@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Form, Button, Alert, Container, Row, Col, Card } from 'react-bootstrap';
+import { Form, Button, Alert, Container, Row, Col, Card, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import PasswordInput from '../components/shared/PasswordInput';
@@ -11,7 +11,7 @@ const Register = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { register } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,17 +24,15 @@ const Register = () => {
       setError('');
       setLoading(true);
       
-      // Since the API doesn't provide a registration endpoint in the schema,
-      // we'll attempt to login directly. In a real application, you would
-      // want to implement proper registration.
-      const success = await login(username, password);
-      if (success) {
-        navigate('/snippets');
-      } else {
-        setError('Failed to register. Please try a different username.');
-      }
+      await register(username, password, confirmPassword);
+      // If we get here, registration and login were successful
+      navigate('/snippets');
     } catch (error) {
-      setError('Failed to register. Please try again.');
+      setError(
+        error.response?.data?.password?.[0] || 
+        error.response?.data?.username?.[0] || 
+        'Failed to register. Please try again.'
+      );
       console.error('Registration error:', error);
     } finally {
       setLoading(false);
@@ -79,11 +77,25 @@ const Register = () => {
                   error={password !== confirmPassword && confirmPassword !== '' ? 'Passwords do not match' : ''}
                 />
                 <Button
-                  className="w-100"
+                  className="w-100 d-flex align-items-center justify-content-center"
                   type="submit"
                   disabled={loading}
                 >
-                  {loading ? 'Registering...' : 'Register'}
+                  {loading ? (
+                    <>
+                      <Spinner
+                        as="span"
+                        animation="border"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                        className="me-2"
+                      />
+                      Registering...
+                    </>
+                  ) : (
+                    'Register'
+                  )}
                 </Button>
               </Form>
             </Card.Body>

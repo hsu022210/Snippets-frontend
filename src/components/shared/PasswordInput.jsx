@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Form, InputGroup, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
+import './PasswordInput.css';
 
 const PasswordInput = ({ 
   value, 
@@ -24,14 +25,13 @@ const PasswordInput = ({
   return (
     <Form.Group className="mb-3">
       {label && <Form.Label>{label}</Form.Label>}
-      <InputGroup>
+      <InputGroup hasValidation size={size}>
         <Form.Control
           type={showPassword ? 'text' : 'password'}
           value={value}
           onChange={onChange}
           required={required}
           disabled={disabled}
-          size={size}
           className={`form-control-light ${className}`}
           autoComplete={autoComplete}
           placeholder={placeholder}
@@ -41,13 +41,9 @@ const PasswordInput = ({
           variant="outline-secondary"
           onClick={togglePasswordVisibility}
           disabled={disabled}
-          className="d-flex align-items-center"
+          className="password-toggle-btn"
         >
-          {showPassword ? (
-            <i className="bi bi-eye-slash"></i>
-          ) : (
-            <i className="bi bi-eye"></i>
-          )}
+          <i className={`bi ${showPassword ? 'bi-eye-slash' : 'bi-eye'}`} />
         </Button>
         {error && (
           <Form.Control.Feedback type="invalid">
