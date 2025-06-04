@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
 
-import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
+import { Navbar, Nav, Container, NavDropdown, Button } from 'react-bootstrap';
 
 const Navigation = () => {
   const [expanded, setExpanded] = useState(false);
   const { user, logout } = useAuth();
+  const { isDark, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -45,11 +47,12 @@ const Navigation = () => {
 
   return (
     <Navbar 
-      bg="dark" 
-      variant="dark" 
+      bg="dark"
+      data-bs-theme="dark"
+      variant="dark"
       expand="lg" 
       fixed="top" 
-      className="navbar-custom"
+      className="custom-navbar"
       expanded={expanded}
       onToggle={(isExpanded) => setExpanded(isExpanded)}
     >
@@ -76,10 +79,19 @@ const Navigation = () => {
             )}
           </Nav>
           <Nav>
+            <Button
+              variant="outline-light"
+              size="sm"
+              className="me-3 d-flex align-items-center"
+              onClick={toggleTheme}
+            >
+              <i className={`bi bi-${isDark ? 'sun' : 'moon'} me-2`}></i>
+              {isDark ? 'Light' : 'Dark'} Mode
+            </Button>
             {user ? (
               <NavDropdown 
                 title={
-                  <span>
+                  <span className="text-light">
                     <i className="bi bi-person-circle me-2"></i>
                     {user.username}
                   </span>

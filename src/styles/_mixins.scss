@@ -3,17 +3,17 @@
 @use "./variables" as *;
 
 // Media query mixins
-@mixin breakpoint($point) {
-  @if map.has-key($breakpoints, $point) {
-    @media (min-width: map.get($breakpoints, $point)) {
+@mixin breakpoint($size) {
+  @if map.has-key($breakpoints, $size) {
+    @media (min-width: map.get($breakpoints, $size)) {
       @content;
     }
   }
 }
 
-@mixin breakpoint-down($point) {
-  @if map.has-key($breakpoints, $point) {
-    @media (max-width: map.get($breakpoints, $point)) {
+@mixin breakpoint-down($size) {
+  @if map.has-key($breakpoints, $size) {
+    @media (max-width: map.get($breakpoints, $size)) {
       @content;
     }
   }
@@ -40,21 +40,25 @@
 }
 
 // Spacing utilities
-@mixin spacing($type, $size) {
+@mixin spacing($property, $size) {
   @if map.has-key($content-spacing, $size) {
-    #{$type}: map.get($content-spacing, $size);
+    #{$property}: map.get($content-spacing, $size);
   }
 }
 
 // Shadow utilities
-@mixin shadow($size: 'base') {
-  @if map.has-key($shadows, $size) {
-    box-shadow: map.get($shadows, $size);
+@mixin shadow($type: 'base') {
+  @if $type == 'sm' {
+    box-shadow: $card-shadow;
+  } @else if $type == 'base' {
+    box-shadow: $container-shadow;
+  } @else if $type == 'lg' {
+    box-shadow: $card-shadow-hover;
   }
 }
 
 // Border radius utilities
-@mixin border-radius($size: 'base') {
+@mixin border-radius($size) {
   @if map.has-key($border-radius, $size) {
     border-radius: map.get($border-radius, $size);
   }
@@ -67,9 +71,9 @@
 
 // Hover effect utility
 @mixin hover-lift {
-  @include transition(transform);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
   &:hover {
     transform: translateY(-2px);
-    @include shadow('base');
+    @include shadow('lg');
   }
 } 

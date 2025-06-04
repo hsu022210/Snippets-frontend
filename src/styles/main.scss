@@ -15,8 +15,9 @@ body {
   font-family: $font-family-base;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: $app-light;
-  color: $app-dark;
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 code {
@@ -28,6 +29,8 @@ code {
   min-height: calc(100vh - #{$navbar-height});
   padding-top: calc(#{$navbar-height} + #{map.get($content-spacing, 'md')});
   @include spacing('padding-bottom', 'md');
+  background-color: var(--bs-body-bg);
+  transition: background-color 0.3s ease;
 
   @include breakpoint-down('md') {
     padding-top: calc(#{$navbar-height} + #{map.get($content-spacing, 'lg')});
