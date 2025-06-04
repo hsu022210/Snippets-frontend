@@ -47,12 +47,12 @@ const Navigation = () => {
 
   return (
     <Navbar 
-      bg="dark"
+      bg={isDark ? "dark" : "black"}
       data-bs-theme="dark"
       variant="dark"
       expand="lg" 
       fixed="top" 
-      className="custom-navbar"
+      className={`custom-navbar ${isDark ? 'theme-dark' : 'theme-light'}`}
       expanded={expanded}
       onToggle={(isExpanded) => setExpanded(isExpanded)}
     >

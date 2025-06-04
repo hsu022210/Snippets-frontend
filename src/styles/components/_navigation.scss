@@ -3,12 +3,37 @@
 @use "../mixins" as *;
 
 .custom-navbar {
-  background-color: $app-dark !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--bs-border-color-translucent);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
   
+  &.theme-dark {
+    background-color: var(--bs-dark-bg-subtle) !important;
+    
+    .container-fluid {
+      background-color: var(--bs-dark-bg-subtle);
+    }
+  }
+  
+  &.theme-light {
+    background-color: var(--bs-dark) !important;
+    
+    .container-fluid {
+      background-color: var(--bs-dark);
+    }
+  }
+
+  .container-fluid {
+    transition: background-color 0.3s ease;
+    padding: map.get($content-spacing, 'sm') map.get($content-spacing, 'md');
+
+    @include breakpoint-down('md') {
+      padding: map.get($content-spacing, 'xs') map.get($content-spacing, 'sm');
+    }
+  }
+
   .navbar-brand,
   .nav-link {
-    color: #fff !important;
+    color: var(--bs-light) !important;
     
     &:hover,
     &:focus {
@@ -19,7 +44,7 @@
   // Dropdown styles
   .nav-dropdown-custom {
     .dropdown-toggle::after {
-      color: #fff;
+      color: var(--bs-light);
     }
 
     .dropdown-menu {
@@ -46,31 +71,28 @@
 
   // Theme toggle button
   .btn-outline-light {
-    border-color: rgba(255, 255, 255, 0.5);
+    border-color: var(--bs-border-color-translucent);
     
     &:hover,
     &:focus {
       background-color: rgba(255, 255, 255, 0.1);
-      border-color: #fff;
+      border-color: var(--bs-light);
     }
   }
 
   // Navbar toggler (hamburger menu)
   .navbar-toggler {
-    color: rgba(255, 255, 255, 0.75);
-    border-color: rgba(255, 255, 255, 0.1);
+    color: var(--bs-navbar-color);
+    border-color: var(--bs-border-color-translucent);
 
     &:hover {
-      background-color: rgba(255, 255, 255, 0.1);
+      background-color: var(--bs-tertiary-bg);
     }
 
     &-icon {
-      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+      background-image: var(--bs-navbar-toggler-icon-bg);
     }
   }
-
-  // Transitions
-  transition: background-color 0.3s ease;
 }
 
 .navbar-custom {
