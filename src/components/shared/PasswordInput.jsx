@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Form, InputGroup, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
-import './PasswordInput.css';
+import '@styles/components/_password-input.scss';
 
 const PasswordInput = ({ 
   value, 

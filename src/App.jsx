@@ -10,8 +10,6 @@ import SnippetDetail from './pages/SnippetDetail';
 import CreateSnippet from './pages/CreateSnippet';
 import Profile from './pages/Profile';
 import { Container } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css';
 
 function App() {
   return (

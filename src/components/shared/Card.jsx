@@ -1,6 +1,5 @@
 import { Card as BootstrapCard } from 'react-bootstrap';
 import PropTypes from 'prop-types';
-import './Card.css';
 
 const Card = ({ children, className, hover = false, ...props }) => {
   const getCardClasses = () => {

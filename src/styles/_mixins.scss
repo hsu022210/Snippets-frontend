@@ -1,0 +1,75 @@
+@use "sass:map";
+@use "sass:math";
+@use "./variables" as *;
+
+// Media query mixins
+@mixin breakpoint($point) {
+  @if map.has-key($breakpoints, $point) {
+    @media (min-width: map.get($breakpoints, $point)) {
+      @content;
+    }
+  }
+}
+
+@mixin breakpoint-down($point) {
+  @if map.has-key($breakpoints, $point) {
+    @media (max-width: map.get($breakpoints, $point)) {
+      @content;
+    }
+  }
+}
+
+// Flexbox utilities
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// Typography utilities
+@mixin font-size($size) {
+  @if map.has-key($font-sizes, $size) {
+    font-size: map.get($font-sizes, $size);
+  }
+}
+
+// Spacing utilities
+@mixin spacing($type, $size) {
+  @if map.has-key($content-spacing, $size) {
+    #{$type}: map.get($content-spacing, $size);
+  }
+}
+
+// Shadow utilities
+@mixin shadow($size: 'base') {
+  @if map.has-key($shadows, $size) {
+    box-shadow: map.get($shadows, $size);
+  }
+}
+
+// Border radius utilities
+@mixin border-radius($size: 'base') {
+  @if map.has-key($border-radius, $size) {
+    border-radius: map.get($border-radius, $size);
+  }
+}
+
+// Transition utility
+@mixin transition($property: all) {
+  transition: $property 0.2s ease-in-out;
+}
+
+// Hover effect utility
+@mixin hover-lift {
+  @include transition(transform);
+  &:hover {
+    transform: translateY(-2px);
+    @include shadow('base');
+  }
+} 

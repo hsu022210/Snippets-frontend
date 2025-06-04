@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import './Navigation.css';
 
 const Navigation = () => {
   const [expanded, setExpanded] = useState(false);

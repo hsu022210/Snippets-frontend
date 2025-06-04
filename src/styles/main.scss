@@ -1,0 +1,56 @@
+// Core imports
+@use "sass:map";
+@use "variables" as *;
+@use "mixins" as *;
+
+// Component imports
+@use "components/card";
+@use "components/container";
+@use "components/password-input";
+
+// Base styles
+body {
+  margin: 0;
+  font-family: $font-family-base;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: $app-light;
+  color: $app-dark;
+}
+
+code {
+  font-family: $font-family-code;
+}
+
+// Layout
+.page-container {
+  min-height: calc(100vh - #{$navbar-height});
+  padding-top: calc(#{$navbar-height} + #{map.get($content-spacing, 'md')});
+  @include spacing('padding-bottom', 'md');
+
+  @include breakpoint-down('md') {
+    padding-top: calc(#{$navbar-height} + #{map.get($content-spacing, 'lg')});
+    @include spacing('padding-bottom', 'lg');
+  }
+}
+
+// Animations
+.fade {
+  &-enter {
+    opacity: 0;
+
+    &-active {
+      opacity: 1;
+      @include transition(opacity);
+    }
+  }
+
+  &-exit {
+    opacity: 1;
+
+    &-active {
+      opacity: 0;
+      @include transition(opacity);
+    }
+  }
+} 

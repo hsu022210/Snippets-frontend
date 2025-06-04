@@ -1,0 +1,45 @@
+@use "sass:map";
+@use "../variables" as *;
+@use "../mixins" as *;
+
+.custom-container {
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  @include spacing('padding-right', 'md');
+  @include spacing('padding-left', 'md');
+
+  &.page-container {
+    min-height: calc(100vh - #{$navbar-height});
+    padding-top: calc(#{$navbar-height} + #{map.get($content-spacing, 'md')});
+    @include spacing('padding-bottom', 'md');
+    background-color: $app-light;
+  }
+
+  @include breakpoint-down('md') {
+    @include spacing('padding-right', 'sm');
+    @include spacing('padding-left', 'sm');
+
+    &.page-container {
+      padding-top: calc(#{$navbar-height});
+    }
+  }
+
+  @include breakpoint('md') {
+    &.page-container {
+      padding-top: calc(#{$navbar-height} + #{map.get($content-spacing, 'lg')});
+    }
+  }
+
+  @include breakpoint('lg') {
+    &:not(.fluid) {
+      max-width: map.get($breakpoints, 'lg');
+    }
+  }
+
+  @include breakpoint('xl') {
+    &:not(.fluid) {
+      max-width: map.get($breakpoints, 'xl');
+    }
+  }
+} 

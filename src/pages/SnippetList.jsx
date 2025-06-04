@@ -15,7 +15,6 @@ import { markdown } from '@codemirror/lang-markdown';
 import Container from '../components/shared/Container';
 import Card, { Body, Title, Subtitle, Text } from '../components/shared/Card';
 import Button from '../components/shared/Button';
-import './SnippetList.css';
 
 const SnippetList = () => {
   const [snippets, setSnippets] = useState([]);

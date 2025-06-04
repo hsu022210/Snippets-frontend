@@ -3,7 +3,6 @@ import { Form, Button, Alert, Row, Col, Card, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import PasswordInput from '../components/shared/PasswordInput';
-import './Login.css';
 
 const Login = () => {
   const [username, setUsername] = useState('');
