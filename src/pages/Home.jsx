@@ -32,8 +32,8 @@ const Home = () => {
                   size="lg"
                   className="w-100 w-md-auto"
                 >
-                  View My Snippets
-                </Button>
+                View My Snippets
+              </Button>
                 <Button 
                   as={Link} 
                   to="/create-snippet" 
@@ -41,8 +41,8 @@ const Home = () => {
                   size="lg"
                   className="w-100 w-md-auto"
                 >
-                  Create Snippet
-                </Button>
+                Create Snippet
+              </Button>
               </Stack>
             </div>
           ) : (
@@ -60,8 +60,8 @@ const Home = () => {
                   size="lg"
                   className="w-100 w-md-auto"
                 >
-                  Login
-                </Button>
+                Login
+              </Button>
                 <Button 
                   as={Link} 
                   to="/register" 
@@ -69,8 +69,8 @@ const Home = () => {
                   size="lg"
                   className="w-100 w-md-auto"
                 >
-                  Register
-                </Button>
+                Register
+              </Button>
               </Stack>
             </div>
           )}
