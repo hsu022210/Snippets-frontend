@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Container, Alert, Spinner, Breadcrumb } from 'react-bootstrap';
+import { Alert, Spinner, Breadcrumb } from 'react-bootstrap';
 import { useParams, Link } from 'react-router-dom';
 import CodeMirror from '@uiw/react-codemirror';
 import ErrorBoundary from '../components/ErrorBoundary';
@@ -8,6 +8,7 @@ import { getLanguageExtension, processCode } from '../utils/languageUtils';
 import SnippetHeader from '../components/snippet/SnippetHeader';
 import SnippetLanguageSelector from '../components/snippet/SnippetLanguageSelector';
 import DeleteConfirmationModal from '../components/snippet/DeleteConfirmationModal';
+import Container from '../components/shared/Container';
 
 const SnippetDetail = () => {
   const { id } = useParams();
@@ -46,39 +47,39 @@ const SnippetDetail = () => {
 
   if (loading) {
     return (
-      <div className="page-container">
+      <Container pageContainer>
         <div className="center-content">
           <Spinner animation="border" role="status">
             <span className="visually-hidden">Loading...</span>
           </Spinner>
         </div>
-      </div>
+      </Container>
     );
   }
 
   if (error) {
     return (
-      <div className="page-container">
+      <Container pageContainer>
         <div className="center-content">
           <Alert variant="danger">{error}</Alert>
         </div>
-      </div>
+      </Container>
     );
   }
 
   if (!snippet) {
     return (
-      <div className="page-container">
+      <Container pageContainer>
         <div className="center-content">
           <Alert variant="warning">Snippet not found</Alert>
         </div>
-      </div>
+      </Container>
     );
   }
 
   return (
     <ErrorBoundary>
-      <div className="page-container">
+      <Container pageContainer>
         <Container className="py-4">
           <Breadcrumb className="mb-4">
             <Breadcrumb.Item linkAs={Link} linkProps={{ to: "/snippets" }}>
@@ -165,9 +166,9 @@ const SnippetDetail = () => {
             }}
           />
         </Container>
-      </div>
+      </Container>
     </ErrorBoundary>
   );
 };
 
-export default SnippetDetail; 
+export default SnippetDetail;

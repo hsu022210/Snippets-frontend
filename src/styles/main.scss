@@ -10,6 +10,9 @@
 @use "components/navigation";
 @use "components/loading-spinner";
 
+// Bootstrap Icons
+@import "../../node_modules/bootstrap-icons/font/bootstrap-icons.css";
+
 // Base styles
 body {
   margin: 0;
@@ -87,4 +90,4 @@ code {
       @include transition(opacity);
     }
   }
-} 
+}

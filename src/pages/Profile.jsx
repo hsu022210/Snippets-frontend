@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Container, Form, Button, Alert, Spinner } from 'react-bootstrap';
+import { Form, Button, Alert, Spinner } from 'react-bootstrap';
 import { useAuth } from '../contexts/AuthContext';
+import Container from '../components/shared/Container';
 
 const Profile = () => {
   const { api } = useAuth();
@@ -60,18 +61,18 @@ const Profile = () => {
 
   if (loading) {
     return (
-      <div className="page-container">
+      <Container pageContainer>
         <div className="center-content">
           <Spinner animation="border" role="status">
             <span className="visually-hidden">Loading...</span>
           </Spinner>
         </div>
-      </div>
+      </Container>
     );
   }
 
   return (
-    <div className="page-container">
+    <Container pageContainer>
       <Container className="py-4">
         <h2 className="mb-4">Profile Settings</h2>
         
@@ -139,8 +140,8 @@ const Profile = () => {
           </Button>
         </Form>
       </Container>
-    </div>
+    </Container>
   );
 };
 
-export default Profile; 
+export default Profile;

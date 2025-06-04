@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Container, Form, Button, Alert } from 'react-bootstrap';
+import { Form, Button, Alert } from 'react-bootstrap';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import { python } from '@codemirror/lang-python';
@@ -12,6 +12,7 @@ import { json } from '@codemirror/lang-json';
 import { markdown } from '@codemirror/lang-markdown';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import Container from '../components/shared/Container';
 
 const CreateSnippet = () => {
   const navigate = useNavigate();
@@ -68,7 +69,7 @@ const CreateSnippet = () => {
   };
 
   return (
-    <div className="page-container">
+    <Container pageContainer>
       <Container className="py-4">
         <h2 className="mb-4">Create Snippet</h2>
         {error && <Alert variant="danger">{error}</Alert>}
@@ -154,8 +155,8 @@ const CreateSnippet = () => {
           </Button>
         </Form>
       </Container>
-    </div>
+    </Container>
   );
 };
 
-export default CreateSnippet; 
+export default CreateSnippet;

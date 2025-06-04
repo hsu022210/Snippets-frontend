@@ -18,7 +18,7 @@ class ErrorBoundary extends Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="page-container">
+        <Container pageContainer>
           <div className="center-content">
             <Alert variant="danger">
               <Alert.Heading>Something went wrong</Alert.Heading>
@@ -35,8 +35,8 @@ class ErrorBoundary extends Component {
                 </Button>
               </div>
             </Alert>
-          </div>
         </div>
+      </Container>
       );
     }
 
@@ -44,4 +44,4 @@ class ErrorBoundary extends Component {
   }
 }
 
-export default ErrorBoundary; 
+export default ErrorBoundary;
