@@ -125,10 +125,10 @@ const SnippetList = () => {
                   <Body className="d-flex flex-column">
                     <Stack gap={3}>
                       <div>
-                        <Title className="text-truncate mb-1">
+                        <Title className="mb-3">
                           {snippet.title || 'Untitled Snippet'}
                         </Title>
-                        <Subtitle>
+                        <Subtitle className="text-muted">
                           Language: {snippet.language || 'None'}
                         </Subtitle>
                       </div>
