@@ -71,14 +71,14 @@ export const AuthProvider = ({ children }) => {
     initializeUser();
   }, [token, api]);
 
-  const register = async (username, password, password2) => {
+  const register = async (username, password, password2, email) => {
     try {
       // Register the user
       await api.post('/auth/register/', {
         username,
         password,
         password2,
-        email: '', // Optional in our case
+        email,
       });
 
       // If registration successful, login automatically

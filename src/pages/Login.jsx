@@ -3,6 +3,7 @@ import { Form, Button, Alert, Row, Col, Card, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import PasswordInput from '../components/shared/PasswordInput';
+import Container from '../components/shared/Container';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -34,7 +35,7 @@ const Login = () => {
   };
 
   return (
-    <div className="page-container">
+    <Container pageContainer>
       <div className="center-content">
         <Row className="justify-content-center w-100">
           <Col xs={11} sm={10} md={8} lg={6} xl={4}>
@@ -95,7 +96,7 @@ const Login = () => {
           </Col>
         </Row>
       </div>
-    </div>
+    </Container>
   );
 };
 

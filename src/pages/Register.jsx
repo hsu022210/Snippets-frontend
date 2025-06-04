@@ -1,11 +1,13 @@
 import { useState } from 'react';
-import { Form, Button, Alert, Container, Row, Col, Card, Spinner } from 'react-bootstrap';
+import { Form, Button, Alert, Row, Col, Card, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import PasswordInput from '../components/shared/PasswordInput';
+import Container from '../components/shared/Container';
 
 const Register = () => {
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
@@ -24,11 +26,12 @@ const Register = () => {
       setError('');
       setLoading(true);
       
-      await register(username, password, confirmPassword);
+      await register(username, password, confirmPassword, email);
       // If we get here, registration and login were successful
       navigate('/snippets');
     } catch (error) {
       setError(
+        error.response?.data?.email?.[0] ||
         error.response?.data?.password?.[0] || 
         error.response?.data?.username?.[0] || 
         'Failed to register. Please try again.'
@@ -40,7 +43,7 @@ const Register = () => {
   };
 
   return (
-    <Container>
+    <Container pageContainer>
       <Row className="justify-content-center">
         <Col md={6}>
           <Card className="p-4">
@@ -55,6 +58,16 @@ const Register = () => {
                     required
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
+                    disabled={loading}
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     disabled={loading}
                   />
                 </Form.Group>
