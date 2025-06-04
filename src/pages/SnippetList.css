@@ -2,7 +2,6 @@
 :root {
   --navbar-height: 56px;
   --content-spacing: 1rem;
-  --mobile-content-spacing: 25rem;
 }
 
 /* Container styles */
@@ -28,12 +27,12 @@
 /* Code preview styles */
 .snippet-preview {
   background-color: #1e1e1e;
-  border-radius: var(--bs-border-radius);
+  border-radius: var(--border-radius);
   overflow: hidden;
 }
 
 .snippet-preview .cm-editor {
-  border-radius: var(--bs-border-radius);
+  border-radius: var(--border-radius);
   height: 100px !important;
 }
 
@@ -51,7 +50,7 @@
 /* Mobile Responsive Styles */
 @media (max-width: 768px) {
   .snippet-list-container {
-    padding-top: calc(var(--navbar-height) + var(--mobile-content-spacing));
+    padding-top: calc(var(--navbar-height));
   }
 
   .snippet-preview .cm-editor {
@@ -87,10 +86,6 @@
 
 /* Additional safety margin for mobile header content */
 @media (max-width: 768px) {
-  .snippet-list-container .stack {
-    padding-top: var(--mobile-content-spacing);
-  }
-
   /* Ensure header text and button are clearly visible */
   .snippet-list-container h2,
   .snippet-list-container .create-snippet-btn {

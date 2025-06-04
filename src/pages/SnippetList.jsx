@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Button, Stack, Spinner, Alert } from 'react-bootstrap';
+import { Row, Col, Stack, Spinner, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import CodeMirror from '@uiw/react-codemirror';
@@ -12,6 +12,9 @@ import { html } from '@codemirror/lang-html';
 import { sql } from '@codemirror/lang-sql';
 import { json } from '@codemirror/lang-json';
 import { markdown } from '@codemirror/lang-markdown';
+import Container from '../components/shared/Container';
+import Card, { Body, Title, Subtitle, Text } from '../components/shared/Card';
+import Button from '../components/shared/Button';
 import './SnippetList.css';
 
 const SnippetList = () => {
@@ -64,7 +67,7 @@ const SnippetList = () => {
 
   if (loading) {
     return (
-      <Container fluid className="snippet-list-container d-flex align-items-center justify-content-center">
+      <Container fluid pageContainer className="d-flex align-items-center justify-content-center">
         <Stack gap={2} className="text-center">
           <div className="d-flex justify-content-center">
             <Spinner animation="border" role="status" variant="primary" />
@@ -77,14 +80,14 @@ const SnippetList = () => {
 
   if (error) {
     return (
-      <Container fluid className="snippet-list-container d-flex align-items-center justify-content-center">
+      <Container fluid pageContainer className="d-flex align-items-center justify-content-center">
         <Alert variant="danger">{error}</Alert>
       </Container>
     );
   }
 
   return (
-    <Container fluid className="snippet-list-container">
+    <Container fluid pageContainer>
       <Container>
         {/* Mobile Header */}
         <div className="d-md-none mb-4">
@@ -94,7 +97,8 @@ const SnippetList = () => {
               to="/create-snippet"
               variant="primary"
               size="lg"
-              className="w-100 py-3"
+              className="w-100"
+              isMobile
             >
               Create Snippet
             </Button>
@@ -118,16 +122,16 @@ const SnippetList = () => {
           <Row xs={1} md={2} lg={3} className="g-4">
             {snippets.map((snippet) => (
               <Col key={snippet.id}>
-                <Card className="h-100 snippet-card">
-                  <Card.Body className="d-flex flex-column">
+                <Card hover className="h-100">
+                  <Body className="d-flex flex-column">
                     <Stack gap={3}>
                       <div>
-                        <Card.Title className="text-truncate mb-1">
+                        <Title className="text-truncate mb-1">
                           {snippet.title || 'Untitled Snippet'}
-                        </Card.Title>
-                        <Card.Subtitle className="text-muted">
+                        </Title>
+                        <Subtitle>
                           Language: {snippet.language || 'None'}
-                        </Card.Subtitle>
+                        </Subtitle>
                       </div>
                       
                       <div className="snippet-preview flex-grow-1">
@@ -170,16 +174,16 @@ const SnippetList = () => {
                         View Details
                       </Button>
                     </Stack>
-                  </Card.Body>
+                  </Body>
                 </Card>
               </Col>
             ))}
           </Row>
         ) : (
           <Card className="text-center">
-            <Card.Body>
+            <Body>
               <Stack gap={3} className="align-items-center">
-                <Card.Text>No snippets found. Create your first snippet!</Card.Text>
+                <Text>No snippets found. Create your first snippet!</Text>
                 <Button
                   as={Link}
                   to="/create-snippet"
@@ -188,7 +192,7 @@ const SnippetList = () => {
                   Create Snippet
                 </Button>
               </Stack>
-            </Card.Body>
+            </Body>
           </Card>
         )}
       </Container>

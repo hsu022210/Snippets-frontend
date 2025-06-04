@@ -1,12 +1,16 @@
-import { Container, Row, Col, Card, Button } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import Container from '../components/shared/Container';
+import Card, { Body, Title, Text } from '../components/shared/Card';
+import Button from '../components/shared/Button';
+import { Stack } from 'react-bootstrap';
 
 const Home = () => {
   const { user } = useAuth();
 
   return (
-    <Container>
+    <Container pageContainer>
       <Row className="justify-content-center">
         <Col md={8} className="text-center">
           <h1 className="display-4 mb-4">Welcome to Code Snippets</h1>
@@ -16,22 +20,58 @@ const Home = () => {
           {user ? (
             <div>
               <p>Welcome back, {user.username}!</p>
-              <Button as={Link} to="/snippets" variant="primary" size="lg" className="me-3">
-                View My Snippets
-              </Button>
-              <Button as={Link} to="/create-snippet" variant="success" size="lg">
-                Create Snippet
-              </Button>
+              <Stack 
+                direction="horizontal" 
+                gap={3} 
+                className="justify-content-center flex-wrap"
+              >
+                <Button 
+                  as={Link} 
+                  to="/snippets" 
+                  variant="primary" 
+                  size="lg"
+                  className="w-100 w-md-auto"
+                >
+                  View My Snippets
+                </Button>
+                <Button 
+                  as={Link} 
+                  to="/create-snippet" 
+                  variant="success" 
+                  size="lg"
+                  className="w-100 w-md-auto"
+                >
+                  Create Snippet
+                </Button>
+              </Stack>
             </div>
           ) : (
             <div>
               <p>Please log in to manage your snippets.</p>
-              <Button as={Link} to="/login" variant="primary" size="lg" className="me-3">
-                Login
-              </Button>
-              <Button as={Link} to="/register" variant="outline-primary" size="lg">
-                Register
-              </Button>
+              <Stack 
+                direction="horizontal" 
+                gap={3} 
+                className="justify-content-center flex-wrap"
+              >
+                <Button 
+                  as={Link} 
+                  to="/login" 
+                  variant="primary" 
+                  size="lg"
+                  className="w-100 w-md-auto"
+                >
+                  Login
+                </Button>
+                <Button 
+                  as={Link} 
+                  to="/register" 
+                  variant="outline-primary" 
+                  size="lg"
+                  className="w-100 w-md-auto"
+                >
+                  Register
+                </Button>
+              </Stack>
             </div>
           )}
         </Col>
@@ -39,33 +79,33 @@ const Home = () => {
 
       <Row className="mt-5">
         <Col md={4}>
-          <Card className="mb-4">
-            <Card.Body>
-              <Card.Title>Store</Card.Title>
-              <Card.Text>
+          <Card className="mb-4" hover>
+            <Body>
+              <Title>Store</Title>
+              <Text>
                 Save your code snippets in a secure and organized way.
-              </Card.Text>
-            </Card.Body>
+              </Text>
+            </Body>
           </Card>
         </Col>
         <Col md={4}>
-          <Card className="mb-4">
-            <Card.Body>
-              <Card.Title>Syntax Highlighting</Card.Title>
-              <Card.Text>
+          <Card className="mb-4" hover>
+            <Body>
+              <Title>Syntax Highlighting</Title>
+              <Text>
                 Beautiful syntax highlighting for multiple programming languages.
-              </Card.Text>
-            </Card.Body>
+              </Text>
+            </Body>
           </Card>
         </Col>
         <Col md={4}>
-          <Card className="mb-4">
-            <Card.Body>
-              <Card.Title>Share</Card.Title>
-              <Card.Text>
+          <Card className="mb-4" hover>
+            <Body>
+              <Title>Share</Title>
+              <Text>
                 Share your snippets with others or keep them private.
-              </Card.Text>
-            </Card.Body>
+              </Text>
+            </Body>
           </Card>
         </Col>
       </Row>
