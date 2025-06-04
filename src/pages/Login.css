@@ -1,0 +1,30 @@
+/* Light grey background for autocomplete */
+.form-control-light:-webkit-autofill,
+.form-control-light:-webkit-autofill:hover,
+.form-control-light:-webkit-autofill:focus,
+.form-control-light:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #e9ecef inset !important;
+    -webkit-text-fill-color: #495057 !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Light grey background for Firefox */
+.form-control-light:autofill {
+    background-color: #e9ecef !important;
+    color: #495057 !important;
+    box-shadow: 0 0 0 30px #e9ecef inset !important;
+}
+
+/* Normal state styling */
+.form-control-light {
+    background-color: #e9ecef !important;
+    border-color: #ced4da;
+    color: #495057;
+}
+
+.form-control-light:focus {
+    background-color: #e9ecef !important;
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    color: #495057;
+} 

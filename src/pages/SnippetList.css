@@ -1,0 +1,120 @@
+/* Define CSS variables for consistent measurements */
+:root {
+  --navbar-height: 56px;
+  --navbar-mobile-expanded: 200px;
+  --content-spacing: 0.5rem;
+  --mobile-content-spacing: 25rem;
+  --mobile-header-spacing: 15rem;
+}
+
+.snippet-list-container {
+  min-height: calc(100vh - var(--navbar-height));
+  padding-top: calc(var(--navbar-height) + var(--content-spacing));
+  padding-bottom: var(--content-spacing);
+  background-color: #f8f9fa;
+  position: relative;
+  z-index: 1;
+}
+
+.snippet-list-header {
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.snippet-list-header h2 {
+  font-size: 1.75rem;
+}
+
+.snippet-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  background-color: #fff;
+}
+
+.snippet-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.snippet-card .card-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.snippet-preview {
+  background-color: #1e1e1e;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.snippet-preview .cm-editor {
+  border-radius: 4px;
+  height: 100px !important;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.snippet-preview .cm-scroller::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.snippet-preview .cm-scroller {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .snippet-list-container {
+    padding-top: calc(var(--navbar-height) + var(--mobile-content-spacing));
+  }
+
+  .snippet-preview .cm-editor {
+    height: 75px !important;
+  }
+
+  /* Additional mobile header spacing */
+  .d-flex.d-md-none .h3 {
+    margin-top: 2rem;
+  }
+}
+
+/* Loading and Error States */
+.snippet-list-container.d-flex {
+  min-height: calc(100vh - var(--navbar-height));
+  padding-top: calc(var(--navbar-height) + var(--content-spacing));
+}
+
+/* Tablet Responsive Styles */
+@media (min-width: 769px) and (max-width: 991.98px) {
+  .snippet-list-container {
+    padding-top: calc(var(--navbar-height) + var(--content-spacing) * 2);
+  }
+}
+
+/* Large Desktop Styles */
+@media (min-width: 992px) {
+  .snippet-list-container {
+    padding-top: calc(var(--navbar-height) + var(--content-spacing));
+  }
+}
+
+/* Ensure content is always visible below navbar */
+.snippet-list-container > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Additional safety margin for mobile header content */
+@media (max-width: 768px) {
+  .snippet-list-container .stack {
+    padding-top: var(--mobile-content-spacing);
+  }
+
+  /* Ensure header text and button are clearly visible */
+  .snippet-list-container h2,
+  .snippet-list-container .create-snippet-btn {
+    position: relative;
+    z-index: 3;
+  }
+} 
