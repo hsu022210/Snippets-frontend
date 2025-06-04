@@ -1,14 +1,41 @@
+import { useState, useEffect } from 'react';
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import './Navigation.css';
 
 const Navigation = () => {
+  const [expanded, setExpanded] = useState(false);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Close navbar when route changes
+  useEffect(() => {
+    setExpanded(false);
+  }, [location]);
+
+  // Close navbar when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      const navbar = document.getElementById('responsive-navbar-nav');
+      const toggle = document.querySelector('.navbar-toggler');
+      
+      if (expanded && navbar && toggle) {
+        const clickedInside = navbar.contains(event.target) || toggle.contains(event.target);
+        if (!clickedInside) {
+          setExpanded(false);
+        }
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [expanded]);
 
   const handleLogout = async () => {
     try {
+      setExpanded(false);
       navigate('/');
       await logout();
     } catch (error) {
@@ -17,20 +44,34 @@ const Navigation = () => {
   };
 
   return (
-    <Navbar bg="dark" variant="dark" expand="lg" fixed="top" className="navbar-custom">
+    <Navbar 
+      bg="dark" 
+      variant="dark" 
+      expand="lg" 
+      fixed="top" 
+      className="navbar-custom"
+      expanded={expanded}
+      onToggle={(isExpanded) => setExpanded(isExpanded)}
+    >
       <Container fluid>
-        <Navbar.Brand as={Link} to="/">
+        <Navbar.Brand as={Link} to="/" onClick={() => setExpanded(false)}>
           <i className="bi bi-code-square me-2"></i>
           Code Snippets
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link as={Link} to="/" className="px-3">Home</Nav.Link>
+            <Nav.Link as={Link} to="/" className="px-3" onClick={() => setExpanded(false)}>
+              Home
+            </Nav.Link>
             {user && (
               <>
-                <Nav.Link as={Link} to="/snippets" className="px-3">My Snippets</Nav.Link>
-                <Nav.Link as={Link} to="/create-snippet" className="px-3">Create Snippet</Nav.Link>
+                <Nav.Link as={Link} to="/snippets" className="px-3" onClick={() => setExpanded(false)}>
+                  My Snippets
+                </Nav.Link>
+                <Nav.Link as={Link} to="/create-snippet" className="px-3" onClick={() => setExpanded(false)}>
+                  Create Snippet
+                </Nav.Link>
               </>
             )}
           </Nav>
@@ -47,11 +88,11 @@ const Navigation = () => {
                 align="end"
                 className="nav-dropdown-custom"
               >
-                <NavDropdown.Item as={Link} to="/profile">
+                <NavDropdown.Item as={Link} to="/profile" onClick={() => setExpanded(false)}>
                   <i className="bi bi-person me-2"></i>
                   Profile
                 </NavDropdown.Item>
-                <NavDropdown.Item as={Link} to="/settings">
+                <NavDropdown.Item as={Link} to="/settings" onClick={() => setExpanded(false)}>
                   <i className="bi bi-gear me-2"></i>
                   Settings
                 </NavDropdown.Item>
@@ -63,11 +104,11 @@ const Navigation = () => {
               </NavDropdown>
             ) : (
               <>
-                <Nav.Link as={Link} to="/login" className="px-3">
+                <Nav.Link as={Link} to="/login" className="px-3" onClick={() => setExpanded(false)}>
                   <i className="bi bi-box-arrow-in-right me-2"></i>
                   Login
                 </Nav.Link>
-                <Nav.Link as={Link} to="/register" className="px-3">
+                <Nav.Link as={Link} to="/register" className="px-3" onClick={() => setExpanded(false)}>
                   <i className="bi bi-person-plus me-2"></i>
                   Register
                 </Nav.Link>

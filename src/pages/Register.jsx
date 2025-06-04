@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Form, Button, Alert, Container, Row, Col, Card } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import PasswordInput from '../components/shared/PasswordInput';
 
 const Register = () => {
   const [username, setUsername] = useState('');
@@ -56,26 +57,27 @@ const Register = () => {
                     required
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
+                    disabled={loading}
                   />
                 </Form.Group>
-                <Form.Group className="mb-3">
-                  <Form.Label>Password</Form.Label>
-                  <Form.Control
-                    type="password"
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3">
-                  <Form.Label>Confirm Password</Form.Label>
-                  <Form.Control
-                    type="password"
-                    required
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                  />
-                </Form.Group>
+                <PasswordInput
+                  label="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  disabled={loading}
+                  autoComplete="new-password"
+                />
+                <PasswordInput
+                  label="Confirm Password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                  disabled={loading}
+                  autoComplete="new-password"
+                  isInvalid={password !== confirmPassword && confirmPassword !== ''}
+                  error={password !== confirmPassword && confirmPassword !== '' ? 'Passwords do not match' : ''}
+                />
                 <Button
                   className="w-100"
                   type="submit"

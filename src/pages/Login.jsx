@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Form, Button, Alert, Row, Col, Card, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import PasswordInput from '../components/shared/PasswordInput';
 import './Login.css';
 
 const Login = () => {
@@ -56,19 +57,16 @@ const Login = () => {
                       autoComplete="username"
                     />
                   </Form.Group>
-                  <Form.Group className="mb-4">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control
-                      type="password"
-                      required
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      disabled={loading}
-                      size="lg"
-                      className="form-control-light"
-                      autoComplete="current-password"
-                    />
-                  </Form.Group>
+                  <PasswordInput
+                    label="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    disabled={loading}
+                    size="lg"
+                    className="mb-4"
+                    autoComplete="current-password"
+                  />
                   <Button
                     variant="primary"
                     size="lg"
