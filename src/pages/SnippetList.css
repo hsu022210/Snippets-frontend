@@ -1,34 +1,23 @@
 /* Define CSS variables for consistent measurements */
 :root {
   --navbar-height: 56px;
-  --navbar-mobile-expanded: 200px;
-  --content-spacing: 0.5rem;
+  --content-spacing: 1rem;
   --mobile-content-spacing: 25rem;
-  --mobile-header-spacing: 15rem;
 }
 
+/* Container styles */
 .snippet-list-container {
   min-height: calc(100vh - var(--navbar-height));
   padding-top: calc(var(--navbar-height) + var(--content-spacing));
   padding-bottom: var(--content-spacing);
-  background-color: #f8f9fa;
-  position: relative;
-  z-index: 1;
+  background-color: var(--bs-light);
 }
 
-.snippet-list-header {
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.snippet-list-header h2 {
-  font-size: 1.75rem;
-}
-
+/* Card styles */
 .snippet-card {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  border: 1px solid rgba(0, 0, 0, 0.125);
-  background-color: #fff;
+  border: 1px solid var(--bs-border-color);
+  background-color: var(--bs-white);
 }
 
 .snippet-card:hover {
@@ -36,19 +25,15 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.snippet-card .card-body {
-  display: flex;
-  flex-direction: column;
-}
-
+/* Code preview styles */
 .snippet-preview {
   background-color: #1e1e1e;
-  border-radius: 4px;
+  border-radius: var(--bs-border-radius);
   overflow: hidden;
 }
 
 .snippet-preview .cm-editor {
-  border-radius: 4px;
+  border-radius: var(--bs-border-radius);
   height: 100px !important;
 }
 
@@ -71,11 +56,6 @@
 
   .snippet-preview .cm-editor {
     height: 75px !important;
-  }
-
-  /* Additional mobile header spacing */
-  .d-flex.d-md-none .h3 {
-    margin-top: 2rem;
   }
 }
 

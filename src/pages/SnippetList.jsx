@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Button, Stack, Spinner } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Stack, Spinner, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import CodeMirror from '@uiw/react-codemirror';
@@ -64,132 +64,135 @@ const SnippetList = () => {
 
   if (loading) {
     return (
-      <div className="snippet-list-container d-flex align-items-center justify-content-center">
-        <Stack direction="vertical" gap={2} className="align-items-center">
-          <Spinner animation="border" role="status" />
+      <Container fluid className="snippet-list-container d-flex align-items-center justify-content-center">
+        <Stack gap={2} className="text-center">
+          <div className="d-flex justify-content-center">
+            <Spinner animation="border" role="status" variant="primary" />
+          </div>
           <span>Loading snippets...</span>
         </Stack>
-      </div>
+      </Container>
     );
   }
 
   if (error) {
     return (
-      <div className="snippet-list-container d-flex align-items-center justify-content-center">
-        <div className="text-danger">{error}</div>
-      </div>
+      <Container fluid className="snippet-list-container d-flex align-items-center justify-content-center">
+        <Alert variant="danger">{error}</Alert>
+      </Container>
     );
   }
 
   return (
-    <div className="snippet-list-container">
-      <Container fluid="lg" className="px-3 px-lg-4">
-        <Stack gap={3}>
-          <div className="d-flex d-md-none flex-column align-items-stretch mb-3">
+    <Container fluid className="snippet-list-container">
+      <Container>
+        {/* Mobile Header */}
+        <div className="d-md-none mb-4">
+          <Stack gap={4} className="py-4 my-4">
             <Button
               as={Link}
               to="/create-snippet"
               variant="primary"
               size="lg"
-              className="mb-4"
+              className="w-100 py-3"
             >
               Create Snippet
             </Button>
-            <h2 className="h3 mb-0 text-center">My Snippets</h2>
-          </div>
+            <h2 className="h3 text-center mb-0">My Snippets</h2>
+          </Stack>
+        </div>
 
-          <div className="d-none d-md-flex justify-content-between align-items-center mb-4">
-            <h2 className="h3 mb-0">My Snippets</h2>
-            <Button
-              as={Link}
-              to="/create-snippet"
-              variant="primary"
-            >
-              Create Snippet
-            </Button>
-          </div>
+        {/* Desktop Header */}
+        <div className="d-none d-md-flex justify-content-between align-items-center mb-4">
+          <h2 className="h3 mb-0">My Snippets</h2>
+          <Button
+            as={Link}
+            to="/create-snippet"
+            variant="primary"
+          >
+            Create Snippet
+          </Button>
+        </div>
 
-          {snippets.length > 0 ? (
-            <Row className="g-4">
-              {snippets.map((snippet) => (
-                <Col key={snippet.id} xs={12} md={6} lg={4}>
-                  <Card className="h-100 snippet-card">
-                    <Card.Body className="d-flex flex-column">
-                      <Stack gap={2}>
-                        <div>
-                          <Card.Title className="text-truncate mb-1">
-                            {snippet.title || 'Untitled Snippet'}
-                          </Card.Title>
-                          <Card.Subtitle className="text-muted">
-                            Language: {snippet.language || 'None'}
-                          </Card.Subtitle>
-                        </div>
-                        
-                        <div className="snippet-preview flex-grow-1">
-                          <CodeMirror
-                            value={snippet.code}
-                            maxHeight="75px"
-                            theme="dark"
-                            editable={false}
-                            basicSetup={{
-                              lineNumbers: false,
-                              foldGutter: false,
-                              dropCursor: false,
-                              allowMultipleSelections: false,
-                              indentOnInput: false,
-                              bracketMatching: false,
-                              closeBrackets: false,
-                              autocompletion: false,
-                              rectangularSelection: false,
-                              crosshairCursor: false,
-                              highlightActiveLine: false,
-                              highlightSelectionMatches: false,
-                              closeBracketsKeymap: false,
-                              defaultKeymap: false,
-                              searchKeymap: false,
-                              historyKeymap: false,
-                              foldKeymap: false,
-                              completionKeymap: false,
-                              lintKeymap: false,
-                            }}
-                            extensions={[getLanguageExtension(snippet.language)]}
-                          />
-                        </div>
+        {snippets.length > 0 ? (
+          <Row xs={1} md={2} lg={3} className="g-4">
+            {snippets.map((snippet) => (
+              <Col key={snippet.id}>
+                <Card className="h-100 snippet-card">
+                  <Card.Body className="d-flex flex-column">
+                    <Stack gap={3}>
+                      <div>
+                        <Card.Title className="text-truncate mb-1">
+                          {snippet.title || 'Untitled Snippet'}
+                        </Card.Title>
+                        <Card.Subtitle className="text-muted">
+                          Language: {snippet.language || 'None'}
+                        </Card.Subtitle>
+                      </div>
+                      
+                      <div className="snippet-preview flex-grow-1">
+                        <CodeMirror
+                          value={snippet.code}
+                          maxHeight="75px"
+                          theme="dark"
+                          editable={false}
+                          basicSetup={{
+                            lineNumbers: false,
+                            foldGutter: false,
+                            dropCursor: false,
+                            allowMultipleSelections: false,
+                            indentOnInput: false,
+                            bracketMatching: false,
+                            closeBrackets: false,
+                            autocompletion: false,
+                            rectangularSelection: false,
+                            crosshairCursor: false,
+                            highlightActiveLine: false,
+                            highlightSelectionMatches: false,
+                            closeBracketsKeymap: false,
+                            defaultKeymap: false,
+                            searchKeymap: false,
+                            historyKeymap: false,
+                            foldKeymap: false,
+                            completionKeymap: false,
+                            lintKeymap: false,
+                          }}
+                          extensions={[getLanguageExtension(snippet.language)]}
+                        />
+                      </div>
 
-                        <Button
-                          as={Link}
-                          to={`/snippets/${snippet.id}`}
-                          variant="outline-primary"
-                          className="mt-auto w-100"
-                        >
-                          View Details
-                        </Button>
-                      </Stack>
-                    </Card.Body>
-                  </Card>
-                </Col>
-              ))}
-            </Row>
-          ) : (
-            <Card className="text-center p-4">
-              <Card.Body>
-                <Stack gap={3} className="align-items-center">
-                  <p className="mb-0">No snippets found. Create your first snippet!</p>
-                  <Button
-                    as={Link}
-                    to="/create-snippet"
-                    variant="primary"
-                    className="create-snippet-btn"
-                  >
-                    Create Snippet
-                  </Button>
-                </Stack>
-              </Card.Body>
-            </Card>
-          )}
-        </Stack>
+                      <Button
+                        as={Link}
+                        to={`/snippets/${snippet.id}`}
+                        variant="outline-primary"
+                        className="mt-auto w-100"
+                      >
+                        View Details
+                      </Button>
+                    </Stack>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        ) : (
+          <Card className="text-center">
+            <Card.Body>
+              <Stack gap={3} className="align-items-center">
+                <Card.Text>No snippets found. Create your first snippet!</Card.Text>
+                <Button
+                  as={Link}
+                  to="/create-snippet"
+                  variant="primary"
+                >
+                  Create Snippet
+                </Button>
+              </Stack>
+            </Card.Body>
+          </Card>
+        )}
       </Container>
-    </div>
+    </Container>
   );
 };
 
