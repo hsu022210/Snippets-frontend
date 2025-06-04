@@ -20,7 +20,7 @@ const Login = () => {
       const success = await login(username, password);
       if (success) {
         // Artificial delay for better UX
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 500));
         navigate('/snippets');
       } else {
         setError('Failed to login. Please check your credentials.');

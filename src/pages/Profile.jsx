@@ -135,7 +135,7 @@ const Profile = () => {
             type="submit"
             disabled={saving}
           >
-            {saving ? 'Saving...' : 'Save Changes'}
+            {saving ? 'Saving...' : 'Save'}
           </Button>
         </Form>
       </Container>

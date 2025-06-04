@@ -104,7 +104,7 @@ const SnippetDetail = () => {
         setSaveError('Your session has expired. Please log in again.');
         navigate('/login');
       } else {
-        setSaveError(error.response?.data?.detail || 'Failed to save changes');
+        setSaveError(error.response?.data?.detail || 'Failed to save');
       }
       console.error('Error saving snippet:', error);
     } finally {
@@ -228,37 +228,34 @@ const SnippetDetail = () => {
 
           <div className="d-flex justify-content-between align-items-center mb-4">
             {isEditing ? (
-              <Form.Group className="mb-3 flex-grow-1 me-3">
+              <div className="d-flex align-items-center flex-grow-1">
                 <Form.Control
                   type="text"
                   value={editedTitle}
                   onChange={(e) => setEditedTitle(e.target.value)}
                   placeholder="Enter snippet title"
+                  className="me-3"
                 />
-              </Form.Group>
+                <Button
+                  variant="secondary"
+                  onClick={handleCancel}
+                  disabled={saving}
+                  className="me-2"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="success"
+                  onClick={handleSave}
+                  disabled={saving}
+                >
+                  {saving ? 'Saving...' : 'Save'}
+                </Button>
+              </div>
             ) : (
-              <h2>{snippet.title || 'Untitled Snippet'}</h2>
-            )}
-            <div className="d-flex gap-2">
-              {isEditing ? (
-                <>
-                  <Button
-                    variant="secondary"
-                    onClick={handleCancel}
-                    disabled={saving}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    variant="success"
-                    onClick={handleSave}
-                    disabled={saving}
-                  >
-                    {saving ? 'Saving...' : 'Save Changes'}
-                  </Button>
-                </>
-              ) : (
-                <>
+              <>
+                <h2 className="mb-0">{snippet.title || 'Untitled Snippet'}</h2>
+                <div className="d-flex gap-2">
                   <Button
                     variant="primary"
                     onClick={() => setIsEditing(true)}
@@ -271,9 +268,9 @@ const SnippetDetail = () => {
                   >
                     Delete
                   </Button>
-                </>
-              )}
-            </div>
+                </div>
+              </>
+            )}
           </div>
 
           <div className="mb-4">
