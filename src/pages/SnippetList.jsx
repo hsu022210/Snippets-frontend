@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Row, Col, Stack, Spinner, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { Row, Col, Stack, Spinner, Alert } from 'react-bootstrap';
+import Container from '../components/shared/Container';
+import Card, { Body, Title, Subtitle, Text } from '../components/shared/Card';
+import Button from '../components/shared/Button';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import { python } from '@codemirror/lang-python';
@@ -12,9 +15,6 @@ import { html } from '@codemirror/lang-html';
 import { sql } from '@codemirror/lang-sql';
 import { json } from '@codemirror/lang-json';
 import { markdown } from '@codemirror/lang-markdown';
-import Container from '../components/shared/Container';
-import Card, { Body, Title, Subtitle, Text } from '../components/shared/Card';
-import Button from '../components/shared/Button';
 
 const SnippetList = () => {
   const [snippets, setSnippets] = useState([]);
