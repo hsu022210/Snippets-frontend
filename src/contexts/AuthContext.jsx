@@ -114,17 +114,19 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
+      // Clear state first to ensure immediate UI update
+      setUser(null);
+      setToken(null);
+      localStorage.removeItem('token');
+      
+      // Then notify the server (don't wait for response since we've already cleared local state)
       if (token) {
-        await api.post('/auth/logout/');
+        await api.post('/auth/logout/').catch(console.error);
       }
       return true;
     } catch (error) {
       console.error('Logout error:', error);
       return false;
-    } finally {
-      setUser(null);
-      setToken(null);
-      localStorage.removeItem('token');
     }
   };
 

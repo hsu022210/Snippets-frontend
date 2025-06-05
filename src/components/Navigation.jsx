@@ -41,8 +41,10 @@ const Navigation = () => {
     try {
       setIsLoggingOut(true);
       setExpanded(false);
-      await logout();
-      navigate('/');
+      const success = await logout();
+      if (success) {
+        navigate('/', { replace: true });
+      }
     } catch (error) {
       console.error('Logout failed:', error);
     } finally {

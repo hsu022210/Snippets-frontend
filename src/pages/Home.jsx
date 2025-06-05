@@ -48,7 +48,6 @@ const Home = () => {
               </div>
             ) : (
               <div>
-                <p>Please log in to manage your snippets.</p>
                 <Stack 
                   direction="horizontal" 
                   gap={3} 
