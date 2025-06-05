@@ -1,26 +1,37 @@
 import { useState } from 'react';
-import { Form, Button, Alert, Row, Col, Card, Spinner } from 'react-bootstrap';
+import { Form, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import PasswordInput from '../components/shared/PasswordInput';
-import Container from '../components/shared/Container';
+import PasswordInput from '../components/auth/PasswordInput';
+import AuthForm from '../components/auth/AuthForm';
+import FormField from '../components/auth/FormField';
+import SubmitButton from '../components/auth/SubmitButton';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [formData, setFormData] = useState({
+    username: '',
+    password: ''
+  });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setError('');
       setLoading(true);
-      const success = await login(username, password);
+      const success = await login(formData.username, formData.password);
       if (success) {
-        // Artificial delay for better UX
         await new Promise(resolve => setTimeout(resolve, 500));
         navigate('/snippets');
       } else {
@@ -35,68 +46,37 @@ const Login = () => {
   };
 
   return (
-    <Container pageContainer>
-      <div className="center-content">
-        <Row className="justify-content-center w-100">
-          <Col xs={11} sm={10} md={8} lg={6} xl={4}>
-            <Card>
-              <Card.Body className="p-4">
-                <h2 className="text-center mb-4">Login</h2>
-                {error && <Alert variant="danger">{error}</Alert>}
-                <Form onSubmit={handleSubmit}>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Username</Form.Label>
-                    <Form.Control
-                      type="text"
-                      required
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                      disabled={loading}
-                      size="lg"
-                      className="form-control-light"
-                      autoComplete="username"
-                    />
-                  </Form.Group>
-                  <PasswordInput
-                    label="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    disabled={loading}
-                    size="lg"
-                    className="mb-4"
-                    autoComplete="current-password"
-                  />
-                  <Button
-                    variant="primary"
-                    size="lg"
-                    className="w-100 d-flex align-items-center justify-content-center"
-                    type="submit"
-                    disabled={loading}
-                  >
-                    {loading ? (
-                      <>
-                        <Spinner
-                          as="span"
-                          animation="border"
-                          size="sm"
-                          role="status"
-                          aria-hidden="true"
-                          className="me-2"
-                        />
-                        Logging in...
-                      </>
-                    ) : (
-                      'Login'
-                    )}
-                  </Button>
-                </Form>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      </div>
-    </Container>
+    <AuthForm title="Login">
+      {error && <Alert variant="danger">{error}</Alert>}
+      <Form onSubmit={handleSubmit} autoComplete="on">
+        <FormField
+          label="Username"
+          type="text"
+          name="username"
+          id="username"
+          value={formData.username}
+          onChange={handleChange}
+          disabled={loading}
+          required
+          autoComplete="username"
+        />
+        <PasswordInput
+          label="Password"
+          name="password"
+          id="password"
+          value={formData.password}
+          onChange={handleChange}
+          required
+          disabled={loading}
+          size="lg"
+          className="mb-4"
+          autoComplete="current-password"
+        />
+        <SubmitButton loading={loading} loadingText="Logging in...">
+          Login
+        </SubmitButton>
+      </Form>
+    </AuthForm>
   );
 };
 

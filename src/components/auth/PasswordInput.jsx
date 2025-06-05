@@ -6,7 +6,9 @@ import '@styles/components/_password-input.scss';
 const PasswordInput = ({ 
   value, 
   onChange, 
-  label, 
+  label,
+  name,
+  id, 
   required = false, 
   disabled = false, 
   size = 'md',
@@ -24,12 +26,14 @@ const PasswordInput = ({
 
   return (
     <Form.Group className="mb-3">
-      {label && <Form.Label>{label}</Form.Label>}
+      {label && <Form.Label htmlFor={id}>{label}</Form.Label>}
       <InputGroup hasValidation size={size}>
         <Form.Control
           type={showPassword ? 'text' : 'password'}
           value={value}
           onChange={onChange}
+          name={name}
+          id={id}
           required={required}
           disabled={disabled}
           className={`form-control-light ${className}`}
@@ -42,6 +46,8 @@ const PasswordInput = ({
           onClick={togglePasswordVisibility}
           disabled={disabled}
           className="password-toggle-btn"
+          type="button"
+          aria-label={showPassword ? 'Hide password' : 'Show password'}
         >
           <i className={`bi ${showPassword ? 'bi-eye-slash' : 'bi-eye'}`} />
         </Button>
@@ -59,6 +65,8 @@ PasswordInput.propTypes = {
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   label: PropTypes.string,
+  name: PropTypes.string,
+  id: PropTypes.string,
   required: PropTypes.bool,
   disabled: PropTypes.bool,
   size: PropTypes.oneOf(['sm', 'md', 'lg']),
