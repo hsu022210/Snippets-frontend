@@ -1,11 +1,11 @@
 import { Button as BootstrapButton } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
-const Button = ({ children, variant = 'primary', size, className, ...props }) => {
+const Button = ({ children, variant = 'primary', size, className, isMobile, ...props }) => {
   const getButtonClasses = () => {
     const classes = [];
     
-    if (size === 'lg' && props.isMobile) {
+    if (size === 'lg' && isMobile) {
       classes.push('py-3');
     }
     
