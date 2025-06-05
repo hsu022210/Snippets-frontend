@@ -41,10 +41,8 @@ const Navigation = () => {
     try {
       setIsLoggingOut(true);
       setExpanded(false);
-      const success = await logout();
-      if (success) {
-        navigate('/', { replace: true });
-      }
+      await logout();
+      navigate('/', { replace: true });
     } catch (error) {
       console.error('Logout failed:', error);
     } finally {
@@ -73,9 +71,6 @@ const Navigation = () => {
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link as={Link} to="/" className="px-3" onClick={() => setExpanded(false)}>
-                Home
-              </Nav.Link>
               {user && (
                 <>
                   <Nav.Link as={Link} to="/snippets" className="px-3" onClick={() => setExpanded(false)}>
