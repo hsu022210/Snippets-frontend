@@ -1,14 +1,14 @@
 @use "sass:map";
 
 // Colors
-$app-primary: #0d6efd;
-$app-secondary: #6c757d;
-$app-success: #198754;
-$app-info: #0dcaf0;
-$app-warning: #ffc107;
-$app-danger: #dc3545;
-$app-light: #f8f9fa;
-$app-dark: #212529;
+$app-primary: var(--bs-primary);
+$app-secondary: var(--bs-secondary);
+$app-success: var(--bs-success);
+$app-info: var(--bs-info);
+$app-warning: var(--bs-warning);
+$app-danger: var(--bs-danger);
+$app-light: var(--bs-light);
+$app-dark: var(--bs-dark);
 
 // Spacing
 $navbar-height: 56px;

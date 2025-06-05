@@ -18,6 +18,7 @@ const SubmitButton = ({ loading, loadingText, children }) => {
             role="status"
             aria-hidden="true"
             className="me-2"
+            data-testid="spinner"
           />
           {loadingText}
         </>

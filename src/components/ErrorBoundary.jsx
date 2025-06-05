@@ -1,5 +1,6 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import { Alert, Button } from 'react-bootstrap';
+import Container from './shared/Container';
 
 class ErrorBoundary extends Component {
   constructor(props) {
