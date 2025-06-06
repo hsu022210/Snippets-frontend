@@ -1,0 +1,89 @@
+import React from 'react'
+import { setupServer } from 'msw/node'
+import { handlers } from './handlers'
+import '@testing-library/jest-dom'
+import { beforeAll, afterEach, afterAll, expect, vi } from 'vitest'
+import { cleanup } from '@testing-library/react'
+import * as matchers from '@testing-library/jest-dom/matchers'
+import { MemoryRouter } from 'react-router-dom'
+import { ThemeProvider } from '../contexts/ThemeContext'
+import { ReactNode } from 'react'
+
+// Extend Vitest's expect method with testing-library matchers
+expect.extend(matchers)
+
+// Setup MSW server
+export const server = setupServer(...handlers)
+
+// Mock matchMedia
+beforeAll(() => {
+  Object.defineProperty(window, 'matchMedia', {
+    writable: true,
+    value: vi.fn().mockImplementation(query => ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    })),
+  })
+})
+
+// Mock localStorage
+const localStorageMock = {
+  getItem: vi.fn(),
+  setItem: vi.fn(),
+  clear: vi.fn()
+}
+Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+
+// Mock window.location.reload
+const originalLocation = window.location
+beforeAll(() => {
+  Object.defineProperty(window, 'location', {
+    value: { ...originalLocation, reload: vi.fn() },
+    writable: true
+  })
+})
+afterAll(() => {
+  Object.defineProperty(window, 'location', {
+    value: originalLocation,
+    writable: true
+  })
+})
+
+// Setup and teardown
+beforeAll(() => server.listen())
+afterEach(() => {
+  server.resetHandlers()
+  cleanup()
+  vi.clearAllMocks()
+})
+afterAll(() => server.close())
+
+// Common test providers
+interface TestProvidersProps {
+  children: ReactNode
+}
+
+export const TestProviders: React.FC<TestProvidersProps> = ({ children }) => {
+  return (
+    <ThemeProvider>
+      <MemoryRouter>
+        {children}
+      </MemoryRouter>
+    </ThemeProvider>
+  )
+}
+
+// Mock auth context
+export const mockUser = { id: '1', username: 'testuser' }
+export const mockLogout = vi.fn()
+
+vi.mock('../contexts/AuthContext', () => ({
+  AuthProvider: ({ children }: { children: ReactNode }) => children,
+  useAuth: () => ({ user: mockUser, logout: mockLogout })
+})) 

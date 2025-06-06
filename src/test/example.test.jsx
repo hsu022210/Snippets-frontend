@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, it, expect } from 'vitest'
-import { server } from './setup'
+import { server } from './setup.tsx'
 import { http, HttpResponse } from 'msw'
 import { useState } from 'react'
 

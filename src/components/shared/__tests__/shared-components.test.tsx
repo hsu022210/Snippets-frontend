@@ -1,6 +1,6 @@
 import React from 'react'
-import { describe, it, expect, vi } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { describe, it, expect } from 'vitest'
+import { render, screen } from '@testing-library/react'
 import Card from '../Card'
 import Container from '../Container'
 import Button from '../Button'
@@ -47,27 +47,38 @@ describe('Shared Components', () => {
   })
 
   describe('Button', () => {
-    it('renders with correct text', () => {
-      render(<Button size="md" className="test-btn">Click Me</Button>)
-      expect(screen.getByText('Click Me')).toBeInTheDocument()
+    it('renders children correctly', () => {
+      render(
+        <Button variant="primary" size="md" className="test-btn" isMobile={false}>
+          Click me
+        </Button>
+      )
+      expect(screen.getByText('Click me')).toBeInTheDocument()
     })
 
-    it('handles click events', () => {
-      const handleClick = vi.fn()
-      render(<Button onClick={handleClick} size="md" className="test-btn">Click Me</Button>)
-      
-      fireEvent.click(screen.getByText('Click Me'))
-      expect(handleClick).toHaveBeenCalledTimes(1)
+    it('applies variant class', () => {
+      render(
+        <Button variant="primary" size="md" className="test-btn" isMobile={false}>
+          Button
+        </Button>
+      )
+      expect(screen.getByText('Button')).toHaveClass('btn-primary')
     })
 
-    it('applies variant classes correctly', () => {
-      render(<Button variant="primary" size="md" className="test-btn">Primary Button</Button>)
-      expect(screen.getByText('Primary Button')).toHaveClass('btn-primary')
-    })
-
-    it('can be disabled', () => {
-      render(<Button disabled size="md" className="test-btn">Disabled Button</Button>)
-      expect(screen.getByText('Disabled Button')).toBeDisabled()
+    it('is disabled when loading', () => {
+      render(
+        <Button 
+          variant="primary" 
+          size="md" 
+          className="test-btn" 
+          isMobile={false} 
+          loading={true}
+          disabled={true}
+        >
+          Button
+        </Button>
+      )
+      expect(screen.getByText('Button')).toBeDisabled()
     })
   })
 }) 

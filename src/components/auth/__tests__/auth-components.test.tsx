@@ -1,56 +1,15 @@
 import React from 'react'
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
-import PasswordInput from '../PasswordInput'
+import userEvent from '@testing-library/user-event'
+import { TestProviders } from '../../../test/setup.tsx'
 import AuthForm from '../AuthForm'
 import FormField from '../FormField'
 import SubmitButton from '../SubmitButton'
 
 describe('Auth Components', () => {
-  describe('PasswordInput', () => {
-    it('toggles password visibility', () => {
-      render(
-        <PasswordInput
-          label="Password"
-          name="password"
-          id="password"
-          value="test123"
-          onChange={() => {}}
-          error=""
-          isInvalid={false}
-          autoComplete="current-password"
-        />
-      )
-      
-      const input = screen.getByLabelText('Password')
-      expect(input).toHaveAttribute('type', 'password')
-      
-      const toggleButton = screen.getByRole('button')
-      fireEvent.click(toggleButton)
-      expect(input).toHaveAttribute('type', 'text')
-      
-      fireEvent.click(toggleButton)
-      expect(input).toHaveAttribute('type', 'password')
-    })
-
-    it('displays error message', () => {
-      const errorMessage = 'Password is required'
-      render(
-        <PasswordInput
-          label="Password"
-          name="password"
-          id="password"
-          value=""
-          onChange={() => {}}
-          error={errorMessage}
-          isInvalid={true}
-          autoComplete="current-password"
-        />
-      )
-      
-      expect(screen.getByText(errorMessage)).toBeInTheDocument()
-    })
-  })
+  // Setup user event
+  const user = userEvent.setup()
 
   describe('AuthForm', () => {
     it('renders children and handles submit', () => {

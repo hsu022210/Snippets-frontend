@@ -1,7 +1,8 @@
 import React from 'react'
 import { describe, it, expect, vi } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
-import { MemoryRouter } from 'react-router-dom'
+import { render, screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { server, TestProviders } from '../../../test/setup.tsx'
 import SnippetCard from '../SnippetCard'
 import EmptySnippetList from '../EmptySnippetList'
 import SnippetListHeader from '../SnippetListHeader'
@@ -9,6 +10,7 @@ import DeleteConfirmationModal from '../DeleteConfirmationModal'
 import SnippetLanguageSelector from '../SnippetLanguageSelector'
 import SnippetHeader from '../SnippetHeader'
 
+// Mock data
 const mockSnippet = {
   id: '1',
   title: 'Test Snippet',
@@ -20,138 +22,176 @@ const mockSnippet = {
 }
 
 describe('Snippet Components', () => {
+  // Setup user event
+  const user = userEvent.setup()
+
   describe('SnippetCard', () => {
-    it('renders snippet information', () => {
+    it('renders snippet information correctly', () => {
       render(
-        <MemoryRouter>
+        <TestProviders>
           <SnippetCard snippet={mockSnippet} />
-        </MemoryRouter>
+        </TestProviders>
       )
       
       expect(screen.getByText(mockSnippet.title)).toBeInTheDocument()
       expect(screen.getByText(`Language: ${mockSnippet.language}`)).toBeInTheDocument()
       expect(screen.getByRole('button', { name: /view details/i })).toBeInTheDocument()
     })
+
+    it('renders untitled snippet when title is missing', () => {
+      const snippetWithoutTitle = { ...mockSnippet, title: '' }
+      render(
+        <TestProviders>
+          <SnippetCard snippet={snippetWithoutTitle} />
+        </TestProviders>
+      )
+      
+      expect(screen.getByText('Untitled Snippet')).toBeInTheDocument()
+    })
+
+    it('renders "None" when language is missing', () => {
+      const snippetWithoutLanguage = { ...mockSnippet, language: '' }
+      render(
+        <TestProviders>
+          <SnippetCard snippet={snippetWithoutLanguage} />
+        </TestProviders>
+      )
+      
+      expect(screen.getByText('Language: None')).toBeInTheDocument()
+    })
+
+    it('has correct link to snippet details', () => {
+      render(
+        <TestProviders>
+          <SnippetCard snippet={mockSnippet} />
+        </TestProviders>
+      )
+      
+      const link = screen.getByRole('button', { name: /view details/i })
+      expect(link).toHaveAttribute('href', `/snippets/${mockSnippet.id}`)
+    })
   })
 
   describe('EmptySnippetList', () => {
     it('renders empty state message', () => {
       render(
-        <MemoryRouter>
+        <TestProviders>
           <EmptySnippetList />
-        </MemoryRouter>
+        </TestProviders>
       )
       
       expect(screen.getByText(/no snippets found/i)).toBeInTheDocument()
       expect(screen.getByRole('button', { name: /create snippet/i })).toHaveAttribute('href', '/create-snippet')
+    })
+
+    it('has accessible create button', () => {
+      render(
+        <TestProviders>
+          <EmptySnippetList />
+        </TestProviders>
+      )
+      
+      const createButton = screen.getByRole('button', { name: /create snippet/i })
+      expect(createButton).toHaveAttribute('href', '/create-snippet')
+      expect(createButton).not.toBeDisabled()
     })
   })
 
   describe('SnippetListHeader', () => {
     it('renders header with create button', () => {
       render(
-        <MemoryRouter>
+        <TestProviders>
           <SnippetListHeader />
-        </MemoryRouter>
+        </TestProviders>
       )
       
-      expect(screen.getAllByText(/my snippets/i)[0]).toBeInTheDocument()
-      expect(screen.getAllByRole('button', { name: /create snippet/i })[0]).toHaveAttribute('href', '/create-snippet')
+      expect(screen.getAllByText(/my snippets/i)).toHaveLength(2)
+      const createButtons = screen.getAllByRole('button', { name: /create snippet/i })
+      expect(createButtons).toHaveLength(2)
+      expect(createButtons[0]).toHaveAttribute('href', '/create-snippet')
     })
   })
 
   describe('DeleteConfirmationModal', () => {
+    const defaultProps = {
+      show: true,
+      onHide: vi.fn(),
+      onConfirm: vi.fn()
+    }
+
     it('renders modal with confirmation message', () => {
-      const handleHide = vi.fn()
-      const handleConfirm = vi.fn()
-      
-      render(
-        <DeleteConfirmationModal
-          show={true}
-          onHide={handleHide}
-          onConfirm={handleConfirm}
-        />
-      )
+      render(<DeleteConfirmationModal {...defaultProps} />)
       
       expect(screen.getByText(/are you sure/i)).toBeInTheDocument()
       expect(screen.getByRole('button', { name: /cancel/i })).toBeInTheDocument()
       expect(screen.getByRole('button', { name: /delete/i })).toBeInTheDocument()
     })
 
-    it('handles cancel and confirm actions', () => {
-      const handleHide = vi.fn()
-      const handleConfirm = vi.fn()
+    it('handles cancel and confirm actions', async () => {
+      render(<DeleteConfirmationModal {...defaultProps} />)
       
-      render(
-        <DeleteConfirmationModal
-          show={true}
-          onHide={handleHide}
-          onConfirm={handleConfirm}
-        />
-      )
+      await user.click(screen.getByRole('button', { name: /cancel/i }))
+      expect(defaultProps.onHide).toHaveBeenCalled()
       
-      fireEvent.click(screen.getByRole('button', { name: /cancel/i }))
-      expect(handleHide).toHaveBeenCalled()
+      await user.click(screen.getByRole('button', { name: /delete/i }))
+      expect(defaultProps.onConfirm).toHaveBeenCalled()
+    })
+
+    it('does not render when show is false', () => {
+      render(<DeleteConfirmationModal {...defaultProps} show={false} />)
       
-      fireEvent.click(screen.getByRole('button', { name: /delete/i }))
-      expect(handleConfirm).toHaveBeenCalled()
+      expect(screen.queryByText(/are you sure/i)).not.toBeInTheDocument()
     })
   })
 
   describe('SnippetLanguageSelector', () => {
-    it('renders language options', () => {
-      const setEditedLanguage = vi.fn()
-      render(
-        <SnippetLanguageSelector
-          isEditing={true}
-          editedLanguage="javascript"
-          setEditedLanguage={setEditedLanguage}
-          language="javascript"
-        />
-      )
+    const defaultProps = {
+      language: 'javascript',
+      editedLanguage: 'javascript',
+      setEditedLanguage: vi.fn(),
+      isEditing: true
+    }
+
+    it('renders language selector', () => {
+      render(<SnippetLanguageSelector {...defaultProps} />)
       
-      expect(screen.getByRole('combobox')).toHaveValue('javascript')
-      expect(screen.getByText(/language/i)).toBeInTheDocument()
+      expect(screen.getByText('Language:')).toBeInTheDocument()
+      expect(screen.getByRole('combobox')).toBeInTheDocument()
     })
 
-    it('handles language change', () => {
-      const setEditedLanguage = vi.fn()
-      render(
-        <SnippetLanguageSelector
-          isEditing={true}
-          editedLanguage="javascript"
-          setEditedLanguage={setEditedLanguage}
-          language="javascript"
-        />
-      )
+    it('handles language change', async () => {
+      render(<SnippetLanguageSelector {...defaultProps} />)
       
-      fireEvent.change(screen.getByRole('combobox'), { target: { value: 'python' } })
-      expect(setEditedLanguage).toHaveBeenCalledWith('python')
+      await user.selectOptions(screen.getByRole('combobox'), 'python')
+      expect(defaultProps.setEditedLanguage).toHaveBeenCalledWith('python')
+    })
+
+    it('shows "None" when language is empty', () => {
+      render(<SnippetLanguageSelector {...defaultProps} language="" editedLanguage="" />)
+      
+      expect(screen.getByText('Language:')).toBeInTheDocument()
+      expect(screen.getByText('None')).toBeInTheDocument()
     })
   })
 
   describe('SnippetHeader', () => {
+    const defaultProps = {
+      isEditing: false,
+      editedTitle: 'Test Snippet',
+      setEditedTitle: vi.fn(),
+      saving: false,
+      handleCancel: vi.fn(),
+      handleSave: vi.fn(),
+      setIsEditing: vi.fn(),
+      setShowDeleteModal: vi.fn(),
+      title: 'Test Snippet'
+    }
+
     it('renders header with title and actions', () => {
-      const setIsEditing = vi.fn()
-      const setEditedTitle = vi.fn()
-      const handleSave = vi.fn()
-      const handleCancel = vi.fn()
-      const setShowDeleteModal = vi.fn()
-      
       render(
-        <MemoryRouter>
-          <SnippetHeader
-            isEditing={false}
-            editedTitle="Test Snippet"
-            setEditedTitle={setEditedTitle}
-            saving={false}
-            handleCancel={handleCancel}
-            handleSave={handleSave}
-            setIsEditing={setIsEditing}
-            setShowDeleteModal={setShowDeleteModal}
-            title="Test Snippet"
-          />
-        </MemoryRouter>
+        <TestProviders>
+          <SnippetHeader {...defaultProps} />
+        </TestProviders>
       )
       
       expect(screen.getByText('Test Snippet')).toBeInTheDocument()
@@ -159,32 +199,38 @@ describe('Snippet Components', () => {
       expect(screen.getByRole('button', { name: /delete/i })).toBeInTheDocument()
     })
 
-    it('shows edit mode UI', () => {
-      const setIsEditing = vi.fn()
-      const setEditedTitle = vi.fn()
-      const handleSave = vi.fn()
-      const handleCancel = vi.fn()
-      const setShowDeleteModal = vi.fn()
-      
+    it('disables save button while saving', () => {
       render(
-        <MemoryRouter>
-          <SnippetHeader
-            isEditing={true}
-            editedTitle="Test Snippet"
-            setEditedTitle={setEditedTitle}
-            saving={false}
-            handleCancel={handleCancel}
-            handleSave={handleSave}
-            setIsEditing={setIsEditing}
-            setShowDeleteModal={setShowDeleteModal}
-            title="Test Snippet"
-          />
-        </MemoryRouter>
+        <TestProviders>
+          <SnippetHeader {...defaultProps} isEditing={true} saving={true} />
+        </TestProviders>
       )
       
-      expect(screen.getByRole('textbox')).toHaveValue('Test Snippet')
-      expect(screen.getByRole('button', { name: /save/i })).toBeInTheDocument()
-      expect(screen.getByRole('button', { name: /cancel/i })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: /saving/i })).toBeDisabled()
+    })
+
+    it('shows "Untitled Snippet" when title is empty', () => {
+      render(
+        <TestProviders>
+          <SnippetHeader {...defaultProps} title="" />
+        </TestProviders>
+      )
+      
+      expect(screen.getByText('Untitled Snippet')).toBeInTheDocument()
+    })
+
+    it('handles edit and delete actions', async () => {
+      render(
+        <TestProviders>
+          <SnippetHeader {...defaultProps} />
+        </TestProviders>
+      )
+      
+      await user.click(screen.getByRole('button', { name: /edit/i }))
+      expect(defaultProps.setIsEditing).toHaveBeenCalledWith(true)
+      
+      await user.click(screen.getByRole('button', { name: /delete/i }))
+      expect(defaultProps.setShowDeleteModal).toHaveBeenCalledWith(true)
     })
   })
 }) 

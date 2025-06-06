@@ -1,96 +1,57 @@
 import React from 'react'
-import { describe, it, expect, vi, beforeEach, beforeAll } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import userEvent from '@testing-library/user-event'
+import { TestProviders, mockUser, mockLogout } from '../../test/setup.tsx'
 import Navigation from '../Navigation'
 import PrivateRoute from '../PrivateRoute'
 import ErrorBoundary from '../ErrorBoundary'
 import LoadingSpinner from '../LoadingSpinner'
-import { ThemeProvider } from '../../contexts/ThemeContext'
 import Container from '../shared/Container'
 import { Alert } from 'react-bootstrap'
 
-// Mock matchMedia
-beforeAll(() => {
-  Object.defineProperty(window, 'matchMedia', {
-    writable: true,
-    value: vi.fn().mockImplementation(query => ({
-      matches: false,
-      media: query,
-      onchange: null,
-      addListener: vi.fn(), // deprecated
-      removeListener: vi.fn(), // deprecated
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-      dispatchEvent: vi.fn(),
-    })),
-  })
-})
-
-// Mock localStorage
-const localStorageMock = {
-  getItem: vi.fn(),
-  setItem: vi.fn(),
-  clear: vi.fn()
-}
-Object.defineProperty(window, 'localStorage', { value: localStorageMock })
-
-const mockUser = { id: '1', username: 'testuser' }
-const mockLogout = vi.fn()
-
-// Mock AuthContext at the top level
-vi.mock('../../contexts/AuthContext', () => ({
-  AuthProvider: ({ children }) => children,
-  useAuth: () => ({ user: mockUser, logout: mockLogout })
-}))
-
-const TestAuthProvider = ({ children }) => (
-  <ThemeProvider>
-    <MemoryRouter>
-      {children}
-    </MemoryRouter>
-  </ThemeProvider>
-)
-
 describe('Common Components', () => {
+  // Setup user event
+  const user = userEvent.setup()
+
   describe('Navigation', () => {
     it('renders navigation links', () => {
       render(
-        <TestAuthProvider>
+        <TestProviders>
           <Navigation />
-        </TestAuthProvider>
+        </TestProviders>
       )
       
       expect(screen.getByText(/Code Snippets/i)).toBeInTheDocument()
       expect(screen.getByRole('navigation')).toBeInTheDocument()
     })
 
-    it('shows user menu', () => {
+    it('shows user menu and handles logout', async () => {
       render(
-        <TestAuthProvider>
+        <TestProviders>
           <Navigation />
-        </TestAuthProvider>
+        </TestProviders>
       )
       
       expect(screen.getByText(mockUser.username)).toBeInTheDocument()
+      
+      // Click user menu
+      await user.click(screen.getByText(mockUser.username))
+      
+      // Click logout
+      await user.click(screen.getByRole('button', { name: /logout/i }))
+      expect(mockLogout).toHaveBeenCalled()
     })
   })
 
   describe('PrivateRoute', () => {
     it('renders children when authenticated', () => {
       render(
-        <TestAuthProvider>
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <PrivateRoute>
-                  <div>Protected Content</div>
-                </PrivateRoute>
-              }
-            />
-          </Routes>
-        </TestAuthProvider>
+        <TestProviders>
+          <PrivateRoute>
+            <div>Protected Content</div>
+          </PrivateRoute>
+        </TestProviders>
       )
       
       expect(screen.getByText('Protected Content')).toBeInTheDocument()
@@ -108,7 +69,7 @@ describe('Common Components', () => {
       expect(screen.getByText('Normal Content')).toBeInTheDocument()
     })
 
-    it('renders error UI when error occurs', () => {
+    it('renders error UI when error occurs', async () => {
       const ThrowError = () => {
         throw new Error('Test Error')
       }
@@ -120,7 +81,10 @@ describe('Common Components', () => {
       )
       
       expect(screen.getByText(/something went wrong/i)).toBeInTheDocument()
-      expect(screen.getByRole('button', { name: /reload page/i })).toBeInTheDocument()
+      
+      // Test reload button
+      await user.click(screen.getByRole('button', { name: /reload page/i }))
+      expect(window.location.reload).toHaveBeenCalled()
     })
   })
 
