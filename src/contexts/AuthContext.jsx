@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import { useApiRequest } from '../hooks/useApiRequest';
 
 const AuthContext = createContext();
 
@@ -16,6 +17,7 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem('token'));
   const isDevelopment = import.meta.env.MODE === 'development'
   const baseURL = isDevelopment ? 'http://localhost:8000' : import.meta.env.VITE_API_BASE_URL_DEPLOY
+  const { makeRequest } = useApiRequest();
   const [api] = useState(() => {
     const instance = axios.create({
       baseURL: baseURL,
@@ -60,7 +62,9 @@ export const AuthProvider = ({ children }) => {
     const initializeUser = async () => {
       if (token) {
         try {
-          const response = await api.get('/auth/user/');
+          const response = await makeRequest(
+            () => api.get('/auth/user/')
+          );
           setUser(response.data);
         } catch (error) {
           console.error('Error initializing user:', error);
@@ -71,17 +75,19 @@ export const AuthProvider = ({ children }) => {
     };
 
     initializeUser();
-  }, [token, api]);
+  }, [token, api, makeRequest]);
 
   const register = async (username, password, password2, email) => {
     try {
       // Register the user
-      await api.post('/auth/register/', {
-        username,
-        password,
-        password2,
-        email,
-      });
+      await makeRequest(
+        () => api.post('/auth/register/', {
+          username,
+          password,
+          password2,
+          email,
+        })
+      );
 
       // If registration successful, login automatically
       return await login(username, password);
@@ -93,19 +99,23 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (username, password) => {
     try {
-      const response = await api.post('/auth/login/', {
-        username,
-        password,
-      });
+      const response = await makeRequest(
+        () => api.post('/auth/login/', {
+          username,
+          password,
+        })
+      );
       
       const { access } = response.data;
       setToken(access);
       localStorage.setItem('token', access);
 
       // Fetch user data
-      const userResponse = await api.get('/auth/user/', {
-        headers: { Authorization: `Bearer ${access}` }
-      });
+      const userResponse = await makeRequest(
+        () => api.get('/auth/user/', {
+          headers: { Authorization: `Bearer ${access}` }
+        })
+      );
       setUser(userResponse.data);
       return true;
     } catch (error) {
@@ -123,7 +133,9 @@ export const AuthProvider = ({ children }) => {
       
       // Then notify the server (don't wait for response since we've already cleared local state)
       if (token) {
-        await api.post('/auth/logout/').catch(console.error);
+        await makeRequest(
+          () => api.post('/auth/logout/')
+        ).catch(console.error);
       }
       return true;
     } catch (error) {

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useApiRequest } from './useApiRequest';
 
 export const useSnippet = (snippetId) => {
   const [snippet, setSnippet] = useState(null);
@@ -14,10 +15,13 @@ export const useSnippet = (snippetId) => {
   const [editedLanguage, setEditedLanguage] = useState('');
   const navigate = useNavigate();
   const { api } = useAuth();
+  const { makeRequest } = useApiRequest();
 
   const fetchSnippet = useCallback(async () => {
     try {
-      const response = await api.get(`/snippets/${snippetId}/`);
+      const response = await makeRequest(
+        () => api.get(`/snippets/${snippetId}/`)
+      );
       setSnippet(response.data);
       setEditedCode(response.data.code);
       setEditedTitle(response.data.title);
@@ -34,7 +38,7 @@ export const useSnippet = (snippetId) => {
     } finally {
       setLoading(false);
     }
-  }, [api, snippetId, navigate]);
+  }, [api, snippetId, navigate, makeRequest]);
 
   useEffect(() => {
     fetchSnippet();
@@ -45,11 +49,13 @@ export const useSnippet = (snippetId) => {
     setSaveError('');
     
     try {
-      const response = await api.patch(`/snippets/${snippetId}/`, {
-        code: editedCode,
-        title: editedTitle,
-        language: editedLanguage
-      });
+      const response = await makeRequest(
+        () => api.patch(`/snippets/${snippetId}/`, {
+          code: editedCode,
+          title: editedTitle,
+          language: editedLanguage
+        })
+      );
       setSnippet(response.data);
       setIsEditing(false);
       setSaveError('');
@@ -68,7 +74,9 @@ export const useSnippet = (snippetId) => {
 
   const handleDelete = async () => {
     try {
-      await api.delete(`/snippets/${snippetId}/`);
+      await makeRequest(
+        () => api.delete(`/snippets/${snippetId}/`)
+      );
       navigate('/snippets');
     } catch (error) {
       if (error.response?.status === 401) {

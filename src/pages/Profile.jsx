@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Form, Button, Alert, Spinner } from 'react-bootstrap';
 import { useAuth } from '../contexts/AuthContext';
+import { useApiRequest } from '../hooks/useApiRequest';
 import Container from '../components/shared/Container';
 
 const Profile = () => {
   const { api } = useAuth();
+  const { makeRequest } = useApiRequest();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
@@ -19,7 +21,9 @@ const Profile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await api.get('/auth/user/');
+        const response = await makeRequest(
+          () => api.get('/auth/user/')
+        );
         setUserProfile(response.data);
         setError('');
       } catch (error) {
@@ -31,7 +35,7 @@ const Profile = () => {
     };
 
     fetchProfile();
-  }, [api]);
+  }, [api, makeRequest]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -48,7 +52,9 @@ const Profile = () => {
     setSuccess('');
 
     try {
-      const response = await api.patch('/auth/user/', userProfile);
+      const response = await makeRequest(
+        () => api.patch('/auth/user/', userProfile)
+      );
       setUserProfile(response.data);
       setSuccess('Profile updated successfully!');
     } catch (error) {
@@ -74,20 +80,9 @@ const Profile = () => {
   return (
     <Container pageContainer>
       <Container className="py-4">
-        <h2 className="mb-4">Profile Settings</h2>
-        
-        {error && (
-          <Alert variant="danger" className="mb-4">
-            {error}
-          </Alert>
-        )}
-        
-        {success && (
-          <Alert variant="success" className="mb-4">
-            {success}
-          </Alert>
-        )}
-
+        <h2 className="mb-4">Profile</h2>
+        {error && <Alert variant="danger">{error}</Alert>}
+        {success && <Alert variant="success">{success}</Alert>}
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3">
             <Form.Label>Username</Form.Label>
@@ -96,7 +91,7 @@ const Profile = () => {
               name="username"
               value={userProfile.username}
               onChange={handleInputChange}
-              required
+              disabled
             />
           </Form.Group>
 
@@ -131,12 +126,8 @@ const Profile = () => {
             />
           </Form.Group>
 
-          <Button
-            variant="primary"
-            type="submit"
-            disabled={saving}
-          >
-            {saving ? 'Saving...' : 'Save'}
+          <Button type="submit" variant="primary" disabled={saving}>
+            {saving ? 'Saving...' : 'Save Changes'}
           </Button>
         </Form>
       </Container>

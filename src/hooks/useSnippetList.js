@@ -1,15 +1,19 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { useApiRequest } from './useApiRequest';
 
 export const useSnippetList = () => {
   const [snippets, setSnippets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const { api } = useAuth();
+  const { makeRequest } = useApiRequest();
 
   const fetchSnippets = useCallback(async () => {
     try {
-      const response = await api.get('/snippets/');
+      const response = await makeRequest(
+        () => api.get('/snippets/')
+      );
       setSnippets(response.data.results);
       setError('');
     } catch (error) {
@@ -18,7 +22,7 @@ export const useSnippetList = () => {
     } finally {
       setLoading(false);
     }
-  }, [api]);
+  }, [api, makeRequest]);
 
   useEffect(() => {
     fetchSnippets();

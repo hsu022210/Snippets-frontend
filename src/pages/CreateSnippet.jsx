@@ -1,52 +1,19 @@
 import { useState } from 'react';
-import { Form, Button, Alert } from 'react-bootstrap';
-import CodeMirror from '@uiw/react-codemirror';
-import { javascript } from '@codemirror/lang-javascript';
-import { python } from '@codemirror/lang-python';
-import { java } from '@codemirror/lang-java';
-import { cpp } from '@codemirror/lang-cpp';
-import { css } from '@codemirror/lang-css';
-import { html } from '@codemirror/lang-html';
-import { sql } from '@codemirror/lang-sql';
-import { json } from '@codemirror/lang-json';
-import { markdown } from '@codemirror/lang-markdown';
+import { Form, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useApiRequest } from '../hooks/useApiRequest';
 import Container from '../components/shared/Container';
 
 const CreateSnippet = () => {
-  const navigate = useNavigate();
-  const { api } = useAuth();
   const [title, setTitle] = useState('');
   const [code, setCode] = useState('');
   const [language, setLanguage] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-
-  const getLanguageExtension = (selectedLanguage) => {
-    if (!selectedLanguage) return [];
-    
-    try {
-      const languageMap = {
-        'javascript': javascript({ jsx: true }),
-        'python': python(),
-        'html': html(),
-        'css': css(),
-        'java': java(),
-        'cpp': cpp(),
-        'c': cpp(),
-        'sql': sql(),
-        'json': json(),
-        'markdown': markdown(),
-        'typescript': javascript({ typescript: true }),
-      };
-      
-      return languageMap[selectedLanguage.toLowerCase()] || [];
-    } catch (error) {
-      console.error('Error loading language extension:', error);
-      return [];
-    }
-  };
+  const navigate = useNavigate();
+  const { api } = useAuth();
+  const { makeRequest } = useApiRequest();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -54,11 +21,13 @@ const CreateSnippet = () => {
     setLoading(true);
 
     try {
-      const response = await api.post('/snippets/', {
-        title,
-        code,
-        language,
-      });
+      const response = await makeRequest(
+        () => api.post('/snippets/', {
+          title,
+          code,
+          language,
+        })
+      );
       navigate(`/snippets/${response.data.id}`);
     } catch (error) {
       setError('Failed to create snippet');
@@ -109,50 +78,23 @@ const CreateSnippet = () => {
 
           <Form.Group className="mb-3">
             <Form.Label>Code</Form.Label>
-            <div style={{ border: '1px solid #dee2e6', borderRadius: '4px', overflow: 'hidden' }}>
-              <CodeMirror
-                value={code}
-                height="300px"
-                theme="dark"
-                onChange={(value) => setCode(value)}
-                extensions={[getLanguageExtension(language)]}
-                basicSetup={{
-                  lineNumbers: true,
-                  highlightActiveLineGutter: true,
-                  highlightSpecialChars: true,
-                  history: true,
-                  foldGutter: true,
-                  drawSelection: true,
-                  dropCursor: true,
-                  allowMultipleSelections: true,
-                  indentOnInput: true,
-                  bracketMatching: true,
-                  closeBrackets: true,
-                  autocompletion: true,
-                  rectangularSelection: true,
-                  crosshairCursor: true,
-                  highlightActiveLine: true,
-                  highlightSelectionMatches: true,
-                  closeBracketsKeymap: true,
-                  defaultKeymap: true,
-                  searchKeymap: true,
-                  historyKeymap: true,
-                  foldKeymap: true,
-                  completionKeymap: true,
-                  lintKeymap: true,
-                }}
-                placeholder="Enter your code here..."
-              />
-            </div>
+            <Form.Control
+              as="textarea"
+              rows={10}
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+              placeholder="Enter your code here"
+              required
+            />
           </Form.Group>
 
-          <Button
-            type="submit"
-            variant="primary"
-            disabled={loading}
-          >
-            {loading ? 'Creating...' : 'Create'}
-          </Button>
+          <Form.Group className="mb-3">
+            <Form.Control
+              type="submit"
+              value={loading ? 'Creating...' : 'Create Snippet'}
+              disabled={loading}
+            />
+          </Form.Group>
         </Form>
       </Container>
     </Container>
