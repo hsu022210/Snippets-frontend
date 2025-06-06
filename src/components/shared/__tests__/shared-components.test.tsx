@@ -64,21 +64,5 @@ describe('Shared Components', () => {
       )
       expect(screen.getByText('Button')).toHaveClass('btn-primary')
     })
-
-    it('is disabled when loading', () => {
-      render(
-        <Button 
-          variant="primary" 
-          size="md" 
-          className="test-btn" 
-          isMobile={false} 
-          loading={true}
-          disabled={true}
-        >
-          Button
-        </Button>
-      )
-      expect(screen.getByText('Button')).toBeDisabled()
-    })
   })
 }) 

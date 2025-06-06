@@ -74,6 +74,10 @@ describe('Common Components', () => {
         throw new Error('Test Error')
       }
 
+      // Suppress console error during this test
+      const originalError = console.error;
+      console.error = vi.fn();
+
       render(
         <ErrorBoundary>
           <ThrowError />
@@ -85,6 +89,9 @@ describe('Common Components', () => {
       // Test reload button
       await user.click(screen.getByRole('button', { name: /reload page/i }))
       expect(window.location.reload).toHaveBeenCalled()
+
+      // Restore console.error
+      console.error = originalError;
     })
   })
 
