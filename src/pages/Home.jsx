@@ -14,13 +14,12 @@ const Home = () => {
       <Container className="py-5 my-4">
         <Row className="justify-content-center">
           <Col md={8} className="text-center">
-            <h1 className="display-4 mb-4">Welcome to Code Snippets</h1>
+            <h1 className="display-4 mb-4"> Simple and elegant way to store and share your code snippets.</h1>
             <p className="lead mb-4">
-              A simple and elegant way to store and share your code snippets.
+              Start creating your own snippets!
             </p>
             {user ? (
               <div>
-                <p>Welcome back, {user.username}!</p>
                 <Stack 
                   direction="horizontal" 
                   gap={3} 
