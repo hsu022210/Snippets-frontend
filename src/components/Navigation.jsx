@@ -83,18 +83,20 @@ const Navigation = () => {
               )}
             </Nav>
             <Nav>
-              <Button
-                variant="outline-light"
-                size="sm"
-                className="me-3 d-flex align-items-center"
-                onClick={(e) => {
-                  toggleTheme();
-                  e.target.blur();
-                }}
-              >
-                <i className={`bi bi-${isDark ? 'sun' : 'moon'} me-2`}></i>
-                {isDark ? 'Light' : 'Dark'} Mode
-              </Button>
+              <Nav.Item>
+                <Button
+                  variant="outline-light"
+                  size="md"
+                  className="me-3 d-flex align-items-center"
+                  onClick={(e) => {
+                    toggleTheme();
+                    e.target.blur();
+                  }}
+                >
+                  <i className={`bi bi-${isDark ? 'sun' : 'moon'} me-2`}></i>
+                  {isDark ? 'Light' : 'Dark'} Mode
+                </Button>
+              </Nav.Item>
               {user ? (
                 <NavDropdown 
                   title={
