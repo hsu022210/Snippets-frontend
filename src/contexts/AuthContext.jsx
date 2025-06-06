@@ -14,9 +14,11 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('token'));
+  const isDevelopment = import.meta.env.MODE === 'development'
+  const baseURL = isDevelopment ? 'http://localhost:8000' : import.meta.env.VITE_API_BASE_URL_DEPLOY
   const [api] = useState(() => {
     const instance = axios.create({
-      baseURL: 'http://localhost:8000',
+      baseURL: baseURL,
       headers: {
         'Content-Type': 'application/json',
       },
