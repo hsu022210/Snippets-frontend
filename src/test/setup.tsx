@@ -7,6 +7,8 @@ import { cleanup } from '@testing-library/react'
 import * as matchers from '@testing-library/jest-dom/matchers'
 import { MemoryRouter } from 'react-router-dom'
 import { ThemeProvider } from '../contexts/ThemeContext'
+import { ToastProvider } from '../contexts/ToastContext'
+import { AuthProvider } from '../contexts/AuthContext'
 import { ReactNode } from 'react'
 
 // Extend Vitest's expect method with testing-library matchers
@@ -71,19 +73,14 @@ interface TestProvidersProps {
 
 export const TestProviders: React.FC<TestProvidersProps> = ({ children }) => {
   return (
-    <ThemeProvider>
-      <MemoryRouter>
-        {children}
-      </MemoryRouter>
-    </ThemeProvider>
+    <ToastProvider>
+      <AuthProvider>
+        <ThemeProvider>
+          <MemoryRouter>
+            {children}
+          </MemoryRouter>
+        </ThemeProvider>
+      </AuthProvider>
+    </ToastProvider>
   )
 }
-
-// Mock auth context
-export const mockUser = { id: '1', username: 'testuser' }
-export const mockLogout = vi.fn()
-
-vi.mock('../contexts/AuthContext', () => ({
-  AuthProvider: ({ children }: { children: ReactNode }) => children,
-  useAuth: () => ({ user: mockUser, logout: mockLogout })
-})) 
