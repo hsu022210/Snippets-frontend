@@ -90,7 +90,7 @@ const Profile = () => {
               name="username"
               value={userProfile.username}
               onChange={handleInputChange}
-              disabled
+              required
             />
           </Form.Group>
 
