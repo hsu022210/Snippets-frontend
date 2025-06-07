@@ -1,15 +1,15 @@
 import { useState, useMemo } from 'react';
 import { Alert, Breadcrumb } from 'react-bootstrap';
 import { useParams, Link } from 'react-router-dom';
-import CodeMirror from '@uiw/react-codemirror';
 import ErrorBoundary from '../components/ErrorBoundary';
 import InlineLoadingSpinner from '../components/InlineLoadingSpinner';
 import { useSnippet } from '../hooks/useSnippet';
-import { getLanguageExtension, processCode } from '../utils/languageUtils';
+import { processCode } from '../utils/languageUtils';
 import SnippetHeader from '../components/snippet/SnippetHeader';
 import SnippetLanguageSelector from '../components/snippet/SnippetLanguageSelector';
 import DeleteConfirmationModal from '../components/snippet/DeleteConfirmationModal';
 import Container from '../components/shared/Container';
+import CodeEditor from '../components/shared/CodeEditor';
 
 const SnippetDetail = () => {
   const { id } = useParams();
@@ -119,41 +119,14 @@ const SnippetDetail = () => {
           </Alert>
         )}
 
-        <div className="mb-4" style={{ border: '1px solid #dee2e6', borderRadius: '4px', overflow: 'hidden' }}>
-          <CodeMirror
-            value={processedCode}
-            height="400px"
-            theme="dark"
-            onChange={(value) => isEditing && setEditedCode(value)}
-            extensions={[getLanguageExtension(snippet.language)]}
-            editable={isEditing}
-            basicSetup={{
-              lineNumbers: true,
-              highlightActiveLineGutter: true,
-              highlightSpecialChars: true,
-              history: true,
-              foldGutter: true,
-              drawSelection: true,
-              dropCursor: true,
-              allowMultipleSelections: true,
-              indentOnInput: true,
-              bracketMatching: true,
-              closeBrackets: true,
-              autocompletion: true,
-              rectangularSelection: true,
-              crosshairCursor: true,
-              highlightActiveLine: true,
-              highlightSelectionMatches: true,
-              closeBracketsKeymap: true,
-              defaultKeymap: true,
-              searchKeymap: true,
-              historyKeymap: true,
-              foldKeymap: true,
-              completionKeymap: true,
-              lintKeymap: true,
-            }}
-          />
-        </div>
+        <CodeEditor
+          value={processedCode}
+          onChange={(value) => isEditing && setEditedCode(value)}
+          language={isEditing ? editedLanguage : snippet.language}
+          height="400px"
+          editable={isEditing}
+          className="mb-4"
+        />
 
         <DeleteConfirmationModal
           show={showDeleteModal}
