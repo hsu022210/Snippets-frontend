@@ -29,21 +29,19 @@ const SnippetList = () => {
 
   return (
     <Container fluid pageContainer>
-      <Container>
-        <SnippetListHeader />
-        
-        {snippets.length > 0 ? (
-          <Row xs={1} md={2} lg={3} className="g-4">
-            {snippets.map((snippet) => (
-              <Col key={snippet.id}>
-                <SnippetCard snippet={snippet} />
-              </Col>
-            ))}
-          </Row>
-        ) : (
-          <EmptySnippetList />
-        )}
-      </Container>
+      <SnippetListHeader />
+      
+      {snippets.length > 0 ? (
+        <Row xs={1} md={2} lg={3} className="g-4">
+          {snippets.map((snippet) => (
+            <Col key={snippet.id}>
+              <SnippetCard snippet={snippet} />
+            </Col>
+          ))}
+        </Row>
+      ) : (
+        <EmptySnippetList />
+      )}
     </Container>
   );
 };

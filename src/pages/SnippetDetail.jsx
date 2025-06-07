@@ -79,92 +79,90 @@ const SnippetDetail = () => {
   return (
     <ErrorBoundary>
       <Container pageContainer>
-        <Container className="py-4">
-          <Breadcrumb className="mb-4">
-            <Breadcrumb.Item linkAs={Link} linkProps={{ to: "/snippets" }}>
-              Snippets
-            </Breadcrumb.Item>
-            <Breadcrumb.Item active>
-              {isEditing ? editedTitle : (snippet?.title || 'Untitled Snippet')}
-            </Breadcrumb.Item>
-          </Breadcrumb>
+        <Breadcrumb className="mb-4">
+          <Breadcrumb.Item linkAs={Link} linkProps={{ to: "/snippets" }}>
+            Snippets
+          </Breadcrumb.Item>
+          <Breadcrumb.Item active>
+            {isEditing ? editedTitle : (snippet?.title || 'Untitled Snippet')}
+          </Breadcrumb.Item>
+        </Breadcrumb>
 
-          <SnippetHeader
-            isEditing={isEditing}
-            editedTitle={editedTitle}
-            setEditedTitle={setEditedTitle}
-            saving={saving}
-            handleCancel={handleCancel}
-            handleSave={handleSave}
-            setIsEditing={setIsEditing}
-            setShowDeleteModal={setShowDeleteModal}
-            title={snippet.title}
-          />
+        <SnippetHeader
+          isEditing={isEditing}
+          editedTitle={editedTitle}
+          setEditedTitle={setEditedTitle}
+          saving={saving}
+          handleCancel={handleCancel}
+          handleSave={handleSave}
+          setIsEditing={setIsEditing}
+          setShowDeleteModal={setShowDeleteModal}
+          title={snippet.title}
+        />
 
-          <SnippetLanguageSelector
-            isEditing={isEditing}
-            editedLanguage={editedLanguage}
-            setEditedLanguage={setEditedLanguage}
-            language={snippet.language}
-          />
+        <SnippetLanguageSelector
+          isEditing={isEditing}
+          editedLanguage={editedLanguage}
+          setEditedLanguage={setEditedLanguage}
+          language={snippet.language}
+        />
 
-          {saveError && (
-            <Alert variant="danger" className="mb-3">
-              {saveError}
-            </Alert>
-          )}
+        {saveError && (
+          <Alert variant="danger" className="mb-3">
+            {saveError}
+          </Alert>
+        )}
 
-          {codeError && (
-            <Alert variant="warning" className="mb-3">
-              There was an issue processing the code content. The display might be affected.
-            </Alert>
-          )}
+        {codeError && (
+          <Alert variant="warning" className="mb-3">
+            There was an issue processing the code content. The display might be affected.
+          </Alert>
+        )}
 
-          <div className="mb-4" style={{ border: '1px solid #dee2e6', borderRadius: '4px', overflow: 'hidden' }}>
-            <CodeMirror
-              value={processedCode}
-              height="400px"
-              theme="dark"
-              onChange={(value) => isEditing && setEditedCode(value)}
-              extensions={[getLanguageExtension(snippet.language)]}
-              editable={isEditing}
-              basicSetup={{
-                lineNumbers: true,
-                highlightActiveLineGutter: true,
-                highlightSpecialChars: true,
-                history: true,
-                foldGutter: true,
-                drawSelection: true,
-                dropCursor: true,
-                allowMultipleSelections: true,
-                indentOnInput: true,
-                bracketMatching: true,
-                closeBrackets: true,
-                autocompletion: true,
-                rectangularSelection: true,
-                crosshairCursor: true,
-                highlightActiveLine: true,
-                highlightSelectionMatches: true,
-                closeBracketsKeymap: true,
-                defaultKeymap: true,
-                searchKeymap: true,
-                historyKeymap: true,
-                foldKeymap: true,
-                completionKeymap: true,
-                lintKeymap: true,
-              }}
-            />
-          </div>
-
-          <DeleteConfirmationModal
-            show={showDeleteModal}
-            onHide={() => setShowDeleteModal(false)}
-            onConfirm={() => {
-              handleDelete();
-              setShowDeleteModal(false);
+        <div className="mb-4" style={{ border: '1px solid #dee2e6', borderRadius: '4px', overflow: 'hidden' }}>
+          <CodeMirror
+            value={processedCode}
+            height="400px"
+            theme="dark"
+            onChange={(value) => isEditing && setEditedCode(value)}
+            extensions={[getLanguageExtension(snippet.language)]}
+            editable={isEditing}
+            basicSetup={{
+              lineNumbers: true,
+              highlightActiveLineGutter: true,
+              highlightSpecialChars: true,
+              history: true,
+              foldGutter: true,
+              drawSelection: true,
+              dropCursor: true,
+              allowMultipleSelections: true,
+              indentOnInput: true,
+              bracketMatching: true,
+              closeBrackets: true,
+              autocompletion: true,
+              rectangularSelection: true,
+              crosshairCursor: true,
+              highlightActiveLine: true,
+              highlightSelectionMatches: true,
+              closeBracketsKeymap: true,
+              defaultKeymap: true,
+              searchKeymap: true,
+              historyKeymap: true,
+              foldKeymap: true,
+              completionKeymap: true,
+              lintKeymap: true,
             }}
           />
-        </Container>
+        </div>
+
+        <DeleteConfirmationModal
+          show={showDeleteModal}
+          onHide={() => setShowDeleteModal(false)}
+          onConfirm={() => {
+            handleDelete();
+            setShowDeleteModal(false);
+          }}
+        />
       </Container>
     </ErrorBoundary>
   );

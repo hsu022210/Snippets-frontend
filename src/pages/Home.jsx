@@ -11,11 +11,11 @@ const Home = () => {
 
   return (
     <Container pageContainer>
-      <Container className="py-5 my-4">
+      <Container className="py-4 my-4">
         <Row className="justify-content-center">
           <Col md={8} className="text-center">
             <h1 className="display-4 mb-4"> Simple and elegant way to store and share your code snippets.</h1>
-            <p className="lead mb-4">
+            <p className="lead mb-5">
               Start creating your own snippets!
             </p>
             {user ? (
