@@ -14,15 +14,17 @@ const mockSnippet = {
 // Define your API handlers here
 export const handlers = [
   // Snippet handlers
-  http.get('/api/snippets', () => {
-    return HttpResponse.json([mockSnippet])
+  http.get('/snippets', () => {
+    return HttpResponse.json({
+      results: [mockSnippet]
+    })
   }),
 
-  http.get('/api/snippets/:id', () => {
+  http.get('/snippets/:id', () => {
     return HttpResponse.json(mockSnippet)
   }),
 
-  http.post('/api/snippets', async ({ request }) => {
+  http.post('/snippets', async ({ request }) => {
     const body = await request.json()
     return HttpResponse.json({
       id: Date.now(),
@@ -32,7 +34,7 @@ export const handlers = [
     })
   }),
 
-  http.put('/api/snippets/:id', async ({ request }) => {
+  http.put('/snippets/:id', async ({ request }) => {
     const body = await request.json()
     return HttpResponse.json({
       ...mockSnippet,
@@ -41,7 +43,7 @@ export const handlers = [
     })
   }),
 
-  http.patch('/api/snippets/:id', async ({ request }) => {
+  http.patch('/snippets/:id', async ({ request }) => {
     const body = await request.json()
     return HttpResponse.json({
       ...mockSnippet,
@@ -50,17 +52,17 @@ export const handlers = [
     })
   }),
 
-  http.delete('/api/snippets/:id', () => {
+  http.delete('/snippets/:id', () => {
     return new HttpResponse(null, { status: 204 })
   }),
 
   // Auth handlers
-  http.post('/api/auth/logout', () => {
+  http.post('/auth/logout', () => {
     return new HttpResponse(null, { status: 204 })
   }),
 
   // Error handlers for testing error states
-  http.get('/api/snippets/:id/error', () => {
+  http.get('/snippets/:id/error', () => {
     return new HttpResponse(null, { status: 500 })
   })
 ] 

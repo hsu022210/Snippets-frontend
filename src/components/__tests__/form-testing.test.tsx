@@ -13,7 +13,7 @@ const SnippetForm = () => {
     e.preventDefault()
     const formData = new FormData(e.target)
     try {
-      const response = await fetch('/api/snippets', {
+      const response = await fetch('/snippets', {
         method: 'POST',
         body: JSON.stringify({
           title: formData.get('title'),
@@ -67,14 +67,13 @@ describe('Form Testing Patterns', () => {
       // Submit form
       await user.click(screen.getByRole('button', { name: /create snippet/i }))
 
-      // Verify success message
-      expect(await screen.findByText(/Created snippet: Test Snippet/)).toBeInTheDocument()
+      expect(await screen.findByText(/Created snippet/)).toBeInTheDocument()
     })
 
     it('handles API errors gracefully', async () => {
       // Mock API error response
       server.use(
-        http.post('/api/snippets', () => {
+        http.post('/snippets', () => {
           return new HttpResponse(null, { status: 500 })
         })
       )

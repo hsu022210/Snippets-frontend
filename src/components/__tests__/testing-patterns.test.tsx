@@ -74,7 +74,7 @@ describe('Testing Patterns', () => {
     it('handles API calls and displays response data', async () => {
       // Mock API response
       server.use(
-        http.get('/api/example', () => {
+        http.get('/example', () => {
           return HttpResponse.json({ message: 'Hello from API' })
         })
       )
@@ -83,7 +83,7 @@ describe('Testing Patterns', () => {
         const [data, setData] = React.useState<ApiResponse | null>(null)
         
         React.useEffect(() => {
-          fetch('/api/example')
+          fetch('/example')
             .then(res => res.json())
             .then(setData)
         }, [])
