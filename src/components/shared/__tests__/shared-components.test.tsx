@@ -1,9 +1,25 @@
 import React from 'react'
-import { describe, it, expect } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { describe, it, expect, vi } from 'vitest'
+import { render, screen, fireEvent } from '@testing-library/react'
 import Card from '../Card'
 import Container from '../Container'
 import Button from '../Button'
+import CodeEditor from '../CodeEditor'
+
+// Mock CodeMirror component
+vi.mock('@uiw/react-codemirror', () => ({
+  default: ({ value, onChange, height, editable }) => (
+    <div 
+      data-testid="codemirror-mock"
+      data-value={value}
+      data-height={height}
+      data-editable={editable}
+      onClick={() => onChange && onChange('new value')}
+    >
+      {value}
+    </div>
+  )
+}))
 
 describe('Shared Components', () => {
   describe('Card', () => {
@@ -63,6 +79,73 @@ describe('Shared Components', () => {
         </Button>
       )
       expect(screen.getByText('Button')).toHaveClass('btn-primary')
+    })
+  })
+
+  describe('CodeEditor', () => {
+    it('renders with default props', () => {
+      render(
+        <CodeEditor
+          value="test code"
+          onChange={() => {}}
+          language="javascript"
+        />
+      )
+      const editor = screen.getByTestId('codemirror-mock')
+      expect(editor).toBeInTheDocument()
+      expect(editor).toHaveAttribute('data-value', 'test code')
+      expect(editor).toHaveAttribute('data-height', '330px')
+      expect(editor).toHaveAttribute('data-editable', 'true')
+    })
+
+    it('renders with custom props', () => {
+      render(
+        <CodeEditor
+          value="custom code"
+          onChange={() => {}}
+          language="python"
+          height="400px"
+          editable={false}
+          className="custom-editor"
+        />
+      )
+      const editor = screen.getByTestId('codemirror-mock')
+      const container = editor.parentElement
+      expect(editor).toHaveAttribute('data-value', 'custom code')
+      expect(editor).toHaveAttribute('data-height', '400px')
+      expect(editor).toHaveAttribute('data-editable', 'false')
+      expect(container).toHaveClass('custom-editor')
+    })
+
+    it('handles onChange event', () => {
+      const handleChange = vi.fn()
+      render(
+        <CodeEditor
+          value="initial code"
+          onChange={handleChange}
+          language="javascript"
+        />
+      )
+      const editor = screen.getByTestId('codemirror-mock')
+      fireEvent.click(editor)
+      expect(handleChange).toHaveBeenCalledWith('new value')
+    })
+
+    it('applies border and border radius styles', () => {
+      render(
+        <CodeEditor
+          value="test code"
+          onChange={() => {}}
+          language="javascript"
+        />
+      )
+      const editor = screen.getByTestId('codemirror-mock')
+      const container = editor.parentElement
+      expect(container).toHaveStyle({
+        border: '1px solid #dee2e6',
+        borderRadius: '4px',
+        overflow: 'hidden'
+      })
     })
   })
 }) 
