@@ -60,7 +60,7 @@ code {
 // Layout
 .page-container {
   min-height: calc(100vh - #{$navbar-height});
-  padding-top: calc(#{$navbar-height} + #{map.get($content-spacing, 'md')});
+  padding-top: calc(#{$navbar-height} + #{map.get($content-spacing, 'xl')});
   @include spacing('padding-bottom', 'md');
   background-color: var(--bs-body-bg);
   transition: background-color 0.3s ease;

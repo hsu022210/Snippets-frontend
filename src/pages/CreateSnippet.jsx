@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { Form, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import CodeMirror from '@uiw/react-codemirror';
 import { useAuth } from '../contexts/AuthContext';
 import { useApiRequest } from '../hooks/useApiRequest';
+import { getLanguageExtension } from '../utils/languageUtils';
 import Container from '../components/shared/Container';
 
 const CreateSnippet = () => {
@@ -39,7 +41,6 @@ const CreateSnippet = () => {
 
   return (
     <Container pageContainer>
-      <Container className="py-4">
         <h2 className="mb-4">Create Snippet</h2>
         {error && <Alert variant="danger">{error}</Alert>}
         <Form onSubmit={handleSubmit}>
@@ -78,14 +79,38 @@ const CreateSnippet = () => {
 
           <Form.Group className="mb-3">
             <Form.Label>Code</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={10}
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-              placeholder="Enter your code here"
-              required
-            />
+              <CodeMirror
+                value={code}
+                height="330px"
+                theme="dark"
+                onChange={(value) => setCode(value)}
+                extensions={[getLanguageExtension(language)]}
+                basicSetup={{
+                  lineNumbers: true,
+                  highlightActiveLineGutter: true,
+                  highlightSpecialChars: true,
+                  history: true,
+                  foldGutter: true,
+                  drawSelection: true,
+                  dropCursor: true,
+                  allowMultipleSelections: true,
+                  indentOnInput: true,
+                  bracketMatching: true,
+                  closeBrackets: true,
+                  autocompletion: true,
+                  rectangularSelection: true,
+                  crosshairCursor: true,
+                  highlightActiveLine: true,
+                  highlightSelectionMatches: true,
+                  closeBracketsKeymap: true,
+                  defaultKeymap: true,
+                  searchKeymap: true,
+                  historyKeymap: true,
+                  foldKeymap: true,
+                  completionKeymap: true,
+                  lintKeymap: true,
+                }}
+              />
           </Form.Group>
 
           <Form.Group className="mb-3">
@@ -96,7 +121,6 @@ const CreateSnippet = () => {
             />
           </Form.Group>
         </Form>
-      </Container>
     </Container>
   );
 };
