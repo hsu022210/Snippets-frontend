@@ -1,26 +1,11 @@
 import { Spinner } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 
-const LoadingSpinner = ({ show }) => {
+const LogoutLoadingSpinner = ({ show, message = 'Logging out...' }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    let timeoutId;
-
-    if (show) {
-      setIsVisible(true);
-    } else {
-      // When hiding, wait for minimum duration before actually hiding
-      timeoutId = setTimeout(() => {
-        setIsVisible(false);
-      }, 1000);
-    }
-
-    return () => {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-    };
+    setIsVisible(show);
   }, [show]);
 
   if (!isVisible) return null;
@@ -33,14 +18,14 @@ const LoadingSpinner = ({ show }) => {
           role="status" 
           variant="light"
         >
-          <span className="visually-hidden">Logging out...</span>
+          <span className="visually-hidden">{message}</span>
         </Spinner>
         <div className="loading-text">
-          Logging out...
+          {message}
         </div>
       </div>
     </div>
   );
 };
 
-export default LoadingSpinner; 
+export default LogoutLoadingSpinner; 

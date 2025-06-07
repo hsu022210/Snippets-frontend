@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Form, Button, Alert, Spinner } from 'react-bootstrap';
+import { Form, Button, Alert } from 'react-bootstrap';
 import { useAuth } from '../contexts/AuthContext';
 import { useApiRequest } from '../hooks/useApiRequest';
 import Container from '../components/shared/Container';
+import InlineLoadingSpinner from '../components/InlineLoadingSpinner';
 
 const Profile = () => {
   const { api } = useAuth();
@@ -69,9 +70,7 @@ const Profile = () => {
     return (
       <Container pageContainer>
         <div className="center-content">
-          <Spinner animation="border" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </Spinner>
+          <InlineLoadingSpinner message="Loading profile..." />
         </div>
       </Container>
     );

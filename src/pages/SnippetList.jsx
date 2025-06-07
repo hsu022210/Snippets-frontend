@@ -1,5 +1,6 @@
-import { Row, Col, Stack, Spinner, Alert } from 'react-bootstrap';
+import { Row, Col, Stack, Alert } from 'react-bootstrap';
 import Container from '../components/shared/Container';
+import InlineLoadingSpinner from '../components/InlineLoadingSpinner';
 import { useSnippetList } from '../hooks/useSnippetList';
 import SnippetListHeader from '../components/snippet/SnippetListHeader';
 import SnippetCard from '../components/snippet/SnippetCard';
@@ -12,10 +13,7 @@ const SnippetList = () => {
     return (
       <Container fluid pageContainer className="d-flex align-items-center justify-content-center">
         <Stack gap={2} className="text-center">
-          <div className="d-flex justify-content-center">
-            <Spinner animation="border" role="status" variant="primary" />
-          </div>
-          <span>Loading snippets...</span>
+          <InlineLoadingSpinner message="Loading snippets..." />
         </Stack>
       </Container>
     );

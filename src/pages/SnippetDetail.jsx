@@ -1,8 +1,9 @@
 import { useState, useMemo } from 'react';
-import { Alert, Spinner, Breadcrumb } from 'react-bootstrap';
+import { Alert, Breadcrumb } from 'react-bootstrap';
 import { useParams, Link } from 'react-router-dom';
 import CodeMirror from '@uiw/react-codemirror';
 import ErrorBoundary from '../components/ErrorBoundary';
+import InlineLoadingSpinner from '../components/InlineLoadingSpinner';
 import { useSnippet } from '../hooks/useSnippet';
 import { getLanguageExtension, processCode } from '../utils/languageUtils';
 import SnippetHeader from '../components/snippet/SnippetHeader';
@@ -49,9 +50,7 @@ const SnippetDetail = () => {
     return (
       <Container pageContainer>
         <div className="center-content">
-          <Spinner animation="border" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </Spinner>
+          <InlineLoadingSpinner message="Loading snippet..." />
         </div>
       </Container>
     );

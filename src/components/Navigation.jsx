@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { Navbar, Nav, NavDropdown, Button } from 'react-bootstrap';
-import LoadingSpinner from './LoadingSpinner';
+import LogoutLoadingSpinner from './LogoutLoadingSpinner';
 import Container from '../components/shared/Container';
 
 const Navigation = () => {
@@ -41,8 +41,11 @@ const Navigation = () => {
     try {
       setIsLoggingOut(true);
       setExpanded(false);
-      await logout();
-      navigate('/', { replace: true });
+      const success = await logout();
+      if (success) {
+        await new Promise(resolve => setTimeout(resolve, 500));
+        navigate('/', { replace: true });
+      }
     } catch (error) {
       console.error('Logout failed:', error);
     } finally {
@@ -52,7 +55,7 @@ const Navigation = () => {
 
   return (
     <>
-      <LoadingSpinner show={isLoggingOut} />
+      <LogoutLoadingSpinner show={isLoggingOut} />
       <Navbar 
         bg={isDark ? "dark" : "black"}
         data-bs-theme="dark"
