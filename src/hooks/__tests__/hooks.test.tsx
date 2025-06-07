@@ -138,16 +138,18 @@ describe('Hooks (with MSW)', () => {
         expect(result.current.loading).toBe(false)
       })
       
-      await act(async () => {
+      await act(() => {
         result.current.setIsEditing(true)
         result.current.setEditedTitle('Updated Title')
-        await result.current.handleSave()
       })
       
-    //   expect(result.current.snippet).not.toBeNull()
-    //   const updatedSnippet = result.current.snippet as unknown as Snippet
-    //   expect(updatedSnippet.title).toBe('Updated Title')
-    //   expect(result.current.isEditing).toBe(false)
+      await waitFor(async () => {
+        await result.current.handleSave()
+        expect(result.current.snippet).not.toBeNull()
+        const updatedSnippet = result.current.snippet as unknown as Snippet
+        expect(updatedSnippet.title).toBe('Updated Title')
+        expect(result.current.isEditing).toBe(false)
+      })
     })
 
     it('should handle delete operation', async () => {
