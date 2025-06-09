@@ -115,4 +115,42 @@ export const useSnippet = (snippetId) => {
     handleDelete,
     handleCancel
   };
+};
+
+export const useCreateSnippet = () => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+  const { api } = useAuth();
+  const { makeRequest } = useApiRequest();
+
+  const createSnippet = async (snippetData) => {
+    setError('');
+    setLoading(true);
+
+    try {
+      const response = await makeRequest(
+        () => api.post('/snippets/', snippetData)
+      );
+      navigate(`/snippets/${response.data.id}`);
+      return response.data;
+    } catch (error) {
+      if (error.response?.status === 401) {
+        setError('Your session has expired. Please log in again.');
+        navigate('/login');
+      } else {
+        setError(error.response?.data?.detail || 'Failed to create snippet');
+      }
+      console.error('Error creating snippet:', error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return {
+    createSnippet,
+    loading,
+    error
+  };
 }; 

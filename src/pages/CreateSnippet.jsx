@@ -1,41 +1,18 @@
 import { useState } from 'react';
 import { Form, Alert } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { useApiRequest } from '../hooks/useApiRequest';
 import Container from '../components/shared/Container';
 import CodeEditor from '../components/shared/CodeEditor';
+import { useCreateSnippet } from '../hooks/useSnippet';
 
 const CreateSnippet = () => {
   const [title, setTitle] = useState('');
   const [code, setCode] = useState('');
   const [language, setLanguage] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-  const { api } = useAuth();
-  const { makeRequest } = useApiRequest();
+  const { createSnippet, loading, error } = useCreateSnippet();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-    setLoading(true);
-
-    try {
-      const response = await makeRequest(
-        () => api.post('/snippets/', {
-          title,
-          code,
-          language,
-        })
-      );
-      navigate(`/snippets/${response.data.id}`);
-    } catch (error) {
-      setError('Failed to create snippet');
-      console.error('Error creating snippet:', error);
-    } finally {
-      setLoading(false);
-    }
+    await createSnippet({ title, code, language });
   };
 
   return (

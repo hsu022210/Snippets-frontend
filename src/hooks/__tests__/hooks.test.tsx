@@ -1,8 +1,8 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { renderHook, act, waitFor } from '@testing-library/react'
 import { useApiRequest } from '../useApiRequest'
 import { useSnippetList } from '../useSnippetList'
-import { useSnippet } from '../useSnippet'
+import { useSnippet, useCreateSnippet } from '../useSnippet'
 import { TestProviders } from '../../test/setup'
 import { http, HttpResponse } from 'msw'
 
@@ -188,6 +188,105 @@ describe('Hooks (with MSW)', () => {
       const cancelledSnippet = result.current.snippet as unknown as Snippet
       expect(result.current.editedTitle).toBe(cancelledSnippet.title)
       expect(result.current.saveError).toBe('')
+    })
+  })
+
+  describe('useCreateSnippet', () => {
+    beforeEach(() => {
+      // Mock localStorage
+      const localStorageMock = {
+        getItem: vi.fn(),
+        setItem: vi.fn(),
+        removeItem: vi.fn(),
+        clear: vi.fn(),
+      };
+      Object.defineProperty(window, 'localStorage', {
+        value: localStorageMock,
+        writable: true
+      });
+    })
+
+    it('should create a new snippet successfully', async () => {
+      const { result } = renderHook(() => useCreateSnippet(), {
+        wrapper: TestProviders,
+      })
+
+      const newSnippet = {
+        title: 'New Test Snippet',
+        code: 'console.log("test")',
+        language: 'javascript'
+      }
+
+      await act(async () => {
+        await result.current.createSnippet(newSnippet)
+      })
+
+      expect(result.current.loading).toBe(false)
+      expect(result.current.error).toBe('')
+    })
+
+    it('should handle creation error', async () => {
+      const { server } = await import('../../test/setup')
+      server.use(
+        http.post('/snippets/', () => {
+          return new HttpResponse(null, { status: 500 })
+        })
+      )
+
+      const { result } = renderHook(() => useCreateSnippet(), {
+        wrapper: TestProviders,
+      })
+
+      const newSnippet = {
+        title: 'New Test Snippet',
+        code: 'console.log("test")',
+        language: 'javascript'
+      }
+
+      await act(async () => {
+        try {
+          await result.current.createSnippet(newSnippet)
+        } catch (error) {
+          // Error is expected
+        }
+      })
+
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false)
+        expect(result.current.error).toMatch(/Failed to create/)
+      })
+    })
+
+    it('should handle authentication error', async () => {
+      const { server } = await import('../../test/setup')
+      server.use(
+        http.post('/snippets/', () => {
+          return new HttpResponse(null, { status: 401 })
+        })
+      )
+
+      const { result } = renderHook(() => useCreateSnippet(), {
+        wrapper: TestProviders,
+      })
+
+      const newSnippet = {
+        title: 'New Test Snippet',
+        code: 'console.log("test")',
+        language: 'javascript'
+      }
+
+      await act(async () => {
+        try {
+          await result.current.createSnippet(newSnippet)
+        } catch (error) {
+          // Error is expected
+        }
+      })
+
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false)
+        expect(result.current.error).toMatch(/session has expired/)
+      })
     })
   })
 }) 
