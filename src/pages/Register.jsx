@@ -6,6 +6,7 @@ import PasswordInput from '../components/auth/PasswordInput';
 import AuthForm from '../components/auth/AuthForm';
 import FormField from '../components/auth/FormField';
 import SubmitButton from '../components/auth/SubmitButton';
+import PasswordRules from '../components/auth/PasswordRules';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -87,6 +88,7 @@ const Register = () => {
           className="mb-3"
           autoComplete="new-password"
         />
+        <PasswordRules password={formData.password} />
         <PasswordInput
           label="Confirm Password"
           name="confirmPassword"
