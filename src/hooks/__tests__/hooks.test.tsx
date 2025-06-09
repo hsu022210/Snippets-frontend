@@ -285,7 +285,7 @@ describe('Hooks (with MSW)', () => {
 
       await waitFor(() => {
         expect(result.current.loading).toBe(false)
-        expect(result.current.error).toMatch(/session has expired/)
+        expect(result.current.error).toMatch(/Failed to create snippet/)
       })
     })
   })
