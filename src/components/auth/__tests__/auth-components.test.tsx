@@ -7,6 +7,7 @@ import AuthForm from '../AuthForm'
 import FormField from '../FormField'
 import SubmitButton from '../SubmitButton'
 import PasswordInput from '../PasswordInput'
+import PasswordRules from '../PasswordRules'
 
 describe('Auth Components', () => {
   // Setup user event
@@ -177,5 +178,49 @@ describe('Auth Components', () => {
       
       expect(screen.queryByText('Password')).not.toBeInTheDocument()
     })
+  })
+
+  describe('PasswordRules', () => {
+    it('renders all password rules', () => {
+      render(<PasswordRules password="" />);
+      
+      expect(screen.getByText('Password must meet the following requirements:')).toBeInTheDocument();
+      expect(screen.getByText('At least 8 characters')).toBeInTheDocument();
+      expect(screen.getByText('At least one letter')).toBeInTheDocument();
+    });
+
+    it('shows invalid state for empty password', () => {
+      render(<PasswordRules password="" />);
+      
+      const checkmarks = screen.getAllByText('○');
+      expect(checkmarks).toHaveLength(2);
+    });
+
+    it('shows valid state for password meeting all requirements', () => {
+      render(<PasswordRules password="Password123" />);
+      
+      const checkmarks = screen.getAllByText('✓');
+      expect(checkmarks).toHaveLength(2);
+    });
+
+    it('shows partial valid state for password meeting some requirements', () => {
+      render(<PasswordRules password="Pass" />);
+      
+      const validCheckmark = screen.getByText('✓');
+      const invalidCheckmark = screen.getByText('○');
+      
+      expect(validCheckmark).toBeInTheDocument();
+      expect(invalidCheckmark).toBeInTheDocument();
+    });
+
+    it('applies correct styling for valid and invalid states', () => {
+      render(<PasswordRules password="Pass" />);
+      
+      const validRule = screen.getByText('At least one letter').closest('li')?.firstChild;
+      const invalidRule = screen.getByText('At least 8 characters').closest('li')?.firstChild;
+      
+      expect(validRule).toHaveClass('text-success');
+      expect(invalidRule).toHaveClass('text-muted');
+    });
   })
 }) 
