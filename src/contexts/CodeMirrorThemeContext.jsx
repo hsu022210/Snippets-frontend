@@ -6,7 +6,7 @@ const CodeMirrorThemeContext = createContext();
 export const CodeMirrorThemeProvider = ({ children }) => {
   const [selectedTheme, setSelectedTheme] = useState(() => {
     const savedTheme = localStorage.getItem('codemirror-theme');
-    return savedTheme || 'dark';
+    return savedTheme || 'copilot';
   });
 
   useEffect(() => {
