@@ -5,6 +5,7 @@ import { CodeMirrorThemeProvider } from './contexts/CodeMirrorThemeContext';
 import { ToastProvider } from './contexts/ToastContext';
 import PrivateRoute from './components/PrivateRoute';
 import Navigation from './components/Navigation';
+import Footer from './components/Footer';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -22,9 +23,9 @@ function App() {
         <CodeMirrorThemeProvider>
           <AuthProvider>
             <Router>
-              <div className="App">
+              <div className="App d-flex flex-column min-vh-100">
                 <Navigation />
-                <Container fluid className="main-container" pageContainer>
+                <Container fluid className="main-container flex-grow-1" pageContainer>
                   <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/login" element={<Login />} />
@@ -56,6 +57,7 @@ function App() {
                     } />
                   </Routes>
                 </Container>
+                <Footer />
               </div>
             </Router>
           </AuthProvider>
