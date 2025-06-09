@@ -9,6 +9,7 @@ import { MemoryRouter } from 'react-router-dom'
 import { ThemeProvider } from '../contexts/ThemeContext'
 import { ToastProvider } from '../contexts/ToastContext'
 import { AuthProvider } from '../contexts/AuthContext'
+import { CodeMirrorThemeProvider } from '../contexts/CodeMirrorThemeContext'
 import { ReactNode } from 'react'
 
 // Extend Vitest's expect method with testing-library matchers
@@ -74,13 +75,15 @@ interface TestProvidersProps {
 export const TestProviders: React.FC<TestProvidersProps> = ({ children }) => {
   return (
     <ToastProvider>
-      <AuthProvider>
-        <ThemeProvider>
+      <ThemeProvider>
+        <CodeMirrorThemeProvider>
+          <AuthProvider>
           <MemoryRouter>
             {children}
           </MemoryRouter>
-        </ThemeProvider>
-      </AuthProvider>
+          </AuthProvider>
+        </CodeMirrorThemeProvider>
+      </ThemeProvider>
     </ToastProvider>
   )
 }

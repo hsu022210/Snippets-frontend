@@ -1,5 +1,7 @@
 import CodeMirror from '@uiw/react-codemirror';
 import { getLanguageExtension } from '../../utils/languageUtils';
+import { useCodeMirrorTheme } from '../../contexts/CodeMirrorThemeContext';
+import * as themes from '@uiw/codemirror-themes-all';
 
 const CodeEditor = ({
   value,
@@ -9,12 +11,15 @@ const CodeEditor = ({
   editable = true,
   className = '',
 }) => {
+  const { selectedTheme } = useCodeMirrorTheme();
+  const theme = themes[selectedTheme] || themes.default;
+
   return (
     <div className={className} style={{ border: '1px solid #dee2e6', borderRadius: '4px', overflow: 'hidden' }}>
       <CodeMirror
         value={value}
         height={height}
-        theme="dark"
+        theme={theme}
         onChange={onChange}
         extensions={[getLanguageExtension(language)]}
         editable={editable}

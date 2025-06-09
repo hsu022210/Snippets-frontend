@@ -5,6 +5,7 @@ import Card from '../Card'
 import Container from '../Container'
 import Button from '../Button'
 import CodeEditor from '../CodeEditor'
+import { TestProviders } from '../../../test/setup'
 
 // Mock CodeMirror component
 vi.mock('@uiw/react-codemirror', () => ({
@@ -85,11 +86,13 @@ describe('Shared Components', () => {
   describe('CodeEditor', () => {
     it('renders with default props', () => {
       render(
-        <CodeEditor
-          value="test code"
-          onChange={() => {}}
-          language="javascript"
-        />
+        <TestProviders>
+          <CodeEditor
+            value="test code"
+            onChange={() => {}}
+            language="javascript"
+          />
+        </TestProviders>
       )
       const editor = screen.getByTestId('codemirror-mock')
       expect(editor).toBeInTheDocument()
@@ -100,14 +103,16 @@ describe('Shared Components', () => {
 
     it('renders with custom props', () => {
       render(
-        <CodeEditor
-          value="custom code"
-          onChange={() => {}}
-          language="python"
-          height="400px"
-          editable={false}
-          className="custom-editor"
-        />
+        <TestProviders>
+          <CodeEditor
+            value="custom code"
+            onChange={() => {}}
+            language="python"
+            height="400px"
+            editable={false}
+            className="custom-editor"
+          />
+        </TestProviders>
       )
       const editor = screen.getByTestId('codemirror-mock')
       const container = editor.parentElement
@@ -120,11 +125,13 @@ describe('Shared Components', () => {
     it('handles onChange event', () => {
       const handleChange = vi.fn()
       render(
-        <CodeEditor
-          value="initial code"
-          onChange={handleChange}
-          language="javascript"
-        />
+        <TestProviders>
+          <CodeEditor
+            value="initial code"
+            onChange={handleChange}
+            language="javascript"
+          />
+        </TestProviders>
       )
       const editor = screen.getByTestId('codemirror-mock')
       fireEvent.click(editor)
@@ -133,11 +140,13 @@ describe('Shared Components', () => {
 
     it('applies border and border radius styles', () => {
       render(
-        <CodeEditor
-          value="test code"
-          onChange={() => {}}
-          language="javascript"
-        />
+        <TestProviders>
+          <CodeEditor
+            value="test code"
+            onChange={() => {}}
+            language="javascript"
+          />
+        </TestProviders>
       )
       const editor = screen.getByTestId('codemirror-mock')
       const container = editor.parentElement
