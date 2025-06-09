@@ -2,8 +2,16 @@ import { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { useApiRequest } from '../hooks/useApiRequest';
 
+// Constants
+const TOKEN_KEY = 'token';
+const REFRESH_TOKEN_KEY = 'refreshToken';
+const isDevelopment = import.meta.env.MODE === 'development';
+const BASE_URL = isDevelopment ? 'http://localhost:8000' : import.meta.env.VITE_API_BASE_URL_DEPLOY;
+
+// Context
 const AuthContext = createContext();
 
+// Custom hook for using auth context
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
@@ -12,52 +20,90 @@ export const useAuth = () => {
   return context;
 };
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem('token'));
-  const isDevelopment = import.meta.env.MODE === 'development'
-  const baseURL = isDevelopment ? 'http://localhost:8000' : import.meta.env.VITE_API_BASE_URL_DEPLOY
-  const { makeRequest } = useApiRequest();
-  const [api] = useState(() => {
-    const instance = axios.create({
-      baseURL: baseURL,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+// Token management utilities
+const tokenStorage = {
+  getAccessToken: () => localStorage.getItem(TOKEN_KEY),
+  getRefreshToken: () => localStorage.getItem(REFRESH_TOKEN_KEY),
+  setTokens: (access, refresh) => {
+    localStorage.setItem(TOKEN_KEY, access);
+    localStorage.setItem(REFRESH_TOKEN_KEY, refresh);
+  },
+  clearTokens: () => {
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(REFRESH_TOKEN_KEY);
+  }
+};
 
-    // Add request interceptor to always include the latest token
-    instance.interceptors.request.use(
-      (config) => {
-        const currentToken = localStorage.getItem('token');
-        if (currentToken) {
-          config.headers.Authorization = `Bearer ${currentToken}`;
-        }
-        return config;
-      },
-      (error) => {
-        return Promise.reject(error);
-      }
-    );
-
-    // Add response interceptor to handle token expiration
-    instance.interceptors.response.use(
-      (response) => response,
-      async (error) => {
-        if (error.response?.status === 401) {
-          // Clear auth state on unauthorized
-          localStorage.removeItem('token');
-          setToken(null);
-          setUser(null);
-        }
-        return Promise.reject(error);
-      }
-    );
-
-    return instance;
+// API instance configuration
+const createApiInstance = (baseURL, makeRequest) => {
+  const instance = axios.create({
+    baseURL,
+    headers: {
+      'Content-Type': 'application/json',
+    },
   });
 
-  // Initialize user data if token exists
+  // Request interceptor
+  instance.interceptors.request.use(
+    (config) => {
+      const currentToken = tokenStorage.getAccessToken();
+      if (currentToken) {
+        config.headers.Authorization = `Bearer ${currentToken}`;
+      }
+      return config;
+    },
+    (error) => Promise.reject(error)
+  );
+
+  // Response interceptor
+  instance.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+      const originalRequest = error.config;
+
+      if (error.response?.status === 401 && !originalRequest._retry) {
+        originalRequest._retry = true;
+
+        try {
+          const refreshToken = tokenStorage.getRefreshToken();
+          if (!refreshToken) {
+            throw new Error('No refresh token available');
+          }
+
+          const response = await makeRequest(
+            () => axios.post(`${baseURL}/auth/login/refresh/`, {
+              refresh: refreshToken
+            })
+          );
+
+          const { access } = response.data;
+          tokenStorage.setTokens(access, refreshToken);
+          
+          originalRequest.headers.Authorization = `Bearer ${access}`;
+          return instance(originalRequest);
+        } catch (refreshError) {
+          tokenStorage.clearTokens();
+          window.location.href = '/login';
+          return Promise.reject(refreshError);
+        }
+      }
+
+      return Promise.reject(error);
+    }
+  );
+
+  return instance;
+};
+
+// Auth Provider Component
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(tokenStorage.getAccessToken());
+  const [, setRefreshToken] = useState(tokenStorage.getRefreshToken());
+  const { makeRequest } = useApiRequest();
+  const [api] = useState(() => createApiInstance(BASE_URL, makeRequest));
+
+  // Initialize user data
   useEffect(() => {
     const initializeUser = async () => {
       if (token) {
@@ -68,8 +114,7 @@ export const AuthProvider = ({ children }) => {
           setUser(response.data);
         } catch (error) {
           console.error('Error initializing user:', error);
-          setToken(null);
-          localStorage.removeItem('token');
+          handleLogout();
         }
       }
     };
@@ -77,9 +122,23 @@ export const AuthProvider = ({ children }) => {
     initializeUser();
   }, [token, api, makeRequest]);
 
+  // Auth state management
+  const handleLogout = () => {
+    setUser(null);
+    setToken(null);
+    setRefreshToken(null);
+    tokenStorage.clearTokens();
+  };
+
+  const updateAuthState = (access, refresh) => {
+    setToken(access);
+    setRefreshToken(refresh);
+    tokenStorage.setTokens(access, refresh);
+  };
+
+  // Auth operations
   const register = async (username, password, password2, email) => {
     try {
-      // Register the user
       await makeRequest(
         () => api.post('/auth/register/', {
           username,
@@ -88,8 +147,6 @@ export const AuthProvider = ({ children }) => {
           email,
         })
       );
-
-      // If registration successful, login automatically
       return await login(username, password);
     } catch (error) {
       console.error('Registration error:', error);
@@ -106,11 +163,9 @@ export const AuthProvider = ({ children }) => {
         })
       );
       
-      const { access } = response.data;
-      setToken(access);
-      localStorage.setItem('token', access);
+      const { access, refresh } = response.data;
+      updateAuthState(access, refresh);
 
-      // Fetch user data
       const userResponse = await makeRequest(
         () => api.get('/auth/user/', {
           headers: { Authorization: `Bearer ${access}` }
@@ -126,12 +181,8 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      // Clear state first to ensure immediate UI update
-      setUser(null);
-      setToken(null);
-      localStorage.removeItem('token');
+      handleLogout();
       
-      // Then notify the server (don't wait for response since we've already cleared local state)
       if (token) {
         await makeRequest(
           () => api.post('/auth/logout/')
