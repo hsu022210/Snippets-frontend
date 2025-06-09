@@ -68,7 +68,7 @@ const Profile = () => {
 
   if (loading) {
     return (
-      <Container pageContainer>
+      <Container>
         <div className="center-content">
           <InlineLoadingSpinner message="Loading profile..." />
         </div>
@@ -77,7 +77,7 @@ const Profile = () => {
   }
 
   return (
-    <Container pageContainer>
+    <Container>
       <Container className="py-4">
         <h2 className="mb-4">Profile</h2>
         {error && <Alert variant="danger">{error}</Alert>}

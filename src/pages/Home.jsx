@@ -10,7 +10,7 @@ const Home = () => {
   const { user } = useAuth();
 
   return (
-    <Container pageContainer>
+    <Container>
       <Container className="py-4 my-4">
         <Row className="justify-content-center">
           <Col md={8} className="text-center">

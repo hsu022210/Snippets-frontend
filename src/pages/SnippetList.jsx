@@ -11,7 +11,7 @@ const SnippetList = () => {
 
   if (loading) {
     return (
-      <Container fluid pageContainer className="d-flex align-items-center justify-content-center">
+      <Container fluid className="d-flex align-items-center justify-content-center">
         <Stack gap={2} className="text-center">
           <InlineLoadingSpinner message="Loading snippets..." />
         </Stack>
@@ -21,14 +21,14 @@ const SnippetList = () => {
 
   if (error) {
     return (
-      <Container fluid pageContainer className="d-flex align-items-center justify-content-center">
+      <Container fluid className="d-flex align-items-center justify-content-center">
         <Alert variant="danger">{error}</Alert>
       </Container>
     );
   }
 
   return (
-    <Container fluid pageContainer>
+    <Container fluid>
       <SnippetListHeader />
       
       {snippets.length > 0 ? (

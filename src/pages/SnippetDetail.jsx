@@ -48,7 +48,7 @@ const SnippetDetail = () => {
 
   if (loading) {
     return (
-      <Container pageContainer>
+      <Container>
         <div className="center-content">
           <InlineLoadingSpinner message="Loading snippet..." />
         </div>
@@ -58,7 +58,7 @@ const SnippetDetail = () => {
 
   if (error) {
     return (
-      <Container pageContainer>
+      <Container>
         <div className="center-content">
           <Alert variant="danger">{error}</Alert>
         </div>
@@ -68,7 +68,7 @@ const SnippetDetail = () => {
 
   if (!snippet) {
     return (
-      <Container pageContainer>
+      <Container>
         <div className="center-content">
           <Alert variant="warning">Snippet not found</Alert>
         </div>
@@ -78,7 +78,7 @@ const SnippetDetail = () => {
 
   return (
     <ErrorBoundary>
-      <Container pageContainer>
+      <Container>
         <Breadcrumb className="mb-4">
           <Breadcrumb.Item linkAs={Link} linkProps={{ to: "/snippets" }}>
             Snippets

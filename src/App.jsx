@@ -13,7 +13,7 @@ import SnippetDetail from './pages/SnippetDetail';
 import CreateSnippet from './pages/CreateSnippet';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
-import { Container } from 'react-bootstrap';
+import Container from './components/shared/Container';
 
 function App() {
   return (
@@ -24,7 +24,7 @@ function App() {
             <Router>
               <div className="App">
                 <Navigation />
-                <Container fluid className="main-container">
+                <Container fluid className="main-container" pageContainer>
                   <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/login" element={<Login />} />

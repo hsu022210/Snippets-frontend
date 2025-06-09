@@ -39,7 +39,7 @@ const CreateSnippet = () => {
   };
 
   return (
-    <Container pageContainer>
+    <Container>
       <h2 className="mb-4">Create Snippet</h2>
       {error && <Alert variant="danger">{error}</Alert>}
       <Form onSubmit={handleSubmit}>

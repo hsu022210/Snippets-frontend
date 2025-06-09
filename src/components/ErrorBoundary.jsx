@@ -4,7 +4,7 @@ import Container from './shared/Container';
 
 function ErrorFallback({ error, resetErrorBoundary }) {
   return (
-    <Container pageContainer>
+    <Container>
       <div className="center-content">
         <Alert variant="danger">
           <Alert.Heading>Something went wrong</Alert.Heading>
