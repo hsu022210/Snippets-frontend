@@ -83,7 +83,6 @@ const createApiInstance = (baseURL, makeRequest) => {
           return instance(originalRequest);
         } catch (refreshError) {
           tokenStorage.clearTokens();
-          window.location.href = '/login';
           return Promise.reject(refreshError);
         }
       }
