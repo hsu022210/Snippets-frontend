@@ -61,6 +61,7 @@ const Register = () => {
         <FormField
           label="Username"
           name="username"
+          id="username"
           value={formData.username}
           onChange={handleChange}
           disabled={loading}
@@ -71,6 +72,7 @@ const Register = () => {
           label="Email"
           type="email"
           name="email"
+          id="email"
           value={formData.email}
           onChange={handleChange}
           disabled={loading}
@@ -80,6 +82,7 @@ const Register = () => {
         <PasswordInput
           label="Password"
           name="password"
+          id="password"
           value={formData.password}
           onChange={handleChange}
           required
@@ -92,6 +95,7 @@ const Register = () => {
         <PasswordInput
           label="Confirm Password"
           name="confirmPassword"
+          id="confirmPassword"
           value={formData.confirmPassword}
           onChange={handleChange}
           required
