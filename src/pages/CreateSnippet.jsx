@@ -50,6 +50,10 @@ const CreateSnippet = () => {
             <option value="sql">SQL</option>
             <option value="json">JSON</option>
             <option value="markdown">Markdown</option>
+            <option value="rust">Rust</option>
+            <option value="php">PHP</option>
+            <option value="xml">XML</option>
+            <option value="yaml">YAML</option>
           </Form.Select>
         </Form.Group>
 

@@ -7,6 +7,10 @@ import { html } from '@codemirror/lang-html';
 import { sql } from '@codemirror/lang-sql';
 import { json } from '@codemirror/lang-json';
 import { markdown } from '@codemirror/lang-markdown';
+import { rust } from '@codemirror/lang-rust';
+import { php } from '@codemirror/lang-php';
+import { xml } from '@codemirror/lang-xml';
+import { yaml } from '@codemirror/lang-yaml';
 
 export const LANGUAGE_OPTIONS = [
   'javascript',
@@ -19,7 +23,11 @@ export const LANGUAGE_OPTIONS = [
   'sql',
   'json',
   'markdown',
-  'typescript'
+  'typescript',
+  'rust',
+  'php',
+  'xml',
+  'yaml'
 ];
 
 export const getLanguageExtension = (selectedLanguage) => {
@@ -38,6 +46,10 @@ export const getLanguageExtension = (selectedLanguage) => {
       'json': json(),
       'markdown': markdown(),
       'typescript': javascript({ typescript: true }),
+      'rust': rust(),
+      'php': php(),
+      'xml': xml(),
+      'yaml': yaml()
     };
     
     return languageMap[selectedLanguage.toLowerCase()] || [];
