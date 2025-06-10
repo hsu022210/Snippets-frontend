@@ -6,7 +6,7 @@ import { useApiRequest } from '../hooks/useApiRequest';
 const TOKEN_KEY = 'token';
 const REFRESH_TOKEN_KEY = 'refreshToken';
 const isDevelopment = import.meta.env.MODE === 'development';
-const BASE_URL = isDevelopment ? 'http://localhost:8000' : import.meta.env.VITE_API_BASE_URL_DEPLOY;
+export const BASE_URL = isDevelopment ? 'http://localhost:8000' : import.meta.env.VITE_API_BASE_URL_DEPLOY;
 
 // Context
 const AuthContext = createContext();

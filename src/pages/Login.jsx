@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Form, Alert } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import PasswordInput from '../components/auth/PasswordInput';
 import AuthForm from '../components/auth/AuthForm';
@@ -75,6 +75,9 @@ const Login = () => {
         <SubmitButton loading={loading} loadingText="Logging in...">
           Login
         </SubmitButton>
+        <div className="text-center mt-3">
+          <Link to="/forgot-password">Forgot Password?</Link>
+        </div>
       </Form>
     </AuthForm>
   );

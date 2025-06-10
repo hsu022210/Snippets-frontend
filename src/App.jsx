@@ -9,6 +9,8 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 import SnippetList from './pages/SnippetList';
 import SnippetDetail from './pages/SnippetDetail';
 import CreateSnippet from './pages/CreateSnippet';
@@ -30,6 +32,8 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
+                    <Route path="/forgot-password" element={<ForgotPassword />} />
+                    <Route path="/reset-password/:token" element={<ResetPassword />} />
                     <Route path="/snippets" element={
                       <PrivateRoute>
                         <SnippetList />
