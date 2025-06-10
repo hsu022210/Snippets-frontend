@@ -6,6 +6,8 @@ import FormField from '../components/auth/FormField';
 import SubmitButton from '../components/auth/SubmitButton';
 import PasswordInput from '../components/auth/PasswordInput';
 import { BASE_URL } from '../contexts/AuthContext';
+import { useApiRequest } from '../hooks/useApiRequest';
+import axios from 'axios';
 
 const ResetPassword = () => {
   const [formData, setFormData] = useState({
@@ -16,6 +18,7 @@ const ResetPassword = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { token } = useParams();
+  const { makeRequest } = useApiRequest();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,28 +40,24 @@ const ResetPassword = () => {
       setError('');
       setLoading(true);
       
-      const response = await fetch(`${BASE_URL}/auth/password-reset/confirm/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const response = await makeRequest(
+        () => axios.post(`${BASE_URL}/auth/password-reset/confirm/`, {
           token,
           password: formData.password,
         }),
-      });
+        'Resetting your password...'
+      );
 
-      if (response.ok) {
+      if (response.status === 200) {
         // Redirect to login page after successful password reset
         navigate('/login', { 
           state: { message: 'Password has been reset successfully. Please login with your new password.' }
         });
       } else {
-        const data = await response.json();
-        setError(data.message || 'Failed to reset password. Please try again.');
+        setError(response.data.message || 'Failed to reset password. Please try again.');
       }
     } catch (error) {
-      setError('An error occurred. Please try again.');
+      setError(error.response?.data?.message || 'An error occurred. Please try again.');
       console.error('Password reset error:', error);
     } finally {
       setLoading(false);

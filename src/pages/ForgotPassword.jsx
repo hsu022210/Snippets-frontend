@@ -5,12 +5,15 @@ import AuthForm from '../components/auth/AuthForm';
 import FormField from '../components/auth/FormField';
 import SubmitButton from '../components/auth/SubmitButton';
 import { BASE_URL } from '../contexts/AuthContext';
+import { useApiRequest } from '../hooks/useApiRequest';
+import axios from 'axios';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
+  const { makeRequest } = useApiRequest();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,23 +22,19 @@ const ForgotPassword = () => {
       setSuccess('');
       setLoading(true);
       
-      const response = await fetch(`${BASE_URL}/auth/password-reset/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
+      const response = await makeRequest(
+        () => axios.post(`${BASE_URL}/auth/password-reset/`, { email }),
+        'Sending password reset instructions...'
+      );
 
-      if (response.ok) {
+      if (response.status === 200) {
         setSuccess('Password reset instructions have been sent to your email.');
         setEmail('');
       } else {
-        const data = await response.json();
-        setError(data.message || 'Failed to send reset instructions. Please try again.');
+        setError(response.data.message || 'Failed to send reset instructions. Please try again.');
       }
     } catch (error) {
-      setError('An error occurred. Please try again.');
+      setError(error.response?.data?.message || 'An error occurred. Please try again.');
       console.error('Password reset error:', error);
     } finally {
       setLoading(false);
