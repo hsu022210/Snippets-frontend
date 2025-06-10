@@ -9,7 +9,7 @@ import SubmitButton from '../components/auth/SubmitButton';
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    username: '',
+    email: '',
     password: ''
   });
   const [error, setError] = useState('');
@@ -30,7 +30,7 @@ const Login = () => {
     try {
       setError('');
       setLoading(true);
-      const success = await login(formData.username, formData.password);
+      const success = await login(formData.email, formData.password);
       if (success) {
         await new Promise(resolve => setTimeout(resolve, 500));
         navigate('/snippets');
@@ -50,15 +50,15 @@ const Login = () => {
       {error && <Alert variant="danger">{error}</Alert>}
       <Form onSubmit={handleSubmit} autoComplete="on">
         <FormField
-          label="Username"
-          type="text"
-          name="username"
-          id="username"
-          value={formData.username}
+          label="Email"
+          type="email"
+          name="email"
+          id="email"
+          value={formData.email}
           onChange={handleChange}
           disabled={loading}
           required
-          autoComplete="username"
+          autoComplete="email"
         />
         <PasswordInput
           label="Password"

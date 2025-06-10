@@ -42,7 +42,7 @@ describe('Login Component', () => {
     renderLogin();
     
     expect(screen.getByRole('heading', { name: 'Login' })).toBeInTheDocument();
-    expect(screen.getByLabelText(/username/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/^password$/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /login/i })).toBeInTheDocument();
   });
@@ -50,13 +50,13 @@ describe('Login Component', () => {
   it('handles input changes correctly', () => {
     renderLogin();
     
-    const usernameInput = screen.getByLabelText(/username/i);
+    const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/^password$/i);
 
-    fireEvent.change(usernameInput, { target: { name: 'username', value: 'testuser' } });
+    fireEvent.change(emailInput, { target: { name: 'email', value: 'test@example.com' } });
     fireEvent.change(passwordInput, { target: { name: 'password', value: 'testpass' } });
 
-    expect(usernameInput.value).toBe('testuser');
+    expect(emailInput.value).toBe('test@example.com');
     expect(passwordInput.value).toBe('testpass');
   });
 
@@ -64,18 +64,18 @@ describe('Login Component', () => {
     mockLogin.mockResolvedValueOnce(true);
     renderLogin();
     
-    const usernameInput = screen.getByLabelText(/username/i);
+    const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/^password$/i);
     const submitButton = screen.getByRole('button', { name: /login/i });
 
-    fireEvent.change(usernameInput, { target: { name: 'username', value: 'testuser' } });
+    fireEvent.change(emailInput, { target: { name: 'email', value: 'test@example.com' } });
     fireEvent.change(passwordInput, { target: { name: 'password', value: 'testpass' } });
     fireEvent.click(submitButton);
 
     expect(screen.getByText('Logging in...')).toBeInTheDocument();
     
     await waitFor(() => {
-      expect(mockLogin).toHaveBeenCalledWith('testuser', 'testpass');
+      expect(mockLogin).toHaveBeenCalledWith('test@example.com', 'testpass');
       expect(mockNavigate).toHaveBeenCalledWith('/snippets');
     });
   });
@@ -84,11 +84,11 @@ describe('Login Component', () => {
     mockLogin.mockResolvedValueOnce(false);
     renderLogin();
     
-    const usernameInput = screen.getByLabelText(/username/i);
+    const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/^password$/i);
     const submitButton = screen.getByRole('button', { name: /login/i });
 
-    fireEvent.change(usernameInput, { target: { name: 'username', value: 'testuser' } });
+    fireEvent.change(emailInput, { target: { name: 'email', value: 'test@example.com' } });
     fireEvent.change(passwordInput, { target: { name: 'password', value: 'wrongpass' } });
     fireEvent.click(submitButton);
 
@@ -101,11 +101,11 @@ describe('Login Component', () => {
     mockLogin.mockRejectedValueOnce(new Error('Network error'));
     renderLogin();
     
-    const usernameInput = screen.getByLabelText(/username/i);
+    const emailInput = screen.getByLabelText(/email/i);
     const passwordInput = screen.getByLabelText(/^password$/i);
     const submitButton = screen.getByRole('button', { name: /login/i });
 
-    fireEvent.change(usernameInput, { target: { name: 'username', value: 'testuser' } });
+    fireEvent.change(emailInput, { target: { name: 'email', value: 'test@example.com' } });
     fireEvent.change(passwordInput, { target: { name: 'password', value: 'testpass' } });
     fireEvent.click(submitButton);
 

@@ -146,18 +146,18 @@ export const AuthProvider = ({ children }) => {
           email,
         })
       );
-      return await login(username, password);
+      return await login(email, password);
     } catch (error) {
       console.error('Registration error:', error);
       throw error;
     }
   };
 
-  const login = async (username, password) => {
+  const login = async (email, password) => {
     try {
       const response = await makeRequest(
         () => api.post('/auth/login/', {
-          username,
+          email,
           password,
         })
       );
