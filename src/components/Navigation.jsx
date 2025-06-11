@@ -2,9 +2,17 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
-import { Navbar, Nav, NavDropdown, Button } from 'react-bootstrap';
+import { Navbar, Nav, NavDropdown, Button, Container } from 'react-bootstrap';
 import LogoutLoadingSpinner from './LogoutLoadingSpinner';
-import Container from '../components/shared/Container';
+import { 
+  CodeSquare, 
+  Sun, 
+  Moon, 
+  PersonCircle, 
+  Person, 
+  Gear, 
+  BoxArrowRight 
+} from 'react-bootstrap-icons';
 
 const Navigation = () => {
   const [expanded, setExpanded] = useState(false);
@@ -68,7 +76,7 @@ const Navigation = () => {
       >
         <Container fluid>
           <Navbar.Brand as={Link} to="/" onClick={() => setExpanded(false)}>
-            <i className="bi bi-code-square me-2"></i>
+            <CodeSquare className="me-2" size={20} />
             Code Snippets
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -90,39 +98,43 @@ const Navigation = () => {
                 <Button
                   variant="outline-light"
                   size="md"
-                  className="me-3 d-flex align-items-center"
+                  className="me-3 d-flex align-items-center theme-toggle-btn"
                   onClick={(e) => {
                     toggleTheme();
                     e.target.blur();
                   }}
                 >
-                  <i className={`bi bi-${isDark ? 'sun' : 'moon'} me-2`}></i>
+                  {isDark ? (
+                    <Sun className="me-2" size={18} />
+                  ) : (
+                    <Moon className="me-2" size={18} />
+                  )}
                   {isDark ? 'Light' : 'Dark'} Mode
                 </Button>
               </Nav.Item>
               {user ? (
                 <NavDropdown 
                   title={
-                    <span className="text-light">
-                      <i className="bi bi-person-circle me-2"></i>
-                      {user.username}
+                    <span className="text-light d-flex align-items-center">
+                      <PersonCircle className="me-2" size={20} />
+                      <span className="d-none d-sm-inline">{user.username}</span>
                     </span>
                   } 
                   id="user-dropdown"
                   align="end"
-                  className="nav-dropdown-custom"
+                  className="nav-dropdown-custom d-flex align-items-center"
                 >
                   <NavDropdown.Item as={Link} to="/profile" onClick={() => setExpanded(false)}>
-                    <i className="bi bi-person me-2"></i>
+                    <Person className="me-2" size={18} />
                     Profile
                   </NavDropdown.Item>
                   <NavDropdown.Item as={Link} to="/settings" onClick={() => setExpanded(false)}>
-                    <i className="bi bi-gear me-2"></i>
+                    <Gear className="me-2" size={18} />
                     Settings
                   </NavDropdown.Item>
                   <NavDropdown.Divider />
                   <NavDropdown.Item onClick={handleLogout}>
-                    <i className="bi bi-box-arrow-right me-2"></i>
+                    <BoxArrowRight className="me-2" size={18} />
                     Logout
                   </NavDropdown.Item>
                 </NavDropdown>

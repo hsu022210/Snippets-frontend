@@ -1,6 +1,6 @@
 import { Form, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useToast } from '../../contexts/ToastContext';
-import { Share } from 'react-bootstrap-icons';
+import { Share, Save, XCircle, PencilSquare, Trash } from 'react-bootstrap-icons';
 
 const SnippetHeader = ({
   isEditing,
@@ -27,9 +27,9 @@ const SnippetHeader = ({
   };
 
   return (
-    <div className="d-flex justify-content-between align-items-center mb-4">
+    <div className="d-flex justify-content-between align-items-center mb-4 snippet-header">
       {isEditing ? (
-        <div className="d-flex align-items-center flex-grow-1">
+        <div className="d-flex align-items-center w-100">
           <Form.Control
             type="text"
             value={editedTitle}
@@ -37,37 +37,43 @@ const SnippetHeader = ({
             placeholder="Enter snippet title"
             className="me-3"
           />
-          <Button
-            variant="success"
-            onClick={handleSave}
-            disabled={saving}
-            className="me-2"
-          >
-            {saving ? 'Saving...' : 'Save'}
-          </Button>
-          <Button
-            variant="secondary"
-            onClick={handleCancel}
-            disabled={saving}
-          >
-            Cancel
-          </Button>
+          <div className="ms-auto d-flex gap-2">
+            <Button
+              variant="success"
+              onClick={handleSave}
+              disabled={saving}
+              className="d-flex align-items-center"
+            >
+              <Save className="me-2" size={18} />
+              {saving ? 'Saving...' : 'Save'}
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={handleCancel}
+              disabled={saving}
+              className="d-flex align-items-center"
+            >
+              <XCircle className="me-2" size={18} />
+              Cancel
+            </Button>
+          </div>
         </div>
       ) : (
-        <>
-          <h2 className="mb-0">{title || 'Untitled Snippet'}</h2>
-          <div className="d-flex gap-2">
+        <div className="d-flex align-items-center w-100">
+          <h2 className="mb-0">{title}</h2>
+          <div className="ms-auto d-flex gap-2">
             <OverlayTrigger
               placement="top"
               overlay={<Tooltip>Share snippet</Tooltip>}
             >
               <Button
-                variant="outline-primary"
+                variant="outline-secondary"
+                size="sm"
                 onClick={handleShare}
-                className="d-flex align-items-center"
+                className="d-flex align-items-center share-btn"
                 aria-label="Share snippet"
               >
-                <Share size={16} />
+                <Share size={18} />
               </Button>
             </OverlayTrigger>
             {isAuthenticated && (
@@ -75,19 +81,23 @@ const SnippetHeader = ({
                 <Button
                   variant="primary"
                   onClick={() => setIsEditing(true)}
+                  className="d-flex align-items-center"
                 >
+                  <PencilSquare className="me-2" size={18} />
                   Edit
                 </Button>
                 <Button
                   variant="danger"
                   onClick={() => setShowDeleteModal(true)}
+                  className="d-flex align-items-center"
                 >
+                  <Trash className="me-2" size={18} />
                   Delete
                 </Button>
               </>
             )}
           </div>
-        </>
+        </div>
       )}
     </div>
   );

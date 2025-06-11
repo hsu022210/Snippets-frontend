@@ -1,8 +1,8 @@
 import React from 'react'
 import { describe, it, expect, vi } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { server, TestProviders } from '../../../test/setup.tsx'
+import { TestProviders } from '../../../test/setup.tsx'
 import SnippetCard from '../SnippetCard'
 import EmptySnippetList from '../EmptySnippetList'
 import SnippetListHeader from '../SnippetListHeader'
@@ -234,6 +234,62 @@ describe('Snippet Components', () => {
       )
 
       expect(screen.getByRole('button', { name: /saving/i })).toBeInTheDocument()
+    })
+
+    it('handles edit button click', async () => {
+      render(
+        <TestProviders>
+          <SnippetHeader {...defaultProps} />
+        </TestProviders>
+      )
+
+      await user.click(screen.getByRole('button', { name: /edit/i }))
+      expect(defaultProps.setIsEditing).toHaveBeenCalledWith(true)
+    })
+
+    it('handles delete button click', async () => {
+      render(
+        <TestProviders>
+          <SnippetHeader {...defaultProps} />
+        </TestProviders>
+      )
+
+      await user.click(screen.getByRole('button', { name: /delete/i }))
+      expect(defaultProps.setShowDeleteModal).toHaveBeenCalledWith(true)
+    })
+
+    it('handles save button click', async () => {
+      render(
+        <TestProviders>
+          <SnippetHeader {...defaultProps} isEditing={true} />
+        </TestProviders>
+      )
+
+      await user.click(screen.getByRole('button', { name: /save/i }))
+      expect(defaultProps.handleSave).toHaveBeenCalled()
+    })
+
+    it('handles cancel button click', async () => {
+      render(
+        <TestProviders>
+          <SnippetHeader {...defaultProps} isEditing={true} />
+        </TestProviders>
+      )
+
+      await user.click(screen.getByRole('button', { name: /cancel/i }))
+      expect(defaultProps.handleCancel).toHaveBeenCalled()
+    })
+
+    it('handles title input change', async () => {
+      render(
+        <TestProviders>
+          <SnippetHeader {...defaultProps} isEditing={true} />
+        </TestProviders>
+      )
+
+      const input = screen.getByPlaceholderText('Enter snippet title')
+      await user.type(input, 'New Title')
+      expect(defaultProps.setEditedTitle).toHaveBeenCalled()
     })
   })
 }) 
