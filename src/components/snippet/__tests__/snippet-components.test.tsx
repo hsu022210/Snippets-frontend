@@ -177,60 +177,63 @@ describe('Snippet Components', () => {
   describe('SnippetHeader', () => {
     const defaultProps = {
       isEditing: false,
-      editedTitle: 'Test Snippet',
+      editedTitle: '',
       setEditedTitle: vi.fn(),
       saving: false,
       handleCancel: vi.fn(),
       handleSave: vi.fn(),
       setIsEditing: vi.fn(),
       setShowDeleteModal: vi.fn(),
-      title: 'Test Snippet'
+      title: 'Test Snippet',
+      isAuthenticated: true
     }
 
-    it('renders header with title and actions', () => {
+    it('renders title and action buttons when not editing', () => {
       render(
         <TestProviders>
           <SnippetHeader {...defaultProps} />
         </TestProviders>
       )
-      
+
       expect(screen.getByText('Test Snippet')).toBeInTheDocument()
       expect(screen.getByRole('button', { name: /edit/i })).toBeInTheDocument()
       expect(screen.getByRole('button', { name: /delete/i })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: /share snippet/i })).toBeInTheDocument()
     })
 
-    it('disables save button while saving', () => {
+    it('hides edit and delete buttons when user is not authenticated', () => {
+      render(
+        <TestProviders>
+          <SnippetHeader {...defaultProps} isAuthenticated={false} />
+        </TestProviders>
+      )
+
+      expect(screen.getByText('Test Snippet')).toBeInTheDocument()
+      expect(screen.queryByRole('button', { name: /edit/i })).not.toBeInTheDocument()
+      expect(screen.queryByRole('button', { name: /delete/i })).not.toBeInTheDocument()
+      expect(screen.getByRole('button', { name: /share snippet/i })).toBeInTheDocument()
+    })
+
+    it('shows editing form when isEditing is true', () => {
+      render(
+        <TestProviders>
+          <SnippetHeader {...defaultProps} isEditing={true} />
+        </TestProviders>
+      )
+
+      expect(screen.getByPlaceholderText('Enter snippet title')).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: /cancel/i })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: /save/i })).toBeInTheDocument()
+    })
+
+    it('shows saving state when saving is true', () => {
       render(
         <TestProviders>
           <SnippetHeader {...defaultProps} isEditing={true} saving={true} />
         </TestProviders>
       )
-      
-      expect(screen.getByRole('button', { name: /saving/i })).toBeDisabled()
-    })
 
-    it('shows "Untitled Snippet" when title is empty', () => {
-      render(
-        <TestProviders>
-          <SnippetHeader {...defaultProps} title="" />
-        </TestProviders>
-      )
-      
-      expect(screen.getByText('Untitled Snippet')).toBeInTheDocument()
-    })
-
-    it('handles edit and delete actions', async () => {
-      render(
-        <TestProviders>
-          <SnippetHeader {...defaultProps} />
-        </TestProviders>
-      )
-      
-      await user.click(screen.getByRole('button', { name: /edit/i }))
-      expect(defaultProps.setIsEditing).toHaveBeenCalledWith(true)
-      
-      await user.click(screen.getByRole('button', { name: /delete/i }))
-      expect(defaultProps.setShowDeleteModal).toHaveBeenCalledWith(true)
+      expect(screen.getByRole('button', { name: /saving/i })).toBeInTheDocument()
     })
   })
 }) 

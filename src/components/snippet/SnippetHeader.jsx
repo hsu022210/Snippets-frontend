@@ -65,6 +65,7 @@ const SnippetHeader = ({
                 variant="outline-primary"
                 onClick={handleShare}
                 className="d-flex align-items-center"
+                aria-label="Share snippet"
               >
                 <Share size={16} />
               </Button>
