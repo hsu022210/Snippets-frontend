@@ -100,89 +100,87 @@ const Profile = () => {
 
   return (
     <Container>
-      <Container className="py-4">
-        <h2 className="mb-4">Profile</h2>
-        {error && <Alert variant="danger">{error}</Alert>}
-        {success && <Alert variant="success">{success}</Alert>}
-        
-        <div className="row g-4">
-          {/* Profile Information Section */}
-          <div className="col-12 col-lg-8">
-            <Card className="h-100">
-              <Card.Body>
-                <Card.Title className="mb-4">Profile Information</Card.Title>
-                <Form onSubmit={handleSubmit}>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Username</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="username"
-                      value={userProfile.username}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </Form.Group>
+      <h2 className="mb-4">Profile</h2>
+      {error && <Alert variant="danger">{error}</Alert>}
+      {success && <Alert variant="success">{success}</Alert>}
+      
+      <div className="row g-4">
+        {/* Profile Information Section */}
+        <div className="col-12 col-lg-8">
+          <Card className="h-100">
+            <Card.Body>
+              <Card.Title className="mb-4">Profile Information</Card.Title>
+              <Form onSubmit={handleSubmit}>
+                <Form.Group className="mb-3">
+                  <Form.Label>Username</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="username"
+                    value={userProfile.username}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </Form.Group>
 
-                  <Form.Group className="mb-3">
-                    <Form.Label>Email</Form.Label>
-                    <Form.Control
-                      type="email"
-                      name="email"
-                      value={userProfile.email}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control
+                    type="email"
+                    name="email"
+                    value={userProfile.email}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </Form.Group>
 
-                  <Form.Group className="mb-3">
-                    <Form.Label>First Name</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="first_name"
-                      value={userProfile.first_name}
-                      onChange={handleInputChange}
-                    />
-                  </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>First Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="first_name"
+                    value={userProfile.first_name}
+                    onChange={handleInputChange}
+                  />
+                </Form.Group>
 
-                  <Form.Group className="mb-3">
-                    <Form.Label>Last Name</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="last_name"
-                      value={userProfile.last_name}
-                      onChange={handleInputChange}
-                    />
-                  </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Last Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="last_name"
+                    value={userProfile.last_name}
+                    onChange={handleInputChange}
+                  />
+                </Form.Group>
 
-                  <Button type="submit" variant="primary" disabled={saving}>
-                    {saving ? 'Saving...' : 'Save Changes'}
-                  </Button>
-                </Form>
-              </Card.Body>
-            </Card>
-          </div>
-
-          {/* Security Section */}
-          <div className="col-12 col-lg-4">
-            <Card className="h-100">
-              <Card.Body>
-                <Card.Title className="mb-4">Security</Card.Title>
-                <p className="text-muted mb-4">
-                  Manage your account security settings and password.
-                </p>
-                <Button 
-                  variant="outline-danger" 
-                  onClick={handleResetPassword}
-                  className="w-100"
-                >
-                  <Key className="me-2" size={18} />
-                  Reset Password
+                <Button type="submit" variant="primary" disabled={saving}>
+                  {saving ? 'Saving...' : 'Save Changes'}
                 </Button>
-              </Card.Body>
-            </Card>
-          </div>
+              </Form>
+            </Card.Body>
+          </Card>
         </div>
-      </Container>
+
+        {/* Security Section */}
+        <div className="col-12 col-lg-4">
+          <Card className="h-100">
+            <Card.Body>
+              <Card.Title className="mb-4">Security</Card.Title>
+              <p className="text-muted mb-4">
+                Manage your account security settings and password.
+              </p>
+              <Button 
+                variant="outline-danger" 
+                onClick={handleResetPassword}
+                className="w-100"
+              >
+                <Key className="me-2" size={18} />
+                Reset Password
+              </Button>
+            </Card.Body>
+          </Card>
+        </div>
+      </div>
     </Container>
   );
 };

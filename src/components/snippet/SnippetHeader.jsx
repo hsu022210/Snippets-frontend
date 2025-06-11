@@ -77,7 +77,7 @@ const SnippetHeader = ({
                 variant="outline-secondary"
                 size="sm"
                 onClick={handleShare}
-                className="d-flex align-items-center share-btn flex-grow-1 flex-md-grow-0"
+                className="d-flex align-items-center share-btn"
                 aria-label="Share snippet"
               >
                 <Share size={18} />

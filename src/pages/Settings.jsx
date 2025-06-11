@@ -25,7 +25,7 @@ const result = calculateSum(numbers);
 console.log('Sum:', result);`;
 
   return (
-    <Container className="py-4">
+    <Container>
       <h2 className="mb-4">Settings</h2>
       <Card>
         <Card.Body>

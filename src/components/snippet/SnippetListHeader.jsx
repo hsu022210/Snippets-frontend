@@ -7,7 +7,7 @@ const SnippetListHeader = () => {
     <>
       {/* Mobile Header */}
       <div className="d-md-none mb-4">
-        <Stack gap={4} className="py-4 my-4">
+        <Stack gap={4} className="my-4">
           <Button
             as={Link}
             to="/create-snippet"
