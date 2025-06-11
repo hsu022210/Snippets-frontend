@@ -81,6 +81,26 @@ const Navigation = () => {
             <CodeSquare className="me-2" size={20} />
             Code Snippets
           </Navbar.Brand>
+          <Nav.Item className="d-flex align-items-center me-2">
+            <Button
+              variant="outline-light"
+              size="md"
+              className="theme-toggle-btn"
+              onClick={(e) => {
+                e.currentTarget.blur();
+                toggleTheme();
+              }}
+              aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
+            >
+              <div className="theme-icon-wrapper">
+                {isDark ? (
+                  <Sun className="theme-icon" size={18} />
+                ) : (
+                  <Moon className="theme-icon" size={18} />
+                )}
+              </div>
+            </Button>
+          </Nav.Item>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
@@ -96,32 +116,12 @@ const Navigation = () => {
               )}
             </Nav>
             <Nav>
-              <Nav.Item>
-                <Button
-                  variant="outline-light"
-                  size="md"
-                  className="me-3 theme-toggle-btn"
-                  onClick={(e) => {
-                    e.currentTarget.blur();
-                    toggleTheme();
-                  }}
-                  aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
-                >
-                  <div className="theme-icon-wrapper">
-                    {isDark ? (
-                      <Sun className="theme-icon" size={18} />
-                    ) : (
-                      <Moon className="theme-icon" size={18} />
-                    )}
-                  </div>
-                </Button>
-              </Nav.Item>
               {user ? (
                 <NavDropdown 
                   title={
                     <span className="text-light d-flex align-items-center">
                       <PersonCircle className="me-2" size={20} />
-                      <span className="d-none d-sm-inline">{user.username}</span>
+                      <span>{user.username}</span>
                     </span>
                   } 
                   id="user-dropdown"
