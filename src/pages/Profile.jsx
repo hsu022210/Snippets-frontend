@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Form, Button, Alert } from 'react-bootstrap';
+import { Form, Button, Alert, Card } from 'react-bootstrap';
 import { useAuth } from '../contexts/AuthContext';
 import { useApiRequest } from '../hooks/useApiRequest';
 import Container from '../components/shared/Container';
 import InlineLoadingSpinner from '../components/InlineLoadingSpinner';
+import { BASE_URL } from '../contexts/AuthContext';
+import axios from 'axios';
 
 const Profile = () => {
   const { api } = useAuth();
@@ -66,6 +68,25 @@ const Profile = () => {
     }
   };
 
+  const handleResetPassword = async () => {
+    try {
+      setError('');
+      setSuccess('');
+      
+      const response = await makeRequest(
+        () => axios.post(`${BASE_URL}/auth/password-reset/`, { email: userProfile.email }),
+        'Sending password reset instructions...'
+      );
+
+      if (response.status === 200) {
+        setSuccess('Password reset instructions have been sent to your email.');
+      }
+    } catch (error) {
+      setError(error.response?.data?.message || 'An error occurred. Please try again.');
+      console.error('Password reset error:', error);
+    }
+  };
+
   if (loading) {
     return (
       <Container>
@@ -82,53 +103,84 @@ const Profile = () => {
         <h2 className="mb-4">Profile</h2>
         {error && <Alert variant="danger">{error}</Alert>}
         {success && <Alert variant="success">{success}</Alert>}
-        <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-3">
-            <Form.Label>Username</Form.Label>
-            <Form.Control
-              type="text"
-              name="username"
-              value={userProfile.username}
-              onChange={handleInputChange}
-              required
-            />
-          </Form.Group>
+        
+        <div className="row g-4">
+          {/* Profile Information Section */}
+          <div className="col-12 col-lg-8">
+            <Card className="h-100">
+              <Card.Body>
+                <Card.Title className="mb-4">Profile Information</Card.Title>
+                <Form onSubmit={handleSubmit}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Username</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="username"
+                      value={userProfile.username}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </Form.Group>
 
-          <Form.Group className="mb-3">
-            <Form.Label>Email</Form.Label>
-            <Form.Control
-              type="email"
-              name="email"
-              value={userProfile.email}
-              onChange={handleInputChange}
-              required
-            />
-          </Form.Group>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Email</Form.Label>
+                    <Form.Control
+                      type="email"
+                      name="email"
+                      value={userProfile.email}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </Form.Group>
 
-          <Form.Group className="mb-3">
-            <Form.Label>First Name</Form.Label>
-            <Form.Control
-              type="text"
-              name="first_name"
-              value={userProfile.first_name}
-              onChange={handleInputChange}
-            />
-          </Form.Group>
+                  <Form.Group className="mb-3">
+                    <Form.Label>First Name</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="first_name"
+                      value={userProfile.first_name}
+                      onChange={handleInputChange}
+                    />
+                  </Form.Group>
 
-          <Form.Group className="mb-3">
-            <Form.Label>Last Name</Form.Label>
-            <Form.Control
-              type="text"
-              name="last_name"
-              value={userProfile.last_name}
-              onChange={handleInputChange}
-            />
-          </Form.Group>
+                  <Form.Group className="mb-3">
+                    <Form.Label>Last Name</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="last_name"
+                      value={userProfile.last_name}
+                      onChange={handleInputChange}
+                    />
+                  </Form.Group>
 
-          <Button type="submit" variant="primary" disabled={saving}>
-            {saving ? 'Saving...' : 'Save Changes'}
-          </Button>
-        </Form>
+                  <Button type="submit" variant="primary" disabled={saving}>
+                    {saving ? 'Saving...' : 'Save Changes'}
+                  </Button>
+                </Form>
+              </Card.Body>
+            </Card>
+          </div>
+
+          {/* Security Section */}
+          <div className="col-12 col-lg-4">
+            <Card className="h-100">
+              <Card.Body>
+                <Card.Title className="mb-4">Security</Card.Title>
+                <p className="text-muted mb-4">
+                  Manage your account security settings and password.
+                </p>
+                <Button 
+                  variant="outline-danger" 
+                  onClick={handleResetPassword}
+                  className="w-100"
+                >
+                  <i className="bi bi-key me-2"></i>
+                  Reset Password
+                </Button>
+              </Card.Body>
+            </Card>
+          </div>
+        </div>
       </Container>
     </Container>
   );
