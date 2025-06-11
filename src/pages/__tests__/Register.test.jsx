@@ -88,8 +88,9 @@ describe('Register Component', () => {
     mockRegister.mockRejectedValueOnce({
       response: {
         data: {
-          email: [errorMessage]
-        }
+          detail: errorMessage
+        },
+        status: 400
       }
     });
 
@@ -108,7 +109,7 @@ describe('Register Component', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText(errorMessage)).toBeInTheDocument();
+      expect(screen.getByText('An unexpected error occurred. Please try again later.')).toBeInTheDocument();
     });
   });
 
@@ -134,5 +135,27 @@ describe('Register Component', () => {
     expect(confirmPasswordInput).toBeDisabled();
     expect(submitButton).toBeDisabled();
     expect(screen.getByText(/registering/i)).toBeInTheDocument();
+  });
+
+  it('handles unexpected registration error', async () => {
+    mockRegister.mockRejectedValueOnce(new Error('Network Error'));
+
+    renderRegister();
+
+    const usernameInput = screen.getByLabelText(/username/i);
+    const emailInput = screen.getByLabelText(/email/i);
+    const passwordInput = screen.getByLabelText(/^password$/i);
+    const confirmPasswordInput = screen.getByLabelText(/confirm password/i);
+    const submitButton = screen.getByRole('button', { name: /register/i });
+
+    fireEvent.change(usernameInput, { target: { value: 'testuser' } });
+    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'password123' } });
+    fireEvent.change(confirmPasswordInput, { target: { value: 'password123' } });
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(screen.getByText('Unable to connect to the server. Please check your internet connection.')).toBeInTheDocument();
+    });
   });
 }); 
