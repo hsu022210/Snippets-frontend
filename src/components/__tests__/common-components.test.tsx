@@ -32,7 +32,7 @@ describe('Common Components', () => {
       renderNavigation()
       
       // Verify user menu is present
-      const themeToggle = screen.getByText('Dark Mode')
+      const themeToggle = screen.getByLabelText('Switch to dark mode')
       expect(themeToggle).toBeInTheDocument()
     })
   })

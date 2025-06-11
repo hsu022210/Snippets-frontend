@@ -100,18 +100,20 @@ const Navigation = () => {
                 <Button
                   variant="outline-light"
                   size="md"
-                  className="me-3 d-flex align-items-center theme-toggle-btn"
+                  className="me-3 theme-toggle-btn"
                   onClick={(e) => {
+                    e.currentTarget.blur();
                     toggleTheme();
-                    e.target.blur();
                   }}
+                  aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
                 >
-                  {isDark ? (
-                    <Sun className="me-2" size={18} />
-                  ) : (
-                    <Moon className="me-2" size={18} />
-                  )}
-                  {isDark ? 'Light' : 'Dark'} Mode
+                  <div className="theme-icon-wrapper">
+                    {isDark ? (
+                      <Sun className="theme-icon" size={18} />
+                    ) : (
+                      <Moon className="theme-icon" size={18} />
+                    )}
+                  </div>
                 </Button>
               </Nav.Item>
               {user ? (
