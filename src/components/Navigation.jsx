@@ -11,7 +11,9 @@ import {
   PersonCircle, 
   Person, 
   Gear, 
-  BoxArrowRight 
+  BoxArrowRight,
+  BoxArrowInRight,
+  PersonPlus
 } from 'react-bootstrap-icons';
 
 const Navigation = () => {
@@ -141,11 +143,11 @@ const Navigation = () => {
               ) : (
                 <>
                   <Nav.Link as={Link} to="/login" className="px-3" onClick={() => setExpanded(false)}>
-                    <i className="bi bi-box-arrow-in-right me-2"></i>
+                    <BoxArrowInRight className="me-2" size={18} />
                     Login
                   </Nav.Link>
                   <Nav.Link as={Link} to="/register" className="px-3" onClick={() => setExpanded(false)}>
-                    <i className="bi bi-person-plus me-2"></i>
+                    <PersonPlus className="me-2" size={18} />
                     Register
                   </Nav.Link>
                 </>

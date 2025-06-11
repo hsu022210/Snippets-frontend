@@ -6,6 +6,7 @@ import Container from '../components/shared/Container';
 import InlineLoadingSpinner from '../components/InlineLoadingSpinner';
 import { BASE_URL } from '../contexts/AuthContext';
 import axios from 'axios';
+import { Key } from 'react-bootstrap-icons';
 
 const Profile = () => {
   const { api } = useAuth();
@@ -174,7 +175,7 @@ const Profile = () => {
                   onClick={handleResetPassword}
                   className="w-100"
                 >
-                  <i className="bi bi-key me-2"></i>
+                  <Key className="me-2" size={18} />
                   Reset Password
                 </Button>
               </Card.Body>
