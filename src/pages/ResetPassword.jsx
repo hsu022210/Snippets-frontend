@@ -2,23 +2,24 @@ import { useState } from 'react';
 import { Form, Alert } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import AuthForm from '../components/auth/AuthForm';
-import FormField from '../components/auth/FormField';
-import SubmitButton from '../components/auth/SubmitButton';
 import PasswordInput from '../components/auth/PasswordInput';
+import SubmitButton from '../components/auth/SubmitButton';
+import PasswordRules from '../components/auth/PasswordRules';
 import { BASE_URL } from '../contexts/AuthContext';
 import { useApiRequest } from '../hooks/useApiRequest';
 import axios from 'axios';
 
 const ResetPassword = () => {
+  const navigate = useNavigate();
+  const { token } = useParams();
+  const { makeRequest } = useApiRequest();
+
   const [formData, setFormData] = useState({
     password: '',
     confirmPassword: '',
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-  const { token } = useParams();
-  const { makeRequest } = useApiRequest();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,15 +27,12 @@ const ResetPassword = () => {
       ...prev,
       [name]: value
     }));
+    // Clear error when user starts typing
+    if (error) setError('');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
-      return;
-    }
 
     try {
       setError('');
@@ -49,15 +47,15 @@ const ResetPassword = () => {
       );
 
       if (response.status === 200) {
-        // Redirect to login page after successful password reset
         navigate('/login', { 
-          state: { message: 'Password has been reset successfully. Please login with your new password.' }
+          state: { 
+            message: 'Password has been reset successfully. Please login with your new password.' 
+          }
         });
-      } else {
-        setError(response.data.message || 'Failed to reset password. Please try again.');
       }
     } catch (error) {
-      setError(error.response?.data?.message || 'An error occurred. Please try again.');
+      const errorMessage = error.response?.data?.message || 'An error occurred. Please try again.';
+      setError(errorMessage);
       console.error('Password reset error:', error);
     } finally {
       setLoading(false);
@@ -77,9 +75,10 @@ const ResetPassword = () => {
           required
           disabled={loading}
           size="lg"
-          className="mb-4"
+          className="mb-2"
           autoComplete="new-password"
         />
+        <PasswordRules password={formData.password} />
         <PasswordInput
           label="Confirm New Password"
           name="confirmPassword"
@@ -91,6 +90,8 @@ const ResetPassword = () => {
           size="lg"
           className="mb-4"
           autoComplete="new-password"
+          isInvalid={formData.password !== formData.confirmPassword && formData.confirmPassword !== ''}
+          error={formData.password !== formData.confirmPassword && formData.confirmPassword !== '' ? 'Passwords do not match' : ''}
         />
         <SubmitButton loading={loading} loadingText="Resetting...">
           Reset Password
