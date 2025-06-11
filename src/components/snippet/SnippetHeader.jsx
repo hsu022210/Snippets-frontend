@@ -38,19 +38,19 @@ const SnippetHeader = ({
             className="me-3"
           />
           <Button
-            variant="secondary"
-            onClick={handleCancel}
-            disabled={saving}
-            className="me-2"
-          >
-            Cancel
-          </Button>
-          <Button
             variant="success"
             onClick={handleSave}
             disabled={saving}
+            className="me-2"
           >
             {saving ? 'Saving...' : 'Save'}
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={handleCancel}
+            disabled={saving}
+          >
+            Cancel
           </Button>
         </div>
       ) : (

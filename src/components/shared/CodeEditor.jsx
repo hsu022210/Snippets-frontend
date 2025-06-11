@@ -12,7 +12,7 @@ const CodeEditor = ({
   className = '',
 }) => {
   const { selectedTheme } = useCodeMirrorTheme();
-  const theme = themes[selectedTheme] || themes.default;
+  const theme = themes[selectedTheme] || themes['copilot'];
 
   return (
     <div className={className} style={{ border: '1px solid #dee2e6', borderRadius: '4px', overflow: 'hidden' }}>

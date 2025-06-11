@@ -9,7 +9,7 @@ import * as themes from '@uiw/codemirror-themes-all';
 
 const SnippetCard = ({ snippet }) => {
   const { selectedTheme } = useCodeMirrorTheme();
-  const theme = themes[selectedTheme] || themes.default;
+  const theme = themes[selectedTheme] || themes['copilot'];
 
   return (
     <Card hover className="h-100">
