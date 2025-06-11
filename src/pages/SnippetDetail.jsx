@@ -10,11 +10,13 @@ import SnippetLanguageSelector from '../components/snippet/SnippetLanguageSelect
 import DeleteConfirmationModal from '../components/snippet/DeleteConfirmationModal';
 import Container from '../components/shared/Container';
 import CodeEditor from '../components/shared/CodeEditor';
+import { useAuth } from '../contexts/AuthContext';
 
 const SnippetDetail = () => {
   const { id } = useParams();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [codeError, setCodeError] = useState(false);
+  const { token } = useAuth();
   
   const {
     snippet,
@@ -79,6 +81,7 @@ const SnippetDetail = () => {
   return (
     <ErrorBoundary>
       <Container>
+        {!!token && (
         <Breadcrumb className="mb-4">
           <Breadcrumb.Item linkAs={Link} linkProps={{ to: "/snippets" }}>
             Snippets
@@ -87,6 +90,7 @@ const SnippetDetail = () => {
             {isEditing ? editedTitle : (snippet?.title || 'Untitled Snippet')}
           </Breadcrumb.Item>
         </Breadcrumb>
+        )}
 
         <SnippetHeader
           isEditing={isEditing}
@@ -98,6 +102,7 @@ const SnippetDetail = () => {
           setIsEditing={setIsEditing}
           setShowDeleteModal={setShowDeleteModal}
           title={snippet.title}
+          isAuthenticated={!!token}
         />
 
         <SnippetLanguageSelector

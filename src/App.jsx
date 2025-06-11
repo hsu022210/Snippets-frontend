@@ -40,9 +40,7 @@ function App() {
                       </PrivateRoute>
                     } />
                     <Route path="/snippets/:id" element={
-                      <PrivateRoute>
                         <SnippetDetail />
-                      </PrivateRoute>
                     } />
                     <Route path="/create-snippet" element={
                       <PrivateRoute>
