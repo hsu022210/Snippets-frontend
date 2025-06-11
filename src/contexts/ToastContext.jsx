@@ -14,9 +14,11 @@ export const useToast = () => {
 export const ToastProvider = ({ children }) => {
   const [show, setShow] = useState(false);
   const [message, setMessage] = useState('');
+  const [type, setType] = useState('primary');
 
-  const showToast = (msg = 'The site may be slow to respond after a certain time of inactivity.') => {
+  const showToast = (msg = 'The site may be slow to respond after a certain time of inactivity.', toastType = 'primary') => {
     setMessage(msg);
+    setType(toastType);
     setShow(true);
   };
 
@@ -31,9 +33,9 @@ export const ToastProvider = ({ children }) => {
         <Toast 
           show={show} 
           onClose={hideToast} 
-        //   delay={3000} 
-        //   autohide
-          bg="primary"
+          // delay={3000} 
+          // autohide
+          bg={type}
         >
           <Toast.Header closeButton>
             <strong className="me-auto">Notification</strong>

@@ -1,6 +1,7 @@
 import { Form, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useToast } from '../../contexts/ToastContext';
 import { Share, Save, XCircle, PencilSquare, Trash } from 'react-bootstrap-icons';
+import { useState } from 'react';
 
 const SnippetHeader = ({
   isEditing,
@@ -16,13 +17,19 @@ const SnippetHeader = ({
 }) => {
   const { showToast } = useToast();
 
+  const [shareSnippetTooltip, setShareSnippetTooltip] = useState('Share snippet');
+
   const handleShare = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
       showToast('Link copied to clipboard!', 'success');
+      setShareSnippetTooltip('Link copied!');
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      setShareSnippetTooltip('Share snippet');
     } catch (error) {
       console.error('Failed to copy link:', error);
       showToast('Failed to copy link', 'error');
+      setShareSnippetTooltip('Failed to copy link');
     }
   };
 
@@ -64,7 +71,7 @@ const SnippetHeader = ({
           <div className="ms-auto d-flex gap-2">
             <OverlayTrigger
               placement="top"
-              overlay={<Tooltip>Share snippet</Tooltip>}
+              overlay={<Tooltip>{shareSnippetTooltip}</Tooltip>}
             >
               <Button
                 variant="outline-secondary"
