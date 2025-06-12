@@ -16,9 +16,9 @@ import {
   PersonPlus
 } from 'react-bootstrap-icons';
 
-const Navigation = () => {
-  const [expanded, setExpanded] = useState(false);
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
+const Navigation: React.FC = () => {
+  const [expanded, setExpanded] = useState<boolean>(false);
+  const [isLoggingOut, setIsLoggingOut] = useState<boolean>(false);
   const { user, logout } = useAuth();
   const { isDark, toggleTheme } = useTheme();
   const navigate = useNavigate();
@@ -31,12 +31,12 @@ const Navigation = () => {
 
   // Close navbar when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event) => {
+    const handleClickOutside = (event: MouseEvent) => {
       const navbar = document.getElementById('responsive-navbar-nav');
       const toggle = document.querySelector('.navbar-toggler');
       
       if (expanded && navbar && toggle) {
-        const clickedInside = navbar.contains(event.target) || toggle.contains(event.target);
+        const clickedInside = navbar.contains(event.target as Node) || toggle.contains(event.target as Node);
         if (!clickedInside) {
           setExpanded(false);
         }
@@ -74,7 +74,7 @@ const Navigation = () => {
         fixed="top" 
         className={`custom-navbar ${isDark ? 'theme-dark' : 'theme-light'}`}
         expanded={expanded}
-        onToggle={(isExpanded) => setExpanded(isExpanded)}
+        onToggle={(isExpanded: boolean) => setExpanded(isExpanded)}
       >
         <Container fluid>
           <Navbar.Brand as={Link} to="/" onClick={() => setExpanded(false)}>
