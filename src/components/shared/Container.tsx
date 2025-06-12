@@ -1,7 +1,15 @@
 import { Container as BootstrapContainer } from 'react-bootstrap';
-import PropTypes from 'prop-types';
+import { ReactNode } from 'react';
 
-const Container = ({ children, className, fluid, pageContainer, ...props }) => {
+interface ContainerProps {
+  children: ReactNode;
+  className?: string;
+  fluid?: boolean;
+  pageContainer?: boolean;
+  [key: string]: any; // for other props
+}
+
+const Container = ({ children, className, fluid, pageContainer, ...props }: ContainerProps) => {
   const getContainerClasses = () => {
     const classes = ['custom-container'];
     
@@ -21,13 +29,6 @@ const Container = ({ children, className, fluid, pageContainer, ...props }) => {
       {children}
     </BootstrapContainer>
   );
-};
-
-Container.propTypes = {
-  children: PropTypes.node.isRequired,
-  className: PropTypes.string,
-  fluid: PropTypes.bool,
-  pageContainer: PropTypes.bool,
 };
 
 export default Container; 

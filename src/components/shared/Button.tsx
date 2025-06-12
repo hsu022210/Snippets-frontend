@@ -1,7 +1,16 @@
 import { Button as BootstrapButton } from 'react-bootstrap';
-import PropTypes from 'prop-types';
+import { ReactNode } from 'react';
 
-const Button = ({ children, variant = 'primary', size, className, isMobile, ...props }) => {
+interface ButtonProps {
+  children: ReactNode;
+  variant?: string;
+  size?: 'sm' | 'lg';
+  className?: string;
+  isMobile?: boolean;
+  [key: string]: any; // for other props
+}
+
+const Button = ({ children, variant = 'primary', size, className, isMobile, ...props }: ButtonProps) => {
   const getButtonClasses = () => {
     const classes = [];
     
@@ -26,14 +35,6 @@ const Button = ({ children, variant = 'primary', size, className, isMobile, ...p
       {children}
     </BootstrapButton>
   );
-};
-
-Button.propTypes = {
-  children: PropTypes.node.isRequired,
-  variant: PropTypes.string,
-  size: PropTypes.oneOf(['sm', 'lg']),
-  className: PropTypes.string,
-  isMobile: PropTypes.bool,
 };
 
 export default Button; 

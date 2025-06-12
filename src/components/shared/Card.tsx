@@ -1,7 +1,14 @@
 import { Card as BootstrapCard } from 'react-bootstrap';
-import PropTypes from 'prop-types';
+import { ReactNode } from 'react';
 
-const Card = ({ children, className, hover = false, ...props }) => {
+interface CardProps {
+  children: ReactNode;
+  className?: string;
+  hover?: boolean;
+  [key: string]: any; // for other props
+}
+
+const Card = ({ children, className, hover = false, ...props }: CardProps) => {
   const getCardClasses = () => {
     const classes = ['custom-card'];
     
@@ -25,11 +32,5 @@ const Card = ({ children, className, hover = false, ...props }) => {
 
 // Re-export Card subcomponents for convenience
 export const { Body, Title, Subtitle, Text, Header, Footer } = BootstrapCard;
-
-Card.propTypes = {
-  children: PropTypes.node.isRequired,
-  className: PropTypes.string,
-  hover: PropTypes.bool,
-};
 
 export default Card; 

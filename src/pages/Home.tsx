@@ -6,14 +6,14 @@ import Card, { Body, Title, Text } from '../components/shared/Card';
 import Button from '../components/shared/Button';
 import { Stack } from 'react-bootstrap';
 
-const Home = () => {
+const Home: React.FC = () => {
   const { user } = useAuth();
 
   return (
     <Container className="my-5">
       <Row className="justify-content-center">
         <Col md={8} className="text-center">
-          <h1 className="display-4 mb-4"> Simple and elegant way to store and share your code snippets.</h1>
+          <h1 className="display-4 mb-4">Simple and elegant way to store and share your code snippets.</h1>
           <p className="lead mb-5">
             Start creating your own snippets!
           </p>
@@ -31,8 +31,8 @@ const Home = () => {
                   size="lg"
                   className="w-100 w-md-auto"
                 >
-                View My Snippets
-              </Button>
+                  View My Snippets
+                </Button>
                 <Button 
                   as={Link} 
                   to="/create-snippet" 
@@ -40,8 +40,8 @@ const Home = () => {
                   size="lg"
                   className="w-100 w-md-auto"
                 >
-                Create Snippet
-              </Button>
+                  Create Snippet
+                </Button>
               </Stack>
             </div>
           ) : (
@@ -58,8 +58,8 @@ const Home = () => {
                   size="lg"
                   className="w-100 w-md-auto"
                 >
-                Login
-              </Button>
+                  Login
+                </Button>
                 <Button 
                   as={Link} 
                   to="/register" 
@@ -67,8 +67,8 @@ const Home = () => {
                   size="lg"
                   className="w-100 w-md-auto"
                 >
-                Register
-              </Button>
+                  Register
+                </Button>
               </Stack>
             </div>
           )}
