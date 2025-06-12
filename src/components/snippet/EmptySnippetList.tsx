@@ -3,7 +3,7 @@ import { Stack } from 'react-bootstrap';
 import Card, { Body, Text } from '../shared/Card';
 import Button from '../shared/Button';
 
-const EmptySnippetList = () => {
+const EmptySnippetList: React.FC = () => {
   return (
     <Card className="text-center">
       <Body>

@@ -7,9 +7,23 @@ import { getLanguageExtension } from '../../utils/languageUtils';
 import { useCodeMirrorTheme } from '../../contexts/CodeMirrorThemeContext';
 import * as themes from '@uiw/codemirror-themes-all';
 
-const SnippetCard = ({ snippet }) => {
+interface Snippet {
+  id: number;
+  title: string;
+  code: string;
+  language: string;
+  created_at: string;
+  updated_at: string;
+  user: number;
+}
+
+interface SnippetCardProps {
+  snippet: Snippet;
+}
+
+const SnippetCard: React.FC<SnippetCardProps> = ({ snippet }) => {
   const { selectedTheme } = useCodeMirrorTheme();
-  const theme = themes[selectedTheme] || themes['copilot'];
+  const theme = (themes as Record<string, any>)[selectedTheme] || (themes as Record<string, any>)['copilot'];
 
   return (
     <Card hover className="h-100">

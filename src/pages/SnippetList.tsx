@@ -6,7 +6,7 @@ import SnippetListHeader from '../components/snippet/SnippetListHeader';
 import SnippetCard from '../components/snippet/SnippetCard';
 import EmptySnippetList from '../components/snippet/EmptySnippetList';
 
-const SnippetList = () => {
+const SnippetList: React.FC = () => {
   const { snippets, loading, error } = useSnippetList();
 
   if (loading) {

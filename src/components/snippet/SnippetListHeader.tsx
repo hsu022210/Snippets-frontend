@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { Stack } from 'react-bootstrap';
 import Button from '../shared/Button';
 
-const SnippetListHeader = () => {
+const SnippetListHeader: React.FC = () => {
   return (
     <>
       {/* Mobile Header */}
@@ -37,4 +37,4 @@ const SnippetListHeader = () => {
   );
 };
 
-export default SnippetListHeader; 
+export default SnippetListHeader;
