@@ -5,15 +5,15 @@ import { useTheme } from '../contexts/ThemeContext';
 import { Navbar, Nav, NavDropdown, Button, Container } from 'react-bootstrap';
 import LogoutLoadingSpinner from './LogoutLoadingSpinner';
 import { 
-  CodeSquare, 
-  Sun, 
-  Moon, 
-  PersonCircle, 
-  Person, 
-  Gear, 
+  CodeSquare,
+  Sun,
+  Moon,
+  Person,
+  Gear,
   BoxArrowRight,
   BoxArrowInRight,
-  PersonPlus
+  PersonPlus,
+  PersonGear
 } from 'react-bootstrap-icons';
 
 const Navigation: React.FC = () => {
@@ -120,7 +120,7 @@ const Navigation: React.FC = () => {
                 <NavDropdown 
                   title={
                     <span className="text-light d-flex align-items-center">
-                      <PersonCircle className="me-2" size={20} />
+                      <Person className="me-2" size={20} />
                       <span>{user.username}</span>
                     </span>
                   } 
@@ -129,7 +129,7 @@ const Navigation: React.FC = () => {
                   className="nav-dropdown-custom d-flex align-items-center"
                 >
                   <NavDropdown.Item as={Link} to="/profile" onClick={() => setExpanded(false)}>
-                    <Person className="me-2" size={18} />
+                    <PersonGear className="me-2" size={18} />
                     Profile
                   </NavDropdown.Item>
                   <NavDropdown.Item as={Link} to="/settings" onClick={() => setExpanded(false)}>
