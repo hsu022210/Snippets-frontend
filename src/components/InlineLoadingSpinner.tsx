@@ -1,6 +1,14 @@
 import { Spinner } from 'react-bootstrap';
 
-const InlineLoadingSpinner = ({ message = 'Loading...', variant = 'primary' }) => {
+interface InlineLoadingSpinnerProps {
+  message?: string;
+  variant?: string;
+}
+
+const InlineLoadingSpinner: React.FC<InlineLoadingSpinnerProps> = ({ 
+  message = 'Loading...', 
+  variant = 'primary' 
+}) => {
   return (
     <div className="d-flex align-items-center gap-2">
       <Spinner 

@@ -1,21 +1,33 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import { Form, Button, Alert, Card } from 'react-bootstrap';
 import { useAuth } from '../contexts/AuthContext';
 import { useApiRequest } from '../hooks/useApiRequest';
 import Container from '../components/shared/Container';
 import InlineLoadingSpinner from '../components/InlineLoadingSpinner';
 import { BASE_URL } from '../contexts/AuthContext';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { Key } from 'react-bootstrap-icons';
 
-const Profile = () => {
+interface UserProfile {
+  username: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+}
+
+interface ApiErrorResponse {
+  detail?: string;
+  message?: string;
+}
+
+const Profile: React.FC = () => {
   const { api } = useAuth();
   const { makeRequest } = useApiRequest();
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
-  const [userProfile, setUserProfile] = useState({
+  const [loading, setLoading] = useState<boolean>(true);
+  const [saving, setSaving] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
+  const [success, setSuccess] = useState<string>('');
+  const [userProfile, setUserProfile] = useState<UserProfile>({
     username: '',
     email: '',
     first_name: '',
@@ -31,7 +43,8 @@ const Profile = () => {
         setUserProfile(response.data);
         setError('');
       } catch (error) {
-        setError(error.response?.data?.detail || 'Failed to fetch profile');
+        const axiosError = error as AxiosError<ApiErrorResponse>;
+        setError(axiosError.response?.data?.detail || 'Failed to fetch profile');
         console.error('Error fetching profile:', error);
       } finally {
         setLoading(false);
@@ -41,7 +54,7 @@ const Profile = () => {
     fetchProfile();
   }, [api, makeRequest]);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserProfile(prev => ({
       ...prev,
@@ -49,7 +62,7 @@ const Profile = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSaving(true);
     setError('');
@@ -62,7 +75,8 @@ const Profile = () => {
       setUserProfile(response.data);
       setSuccess('Profile updated successfully!');
     } catch (error) {
-      setError(error.response?.data?.detail || 'Failed to update profile');
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+      setError(axiosError.response?.data?.detail || 'Failed to update profile');
       console.error('Error updating profile:', error);
     } finally {
       setSaving(false);
@@ -83,7 +97,8 @@ const Profile = () => {
         setSuccess('Password reset instructions have been sent to your email.');
       }
     } catch (error) {
-      setError(error.response?.data?.message || 'An error occurred. Please try again.');
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+      setError(axiosError.response?.data?.message || 'An error occurred. Please try again.');
       console.error('Password reset error:', error);
     }
   };
@@ -185,4 +200,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default Profile; 
