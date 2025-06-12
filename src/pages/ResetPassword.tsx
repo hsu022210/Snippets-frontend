@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, FormEvent, ChangeEvent } from 'react';
 import { Form, Alert } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import AuthForm from '../components/auth/AuthForm';
@@ -7,21 +7,30 @@ import SubmitButton from '../components/auth/SubmitButton';
 import PasswordRules from '../components/auth/PasswordRules';
 import { BASE_URL } from '../contexts/AuthContext';
 import { useApiRequest } from '../hooks/useApiRequest';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
+
+interface FormData {
+  password: string;
+  confirmPassword: string;
+}
+
+interface ApiErrorResponse {
+  message?: string;
+}
 
 const ResetPassword = () => {
   const navigate = useNavigate();
-  const { token } = useParams();
+  const { token } = useParams<{ token: string }>();
   const { makeRequest } = useApiRequest();
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     password: '',
     confirmPassword: '',
   });
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -31,8 +40,18 @@ const ResetPassword = () => {
     if (error) setError('');
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!token) {
+      setError('Invalid reset token. Please request a new password reset.');
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
 
     try {
       setError('');
@@ -54,7 +73,8 @@ const ResetPassword = () => {
         });
       }
     } catch (error) {
-      const errorMessage = error.response?.data?.message || 'An error occurred. Please try again.';
+      const axiosError = error as AxiosError<ApiErrorResponse>;
+      const errorMessage = axiosError.response?.data?.message || 'An error occurred. Please try again.';
       setError(errorMessage);
       console.error('Password reset error:', error);
     } finally {
