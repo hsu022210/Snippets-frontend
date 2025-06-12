@@ -1,10 +1,17 @@
 import { Card, Row, Col } from 'react-bootstrap';
-import Container from '../shared/Container';
 
-const AuthForm = ({ title, children }) => {
+const AuthForm = ({ title, className='', children }) => {
+  const getContainerClasses = () => {
+    const classes = ['center-content'];
+    
+    if (className) {
+      classes.push(className);
+    }
+    
+    return classes.join(' ');
+  };
   return (
-    <Container>
-      <div className="center-content">
+    <div className={getContainerClasses()}>
         <Row className="justify-content-center w-100">
           <Col xs={11} sm={10} md={8} lg={6} xl={4}>
             <Card>
@@ -16,7 +23,6 @@ const AuthForm = ({ title, children }) => {
           </Col>
         </Row>
       </div>
-    </Container>
   );
 };
 

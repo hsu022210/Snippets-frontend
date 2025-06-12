@@ -46,7 +46,7 @@ const Login = () => {
   };
 
   return (
-    <AuthForm title="Login">
+    <AuthForm title="Login" className='my-5'>
       {error && <Alert variant="danger">{error}</Alert>}
       <Form onSubmit={handleSubmit} autoComplete="on">
         <FormField
