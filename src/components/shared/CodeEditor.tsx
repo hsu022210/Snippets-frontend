@@ -1,4 +1,3 @@
-import React from 'react'
 import CodeMirror from '@uiw/react-codemirror';
 import { getLanguageExtension } from '../../utils/languageUtils';
 import { useCodeMirrorTheme } from '../../contexts/CodeMirrorThemeContext';

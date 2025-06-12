@@ -1,10 +1,10 @@
-import React from 'react'
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { server } from '../../test/setup.tsx'
 import { http, HttpResponse } from 'msw'
+import { useState, useEffect } from 'react';
 
 interface ApiResponse {
   message: string
@@ -80,9 +80,9 @@ describe('Testing Patterns', () => {
       )
 
       const ApiComponent = () => {
-        const [data, setData] = React.useState<ApiResponse | null>(null)
+        const [data, setData] = useState<ApiResponse | null>(null)
         
-        React.useEffect(() => {
+        useEffect(() => {
           fetch('/example')
             .then(res => res.json())
             .then(setData)

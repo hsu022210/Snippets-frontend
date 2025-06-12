@@ -1,4 +1,3 @@
-import React from 'react'
 import { AxiosResponse } from 'axios';
 
 // Auth Related Interfaces

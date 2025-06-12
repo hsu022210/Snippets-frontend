@@ -1,4 +1,3 @@
-import React from 'react'
 import { Form, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useToast } from '../../contexts/ToastContext';
 import { Share, Save, XCircle, PencilSquare, Trash } from 'react-bootstrap-icons';

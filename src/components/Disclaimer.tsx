@@ -1,4 +1,3 @@
-import React from 'react';
 import '../styles/Disclaimer.scss';
 
 const Disclaimer: React.FC = () => {

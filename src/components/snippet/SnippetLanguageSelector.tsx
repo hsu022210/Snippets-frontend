@@ -1,4 +1,3 @@
-import React from 'react'
 import { Form } from 'react-bootstrap';
 import { LANGUAGE_OPTIONS } from '../../utils/languageUtils';
 import { SnippetLanguageSelectorProps } from '../../types/interfaces';

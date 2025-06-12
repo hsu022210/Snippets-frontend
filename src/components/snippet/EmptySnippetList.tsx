@@ -1,4 +1,3 @@
-import React from 'react'
 import { Link } from 'react-router-dom';
 import { Stack } from 'react-bootstrap';
 import Card, { Body, Text } from '../shared/Card';
