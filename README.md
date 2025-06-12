@@ -7,7 +7,6 @@ A modern web application for managing and organizing code snippets across multip
 - ✨ Syntax highlighting for multiple programming languages
 - 🎨 Customizable themes for code display
 - 📝 Rich text editing with CodeMirror
-- 🔍 Search and filter functionality
 - 📱 Responsive design with Bootstrap
 - 🧪 Comprehensive test coverage with Vitest
 
