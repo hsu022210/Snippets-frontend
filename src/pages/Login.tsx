@@ -6,11 +6,7 @@ import PasswordInput from '../components/auth/PasswordInput';
 import AuthForm from '../components/auth/AuthForm';
 import FormField from '../components/auth/FormField';
 import SubmitButton from '../components/auth/SubmitButton';
-
-interface FormData {
-  email: string;
-  password: string;
-}
+import { FormData } from '../types/interfaces';
 
 const Login = () => {
   const [formData, setFormData] = useState<FormData>({

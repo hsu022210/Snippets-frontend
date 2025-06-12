@@ -1,4 +1,3 @@
-import React from 'react'
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -9,16 +8,16 @@ import SnippetListHeader from '../SnippetListHeader'
 import DeleteConfirmationModal from '../DeleteConfirmationModal'
 import SnippetLanguageSelector from '../SnippetLanguageSelector'
 import SnippetHeader from '../SnippetHeader'
+import { Snippet } from '@/types/interfaces.ts'
 
 // Mock data
-const mockSnippet = {
+const mockSnippet: Snippet = {
   id: '1',
   title: 'Test Snippet',
-  description: 'Test Description',
   language: 'javascript',
   code: 'console.log("test")',
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
+  created_at: new Date().toISOString(),
+  updated_at: new Date().toISOString(),
 }
 
 describe('Snippet Components', () => {

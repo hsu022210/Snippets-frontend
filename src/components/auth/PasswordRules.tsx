@@ -1,14 +1,5 @@
-import React from 'react';
 import { Form } from 'react-bootstrap';
-
-interface PasswordRule {
-  label: string;
-  isValid: boolean;
-}
-
-interface PasswordRulesProps {
-  password: string;
-}
+import { PasswordRule, PasswordRulesProps } from '../../types/interfaces';
 
 const PasswordRules = ({ password }: PasswordRulesProps) => {
   const rules: PasswordRule[] = [

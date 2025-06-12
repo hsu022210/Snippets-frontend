@@ -1,27 +1,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 import { useApiRequest } from '../hooks/useApiRequest';
-
-// Types
-interface User {
-  id: number;
-  username: string;
-  email: string;
-  // Add other user properties as needed
-}
-
-interface AuthContextType {
-  user: User | null;
-  token: string | null;
-  login: (email: string, password: string) => Promise<boolean>;
-  logout: () => Promise<boolean>;
-  register: (username: string, password: string, password2: string, email: string) => Promise<boolean>;
-  api: AxiosInstance
-}
-
-interface AuthProviderProps {
-  children: ReactNode;
-}
+import { User, AuthContextType, AuthProviderProps } from '../types/interfaces';
 
 // Constants
 const TOKEN_KEY = 'token';

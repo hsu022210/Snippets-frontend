@@ -1,10 +1,5 @@
 import { Modal, Button } from 'react-bootstrap';
-
-interface DeleteConfirmationModalProps {
-  show: boolean;
-  onHide: () => void;
-  onConfirm: () => void;
-}
+import { DeleteConfirmationModalProps } from '../../types/interfaces';
 
 const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
   show,

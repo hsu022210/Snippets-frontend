@@ -1,8 +1,6 @@
-import React from 'react'
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { TestProviders } from '../../../test/setup.tsx'
 import AuthForm from '../AuthForm'
 import FormField from '../FormField'
 import SubmitButton from '../SubmitButton'
@@ -173,7 +171,7 @@ describe('Auth Components', () => {
     })
 
     it('renders without label when label prop is not provided', () => {
-      const { label, ...propsWithoutLabel } = defaultProps
+      const { ...propsWithoutLabel } = defaultProps
       render(<PasswordInput {...propsWithoutLabel} label={undefined} />)
       
       expect(screen.queryByText('Password')).not.toBeInTheDocument()

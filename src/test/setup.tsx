@@ -1,4 +1,3 @@
-import React from 'react'
 import { setupServer } from 'msw/node'
 import { handlers } from './handlers'
 import '@testing-library/jest-dom'
@@ -10,7 +9,7 @@ import { ThemeProvider } from '../contexts/ThemeContext'
 import { ToastProvider } from '../contexts/ToastContext'
 import { AuthProvider } from '../contexts/AuthContext'
 import { CodeMirrorThemeProvider } from '../contexts/CodeMirrorThemeContext'
-import { ReactNode } from 'react'
+import { TestProvidersProps } from '../types/interfaces';
 
 // Extend Vitest's expect method with testing-library matchers
 expect.extend(matchers)
@@ -58,6 +57,15 @@ afterAll(() => {
   })
 })
 
+// Mock console methods to silence logs during tests
+beforeAll(() => {
+  vi.spyOn(console, 'log').mockImplementation(() => {});
+  vi.spyOn(console, 'error').mockImplementation(() => {});
+  vi.spyOn(console, 'warn').mockImplementation(() => {});
+  vi.spyOn(console, 'info').mockImplementation(() => {});
+  vi.spyOn(console, 'debug').mockImplementation(() => {});
+});
+
 // Setup and teardown
 beforeAll(() => server.listen())
 afterEach(() => {
@@ -68,9 +76,6 @@ afterEach(() => {
 afterAll(() => server.close())
 
 // Common test providers
-interface TestProvidersProps {
-  children: ReactNode
-}
 
 export const TestProviders: React.FC<TestProvidersProps> = ({ children }) => {
   return (

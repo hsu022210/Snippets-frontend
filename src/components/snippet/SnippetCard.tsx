@@ -6,22 +6,9 @@ import CodeMirror from '@uiw/react-codemirror';
 import { getLanguageExtension } from '../../utils/languageUtils';
 import { useCodeMirrorTheme } from '../../contexts/CodeMirrorThemeContext';
 import * as themes from '@uiw/codemirror-themes-all';
+import { SnippetCardProps } from '../../types/interfaces';
 
-interface Snippet {
-  id: number;
-  title: string;
-  code: string;
-  language: string;
-  created_at: string;
-  updated_at: string;
-  user: number;
-}
-
-interface SnippetCardProps {
-  snippet: Snippet;
-}
-
-const SnippetCard: React.FC<SnippetCardProps> = ({ snippet }) => {
+export const SnippetCard = ({ snippet }: SnippetCardProps) => {
   const { selectedTheme } = useCodeMirrorTheme();
   const theme = (themes as Record<string, any>)[selectedTheme] || (themes as Record<string, any>)['copilot'];
 

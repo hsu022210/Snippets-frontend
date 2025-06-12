@@ -1,20 +1,5 @@
-import { ChangeEvent } from 'react';
 import { Form } from 'react-bootstrap';
-
-interface FormFieldProps {
-  label: string;
-  type?: string;
-  name?: string;
-  id?: string;
-  value: string;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  disabled?: boolean;
-  required?: boolean;
-  autoComplete?: string;
-  className?: string;
-  error?: string;
-  isInvalid?: boolean;
-}
+import { FormFieldProps } from '../../types/interfaces'
 
 const FormField = ({
   label,

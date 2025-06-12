@@ -8,22 +8,14 @@ import PasswordRules from '../components/auth/PasswordRules';
 import { BASE_URL } from '../contexts/AuthContext';
 import { useApiRequest } from '../hooks/useApiRequest';
 import axios, { AxiosError } from 'axios';
-
-interface FormData {
-  password: string;
-  confirmPassword: string;
-}
-
-interface ApiErrorResponse {
-  message?: string;
-}
+import { PasswordFormData, ApiErrorResponse } from '../types/interfaces';
 
 const ResetPassword = () => {
   const navigate = useNavigate();
   const { token } = useParams<{ token: string }>();
   const { makeRequest } = useApiRequest();
 
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<PasswordFormData>({
     password: '',
     confirmPassword: '',
   });

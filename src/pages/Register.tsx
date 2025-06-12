@@ -8,26 +8,10 @@ import FormField from '../components/auth/FormField';
 import SubmitButton from '../components/auth/SubmitButton';
 import PasswordRules from '../components/auth/PasswordRules';
 import { AxiosError } from 'axios';
-
-interface FormData {
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
-
-interface ApiErrorResponse {
-  detail: {
-    email?: string | string[];
-    username?: string | string[];
-    password?: string | string[];
-    password2?: string | string[];
-    detail?: string;
-  };
-}
+import { RegisterFormData, ApiRegisterErrorResponse } from '../types/interfaces';
 
 const Register = () => {
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<RegisterFormData>({
     username: '',
     email: '',
     password: '',
@@ -46,7 +30,7 @@ const Register = () => {
     }));
   };
 
-  const getErrorMessage = (error: AxiosError<ApiErrorResponse>): string => {
+  const getErrorMessage = (error: AxiosError<ApiRegisterErrorResponse>): string => {
     // Handle validation errors from the API
     if (error.response?.data) {
       const data = error.response.data.detail;
@@ -94,7 +78,7 @@ const Register = () => {
       await register(formData.username, formData.password, formData.confirmPassword, formData.email);
       navigate('/snippets');
     } catch (error) {
-      const errorMessage = getErrorMessage(error as AxiosError<ApiErrorResponse>);
+      const errorMessage = getErrorMessage(error as AxiosError<ApiRegisterErrorResponse>);
       setError(errorMessage);
       console.error('Registration error:', error);
     } finally {

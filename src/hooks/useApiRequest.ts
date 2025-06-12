@@ -1,12 +1,7 @@
 import { useCallback } from 'react';
 import { useToast } from '../contexts/ToastContext';
 import { AxiosResponse } from 'axios';
-
-type ApiCall<T = any> = () => Promise<AxiosResponse<T>>;
-
-interface UseApiRequestReturn {
-  makeRequest: <T = any>(apiCall: ApiCall<T>, loadingMessage?: string) => Promise<AxiosResponse<T>>;
-}
+import { ApiCall, UseApiRequestReturn } from '../types/interfaces';
 
 export const useApiRequest = (): UseApiRequestReturn => {
   const { showToast, hideToast } = useToast();
@@ -15,7 +10,7 @@ export const useApiRequest = (): UseApiRequestReturn => {
     apiCall: ApiCall<T>,
     loadingMessage?: string
   ): Promise<AxiosResponse<T>> => {
-    let timeoutId: NodeJS.Timeout | undefined;
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
     
     try {
       // Show loading toast after 3 seconds if loadingMessage is provided

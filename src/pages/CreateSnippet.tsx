@@ -1,15 +1,10 @@
 import { useState, FormEvent, ChangeEvent } from 'react';
-import { Form, Alert } from 'react-bootstrap';
+import { Form, Alert, Button } from 'react-bootstrap';
 import Container from '../components/shared/Container';
 import CodeEditor from '../components/shared/CodeEditor';
 import { useCreateSnippet } from '../hooks/useSnippet';
 import { LANGUAGE_OPTIONS } from '../utils/languageUtils';
-
-interface SnippetData {
-  title: string;
-  code: string;
-  language: string;
-}
+import { SnippetData } from '../types/interfaces';
 
 const CreateSnippet: React.FC = () => {
   const [title, setTitle] = useState<string>('');
@@ -66,11 +61,14 @@ const CreateSnippet: React.FC = () => {
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Control
+          <Button
             type="submit"
-            value={loading ? 'Creating...' : 'Create Snippet'}
+            variant="outline-primary"
             disabled={loading}
-          />
+            className='w-100'
+          >
+            {loading ? 'Creating...' : 'Create Snippet'}
+          </Button>
         </Form.Group>
       </Form>
     </Container>

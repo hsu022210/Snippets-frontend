@@ -3,15 +3,7 @@ import { getLanguageExtension } from '../../utils/languageUtils';
 import { useCodeMirrorTheme } from '../../contexts/CodeMirrorThemeContext';
 import * as themes from '@uiw/codemirror-themes-all';
 import { Extension } from '@codemirror/state';
-
-interface CodeEditorProps {
-  value: string;
-  onChange?: (value: string) => void;
-  language: string;
-  height?: string;
-  editable?: boolean;
-  className?: string;
-}
+import { CodeEditorProps } from '../../types/interfaces';
 
 const CodeEditor: React.FC<CodeEditorProps> = ({
   value,

@@ -7,18 +7,7 @@ import InlineLoadingSpinner from '../components/InlineLoadingSpinner';
 import { BASE_URL } from '../contexts/AuthContext';
 import axios, { AxiosError } from 'axios';
 import { Key } from 'react-bootstrap-icons';
-
-interface UserProfile {
-  username: string;
-  email: string;
-  first_name: string;
-  last_name: string;
-}
-
-interface ApiErrorResponse {
-  detail?: string;
-  message?: string;
-}
+import { UserProfile, ApiErrorResponse } from '../types/interfaces';
 
 const Profile: React.FC = () => {
   const { api } = useAuth();
