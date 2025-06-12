@@ -1,7 +1,14 @@
 import { Form } from 'react-bootstrap';
 import { LANGUAGE_OPTIONS } from '../../utils/languageUtils';
 
-const SnippetLanguageSelector = ({
+interface SnippetLanguageSelectorProps {
+  isEditing: boolean;
+  editedLanguage: string;
+  setEditedLanguage: (language: string) => void;
+  language: string;
+}
+
+const SnippetLanguageSelector: React.FC<SnippetLanguageSelectorProps> = ({
   isEditing,
   editedLanguage,
   setEditedLanguage,

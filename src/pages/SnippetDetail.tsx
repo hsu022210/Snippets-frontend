@@ -12,10 +12,14 @@ import Container from '../components/shared/Container';
 import CodeEditor from '../components/shared/CodeEditor';
 import { useAuth } from '../contexts/AuthContext';
 
-const SnippetDetail = () => {
-  const { id } = useParams();
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [codeError, setCodeError] = useState(false);
+interface RouteParams {
+  id: string;
+}
+
+const SnippetDetail: React.FC = () => {
+  const { id } = useParams<RouteParams>();
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const [codeError, setCodeError] = useState<boolean>(false);
   const { token } = useAuth();
   
   const {
@@ -35,7 +39,7 @@ const SnippetDetail = () => {
     handleSave,
     handleDelete,
     handleCancel
-  } = useSnippet(id);
+  } = useSnippet(Number(id));
 
   const processedCode = useMemo(() => {
     const codeToProcess = isEditing ? editedCode : snippet?.code;
@@ -146,4 +150,4 @@ const SnippetDetail = () => {
   );
 };
 
-export default SnippetDetail;
+export default SnippetDetail; 

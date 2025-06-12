@@ -1,8 +1,13 @@
-import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';
+import { ErrorBoundary as ReactErrorBoundary, FallbackProps } from 'react-error-boundary';
 import { Alert, Button } from 'react-bootstrap';
 import Container from './shared/Container';
 
-function ErrorFallback({ error, resetErrorBoundary }) {
+interface ErrorFallbackProps extends FallbackProps {
+  error: Error;
+  resetErrorBoundary: () => void;
+}
+
+const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, resetErrorBoundary }) => {
   return (
     <Container>
       <div className="center-content">
@@ -24,9 +29,13 @@ function ErrorFallback({ error, resetErrorBoundary }) {
       </div>
     </Container>
   );
+};
+
+interface ErrorBoundaryProps {
+  children: React.ReactNode;
 }
 
-const ErrorBoundary = ({ children }) => {
+const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({ children }) => {
   return (
     <ReactErrorBoundary
       FallbackComponent={ErrorFallback}
@@ -37,4 +46,4 @@ const ErrorBoundary = ({ children }) => {
   );
 };
 
-export default ErrorBoundary;
+export default ErrorBoundary; 

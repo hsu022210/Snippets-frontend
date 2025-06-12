@@ -3,7 +3,20 @@ import { useToast } from '../../contexts/ToastContext';
 import { Share, Save, XCircle, PencilSquare, Trash } from 'react-bootstrap-icons';
 import { useState } from 'react';
 
-const SnippetHeader = ({
+interface SnippetHeaderProps {
+  isEditing: boolean;
+  editedTitle: string;
+  setEditedTitle: (title: string) => void;
+  saving: boolean;
+  handleCancel: () => void;
+  handleSave: () => void;
+  setIsEditing: (isEditing: boolean) => void;
+  setShowDeleteModal: (show: boolean) => void;
+  title: string;
+  isAuthenticated: boolean;
+}
+
+const SnippetHeader: React.FC<SnippetHeaderProps> = ({
   isEditing,
   editedTitle,
   setEditedTitle,
@@ -16,8 +29,7 @@ const SnippetHeader = ({
   isAuthenticated
 }) => {
   const { showToast } = useToast();
-
-  const [shareSnippetTooltip, setShareSnippetTooltip] = useState('Share snippet');
+  const [shareSnippetTooltip, setShareSnippetTooltip] = useState<string>('Share snippet');
 
   const handleShare = async () => {
     try {
@@ -28,7 +40,7 @@ const SnippetHeader = ({
       setShareSnippetTooltip('Share snippet');
     } catch (error) {
       console.error('Failed to copy link:', error);
-      showToast('Failed to copy link', 'error');
+      showToast('Failed to copy link', 'danger');
       setShareSnippetTooltip('Failed to copy link');
     }
   };
