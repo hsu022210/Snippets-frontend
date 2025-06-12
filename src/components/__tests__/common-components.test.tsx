@@ -1,5 +1,5 @@
 import React from 'react'
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { TestProviders } from '../../test/setup.tsx'
@@ -7,10 +7,24 @@ import Navigation from '../Navigation'
 import PrivateRoute from '../PrivateRoute'
 import ErrorBoundary from '../ErrorBoundary'
 import LogoutLoadingSpinner from '../LogoutLoadingSpinner'
+import Footer from '../Footer'
+import { useTheme } from '../../contexts/ThemeContext'
+
+// Mock the useTheme hook
+vi.mock('../../contexts/ThemeContext', () => {
+  const mockToggleTheme = vi.fn()
+  return {
+    useTheme: vi.fn().mockReturnValue({ isDark: false, toggleTheme: mockToggleTheme })
+  }
+})
 
 describe('Common Components', () => {
   // Setup user event
   const user = userEvent.setup()
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
 
   describe('Navigation', () => {
     const renderNavigation = () => {
@@ -145,5 +159,51 @@ describe('Common Components', () => {
       rerender(<LogoutLoadingSpinner show={false} />)
       expect(screen.queryByRole('status')).not.toBeInTheDocument()
     })
+  })
+
+  describe('Footer', () => {
+    const currentYear = new Date().getFullYear();
+    const copyrightText = `© ${currentYear} Alec Hsu. All rights reserved.`;
+
+    const renderFooter = (isDark = false): ReturnType<typeof render> => {
+      (useTheme as ReturnType<typeof vi.fn>).mockReturnValue({ isDark, toggleTheme: vi.fn() });
+      return render(
+        <TestProviders>
+          <Footer />
+        </TestProviders>
+      );
+    };
+
+    describe('Content', () => {
+      it('displays copyright text', () => {
+        renderFooter();
+        expect(screen.getByText(copyrightText)).toBeInTheDocument();
+      });
+    });
+
+    describe('Theme', () => {
+      it('applies dark theme', () => {
+        renderFooter(true);
+        const footer = screen.getByRole('contentinfo');
+        expect(footer).toHaveClass('theme-dark');
+        expect(footer).not.toHaveClass('theme-light');
+      });
+
+      it('applies light theme', () => {
+        renderFooter(false);
+        const footer = screen.getByRole('contentinfo');
+        expect(footer).toHaveClass('theme-light');
+        expect(footer).not.toHaveClass('theme-dark');
+      });
+    });
+
+    describe('Layout', () => {
+      it('has correct classes', () => {
+        renderFooter();
+        const footer = screen.getByRole('contentinfo');
+        expect(footer).toHaveClass('footer', 'py-3', 'mt-auto');
+        expect(screen.getByText(copyrightText).parentElement).toHaveClass('text-center');
+      });
+    });
   })
 })
