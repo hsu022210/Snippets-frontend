@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, ChangeEvent, FormEvent } from 'react';
 import { Form, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -7,20 +7,38 @@ import AuthForm from '../components/auth/AuthForm';
 import FormField from '../components/auth/FormField';
 import SubmitButton from '../components/auth/SubmitButton';
 import PasswordRules from '../components/auth/PasswordRules';
+import { AxiosError } from 'axios';
+
+interface FormData {
+  username: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
+interface ApiErrorResponse {
+  detail: {
+    email?: string | string[];
+    username?: string | string[];
+    password?: string | string[];
+    password2?: string | string[];
+    detail?: string;
+  };
+}
 
 const Register = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     username: '',
     email: '',
     password: '',
     confirmPassword: ''
   });
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const { register } = useAuth();
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -28,7 +46,7 @@ const Register = () => {
     }));
   };
 
-  const getErrorMessage = (error) => {
+  const getErrorMessage = (error: AxiosError<ApiErrorResponse>): string => {
     // Handle validation errors from the API
     if (error.response?.data) {
       const data = error.response.data.detail;
@@ -62,7 +80,7 @@ const Register = () => {
     return 'An unexpected error occurred. Please try again later.';
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
@@ -76,7 +94,7 @@ const Register = () => {
       await register(formData.username, formData.password, formData.confirmPassword, formData.email);
       navigate('/snippets');
     } catch (error) {
-      const errorMessage = getErrorMessage(error);
+      const errorMessage = getErrorMessage(error as AxiosError<ApiErrorResponse>);
       setError(errorMessage);
       console.error('Registration error:', error);
     } finally {

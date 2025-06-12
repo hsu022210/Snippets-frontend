@@ -1,8 +1,17 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
 
-const PasswordRules = ({ password }) => {
-  const rules = [
+interface PasswordRule {
+  label: string;
+  isValid: boolean;
+}
+
+interface PasswordRulesProps {
+  password: string;
+}
+
+const PasswordRules = ({ password }: PasswordRulesProps) => {
+  const rules: PasswordRule[] = [
     {
       label: 'At least 8 characters',
       isValid: password.length >= 8
