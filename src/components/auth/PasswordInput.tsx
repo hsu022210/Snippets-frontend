@@ -1,6 +1,21 @@
-import { useState } from 'react';
+import { useState, ChangeEvent } from 'react';
 import { Form, InputGroup, Button } from 'react-bootstrap';
-import PropTypes from 'prop-types';
+
+interface PasswordInputProps {
+  value: string;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  label?: string;
+  name?: string;
+  id?: string;
+  required?: boolean;
+  disabled?: boolean;
+  size?: 'sm' | 'lg';
+  className?: string;
+  autoComplete?: string;
+  placeholder?: string;
+  isInvalid?: boolean;
+  error?: string;
+}
 
 const PasswordInput = ({ 
   value, 
@@ -10,13 +25,13 @@ const PasswordInput = ({
   id, 
   required = false, 
   disabled = false, 
-  size = 'md',
+  size,
   className = '',
   autoComplete = 'current-password',
   placeholder = '',
   isInvalid = false,
   error = ''
-}) => {
+}: PasswordInputProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
@@ -58,22 +73,6 @@ const PasswordInput = ({
       </InputGroup>
     </Form.Group>
   );
-};
-
-PasswordInput.propTypes = {
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-  label: PropTypes.string,
-  name: PropTypes.string,
-  id: PropTypes.string,
-  required: PropTypes.bool,
-  disabled: PropTypes.bool,
-  size: PropTypes.oneOf(['sm', 'md', 'lg']),
-  className: PropTypes.string,
-  autoComplete: PropTypes.string,
-  placeholder: PropTypes.string,
-  isInvalid: PropTypes.bool,
-  error: PropTypes.string
 };
 
 export default PasswordInput; 

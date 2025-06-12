@@ -1,4 +1,20 @@
+import { ChangeEvent } from 'react';
 import { Form } from 'react-bootstrap';
+
+interface FormFieldProps {
+  label: string;
+  type?: string;
+  name?: string;
+  id?: string;
+  value: string;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  disabled?: boolean;
+  required?: boolean;
+  autoComplete?: string;
+  className?: string;
+  error?: string;
+  isInvalid?: boolean;
+}
 
 const FormField = ({
   label,
@@ -13,7 +29,7 @@ const FormField = ({
   className = 'mb-3',
   error,
   isInvalid
-}) => {
+}: FormFieldProps) => {
   return (
     <Form.Group className={className}>
       <Form.Label htmlFor={id}>{label}</Form.Label>
