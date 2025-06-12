@@ -2,7 +2,7 @@ import React from 'react';
 import { Container } from 'react-bootstrap';
 import { useTheme } from '../contexts/ThemeContext';
 
-const Footer = () => {
+const Footer: React.FC = () => {
   const { isDark } = useTheme();
   const currentYear = new Date().getFullYear();
 

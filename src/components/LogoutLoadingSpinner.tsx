@@ -1,8 +1,16 @@
 import { Spinner } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 
-const LogoutLoadingSpinner = ({ show, message = 'Logging out...' }) => {
-  const [isVisible, setIsVisible] = useState(false);
+interface LogoutLoadingSpinnerProps {
+  show: boolean;
+  message?: string;
+}
+
+const LogoutLoadingSpinner: React.FC<LogoutLoadingSpinnerProps> = ({ 
+  show, 
+  message = 'Logging out...' 
+}) => {
+  const [isVisible, setIsVisible] = useState<boolean>(false);
 
   useEffect(() => {
     setIsVisible(show);
