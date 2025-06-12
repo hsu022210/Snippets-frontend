@@ -2,8 +2,18 @@ import CodeMirror from '@uiw/react-codemirror';
 import { getLanguageExtension } from '../../utils/languageUtils';
 import { useCodeMirrorTheme } from '../../contexts/CodeMirrorThemeContext';
 import * as themes from '@uiw/codemirror-themes-all';
+import { Extension } from '@codemirror/state';
 
-const CodeEditor = ({
+interface CodeEditorProps {
+  value: string;
+  onChange?: (value: string) => void;
+  language: string;
+  height?: string;
+  editable?: boolean;
+  className?: string;
+}
+
+const CodeEditor: React.FC<CodeEditorProps> = ({
   value,
   onChange,
   language,
@@ -12,7 +22,9 @@ const CodeEditor = ({
   className = '',
 }) => {
   const { selectedTheme } = useCodeMirrorTheme();
-  const theme = themes[selectedTheme] || themes['copilot'];
+  // Type assertion to handle theme access
+  const theme = (themes as unknown as Record<string, Extension>)[selectedTheme] || 
+                (themes as unknown as Record<string, Extension>)['copilot'];
 
   return (
     <div className={className} style={{ border: '1px solid #dee2e6', borderRadius: '4px', overflow: 'hidden' }}>

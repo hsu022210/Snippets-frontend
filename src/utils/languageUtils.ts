@@ -11,6 +11,7 @@ import { rust } from '@codemirror/lang-rust';
 import { php } from '@codemirror/lang-php';
 import { xml } from '@codemirror/lang-xml';
 import { yaml } from '@codemirror/lang-yaml';
+import { Extension } from '@codemirror/state';
 
 export const LANGUAGE_OPTIONS = [
   'javascript',
@@ -28,13 +29,15 @@ export const LANGUAGE_OPTIONS = [
   'php',
   'xml',
   'yaml'
-];
+] as const;
 
-export const getLanguageExtension = (selectedLanguage) => {
+export type LanguageOption = typeof LANGUAGE_OPTIONS[number];
+
+export const getLanguageExtension = (selectedLanguage: string): Extension[] => {
   if (!selectedLanguage) return [];
   
   try {
-    const languageMap = {
+    const languageMap: Record<string, Extension> = {
       'javascript': javascript({ jsx: true }),
       'python': python(),
       'html': html(),
@@ -52,14 +55,14 @@ export const getLanguageExtension = (selectedLanguage) => {
       'yaml': yaml()
     };
     
-    return languageMap[selectedLanguage.toLowerCase()] || [];
+    return languageMap[selectedLanguage.toLowerCase()] ? [languageMap[selectedLanguage.toLowerCase()]] : [];
   } catch (error) {
     console.error('Error loading language extension:', error);
     return [];
   }
 };
 
-export const processCode = (codeToProcess) => {
+export const processCode = (codeToProcess: unknown): string => {
   if (!codeToProcess) return '';
   
   try {
