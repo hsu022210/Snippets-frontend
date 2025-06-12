@@ -33,7 +33,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
         height={height}
         theme={theme}
         onChange={onChange}
-        extensions={[getLanguageExtension(language)]}
+        extensions={getLanguageExtension(language)}
         editable={editable}
         basicSetup={{
           lineNumbers: true,

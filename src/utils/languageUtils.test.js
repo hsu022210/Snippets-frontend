@@ -44,21 +44,21 @@ describe('LANGUAGE_OPTIONS', () => {
 
 describe('getLanguageExtension', () => {
   it('returns the correct extension for each language', () => {
-    expect(getLanguageExtension('javascript')).toBe('js-ext');
-    expect(getLanguageExtension('typescript')).toBe('js-ext');
-    expect(getLanguageExtension('python')).toBe('py-ext');
-    expect(getLanguageExtension('java')).toBe('java-ext');
-    expect(getLanguageExtension('cpp')).toBe('cpp-ext');
-    expect(getLanguageExtension('c')).toBe('cpp-ext');
-    expect(getLanguageExtension('css')).toBe('css-ext');
-    expect(getLanguageExtension('html')).toBe('html-ext');
-    expect(getLanguageExtension('sql')).toBe('sql-ext');
-    expect(getLanguageExtension('json')).toBe('json-ext');
-    expect(getLanguageExtension('markdown')).toBe('md-ext');
-    expect(getLanguageExtension('rust')).toBe('rust-ext');
-    expect(getLanguageExtension('php')).toBe('php-ext');
-    expect(getLanguageExtension('xml')).toBe('xml-ext');
-    expect(getLanguageExtension('yaml')).toBe('yaml-ext');
+    expect(getLanguageExtension('javascript')[0]).toBe('js-ext');
+    expect(getLanguageExtension('typescript')[0]).toBe('js-ext');
+    expect(getLanguageExtension('python')[0]).toBe('py-ext');
+    expect(getLanguageExtension('java')[0]).toBe('java-ext');
+    expect(getLanguageExtension('cpp')[0]).toBe('cpp-ext');
+    expect(getLanguageExtension('c')[0]).toBe('cpp-ext');
+    expect(getLanguageExtension('css')[0]).toBe('css-ext');
+    expect(getLanguageExtension('html')[0]).toBe('html-ext');
+    expect(getLanguageExtension('sql')[0]).toBe('sql-ext');
+    expect(getLanguageExtension('json')[0]).toBe('json-ext');
+    expect(getLanguageExtension('markdown')[0]).toBe('md-ext');
+    expect(getLanguageExtension('rust')[0]).toBe('rust-ext');
+    expect(getLanguageExtension('php')[0]).toBe('php-ext');
+    expect(getLanguageExtension('xml')[0]).toBe('xml-ext');
+    expect(getLanguageExtension('yaml')[0]).toBe('yaml-ext');
     // Unknown language returns []
     expect(getLanguageExtension('unknown')).toEqual([]);
     // No language returns []

@@ -1,7 +1,7 @@
 import React from 'react';
-import '../styles/Disclaimer.css';
+import '../styles/Disclaimer.scss';
 
-const Disclaimer = () => {
+const Disclaimer: React.FC = () => {
   return (
     <div className="disclaimer-container">
       <div className="disclaimer-logo" />

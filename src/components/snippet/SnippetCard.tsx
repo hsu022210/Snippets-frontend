@@ -65,7 +65,7 @@ const SnippetCard: React.FC<SnippetCardProps> = ({ snippet }) => {
                 completionKeymap: false,
                 lintKeymap: false,
               }}
-              extensions={[getLanguageExtension(snippet.language)]}
+              extensions={getLanguageExtension(snippet.language)}
             />
           </div>
 
