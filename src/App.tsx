@@ -18,7 +18,7 @@ import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import Container from './components/shared/Container';
 
-function App() {
+const App: React.FC = () => {
   return (
     <ToastProvider>
       <ThemeProvider>
@@ -69,4 +69,4 @@ function App() {
   );
 }
 
-export default App;
+export default App; 

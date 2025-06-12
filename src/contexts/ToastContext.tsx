@@ -1,7 +1,18 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, ReactNode } from 'react';
 import { Toast, ToastContainer } from 'react-bootstrap';
 
-const ToastContext = createContext();
+type ToastType = 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
+
+interface ToastContextType {
+  showToast: (message?: string, type?: ToastType) => void;
+  hideToast: () => void;
+}
+
+interface ToastProviderProps {
+  children: ReactNode;
+}
+
+const ToastContext = createContext<ToastContextType | null>(null);
 
 export const useToast = () => {
   const context = useContext(ToastContext);
@@ -11,12 +22,12 @@ export const useToast = () => {
   return context;
 };
 
-export const ToastProvider = ({ children }) => {
+export const ToastProvider = ({ children }: ToastProviderProps) => {
   const [show, setShow] = useState(false);
   const [message, setMessage] = useState('');
-  const [type, setType] = useState('primary');
+  const [type, setType] = useState<ToastType>('primary');
 
-  const showToast = (msg = 'The site may be slow to respond after a certain time of inactivity.', toastType = 'primary') => {
+  const showToast = (msg = 'The site may be slow to respond after a certain time of inactivity.', toastType: ToastType = 'primary') => {
     setMessage(msg);
     setType(toastType);
     setShow(true);
