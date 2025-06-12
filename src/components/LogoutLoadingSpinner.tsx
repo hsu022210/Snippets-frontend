@@ -1,10 +1,7 @@
+import React from 'react'
 import { Spinner } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
-
-interface LogoutLoadingSpinnerProps {
-  show: boolean;
-  message?: string;
-}
+import { LogoutLoadingSpinnerProps } from '../types/interfaces'
 
 const LogoutLoadingSpinner: React.FC<LogoutLoadingSpinnerProps> = ({ 
   show, 

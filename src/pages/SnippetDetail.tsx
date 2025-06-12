@@ -12,16 +12,11 @@ import Container from '../components/shared/Container';
 import CodeEditor from '../components/shared/CodeEditor';
 import { useAuth } from '../contexts/AuthContext';
 
-interface RouteParams {
-  id: string;
-}
-
 const SnippetDetail: React.FC = () => {
-  const { id } = useParams<RouteParams>();
+  const { id } = useParams<{ id: string }>();
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [codeError, setCodeError] = useState<boolean>(false);
   const { token } = useAuth();
-  
   const {
     snippet,
     loading,

@@ -1,20 +1,6 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import * as themes from '@uiw/codemirror-themes-all';
-
-interface ThemeOption {
-  value: string;
-  label: string;
-}
-
-interface CodeMirrorThemeContextType {
-  selectedTheme: string;
-  setSelectedTheme: (theme: string) => void;
-  themeOptions: ThemeOption[];
-}
-
-interface CodeMirrorThemeProviderProps {
-  children: ReactNode;
-}
+import { ThemeOption, CodeMirrorThemeContextType, CodeMirrorThemeProviderProps } from '../types/interfaces';
 
 const CodeMirrorThemeContext = createContext<CodeMirrorThemeContextType | null>(null);
 

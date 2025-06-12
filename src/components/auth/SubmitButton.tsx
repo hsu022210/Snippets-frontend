@@ -1,11 +1,5 @@
-import { ReactNode } from 'react';
 import { Button, Spinner } from 'react-bootstrap';
-
-interface SubmitButtonProps {
-  loading: boolean;
-  loadingText: string;
-  children: ReactNode;
-}
+import { SubmitButtonProps } from '../../types/interfaces';
 
 const SubmitButton = ({ loading, loadingText, children }: SubmitButtonProps) => {
   return (

@@ -10,7 +10,7 @@ import { ThemeProvider } from '../contexts/ThemeContext'
 import { ToastProvider } from '../contexts/ToastContext'
 import { AuthProvider } from '../contexts/AuthContext'
 import { CodeMirrorThemeProvider } from '../contexts/CodeMirrorThemeContext'
-import { ReactNode } from 'react'
+import { TestProvidersProps } from '../types/interfaces';
 
 // Extend Vitest's expect method with testing-library matchers
 expect.extend(matchers)
@@ -77,9 +77,6 @@ afterEach(() => {
 afterAll(() => server.close())
 
 // Common test providers
-interface TestProvidersProps {
-  children: ReactNode
-}
 
 export const TestProviders: React.FC<TestProvidersProps> = ({ children }) => {
   return (

@@ -1,21 +1,6 @@
-import { useState, ChangeEvent } from 'react';
+import { useState} from 'react';
 import { Form, InputGroup, Button } from 'react-bootstrap';
-
-interface PasswordInputProps {
-  value: string;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  label?: string;
-  name?: string;
-  id?: string;
-  required?: boolean;
-  disabled?: boolean;
-  size?: 'sm' | 'lg';
-  className?: string;
-  autoComplete?: string;
-  placeholder?: string;
-  isInvalid?: boolean;
-  error?: string;
-}
+import { PasswordInputProps } from '../../types/interfaces'
 
 const PasswordInput = ({ 
   value, 

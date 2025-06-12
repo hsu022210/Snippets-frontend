@@ -1,16 +1,6 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState } from 'react';
 import { Toast, ToastContainer } from 'react-bootstrap';
-
-type ToastType = 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
-
-interface ToastContextType {
-  showToast: (message?: string, type?: ToastType) => void;
-  hideToast: () => void;
-}
-
-interface ToastProviderProps {
-  children: ReactNode;
-}
+import { ToastType, ToastContextType, ToastProviderProps } from '../types/interfaces';
 
 const ToastContext = createContext<ToastContextType | null>(null);
 

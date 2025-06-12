@@ -173,7 +173,7 @@ describe('Auth Components', () => {
     })
 
     it('renders without label when label prop is not provided', () => {
-      const { label, ...propsWithoutLabel } = defaultProps
+      const { ...propsWithoutLabel } = defaultProps
       render(<PasswordInput {...propsWithoutLabel} label={undefined} />)
       
       expect(screen.queryByText('Password')).not.toBeInTheDocument()

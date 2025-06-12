@@ -1,35 +1,21 @@
 import { http, HttpResponse } from 'msw'
-
-interface Snippet {
-  id: string;
-  title: string;
-  description: string;
-  language: string;
-  code: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface SnippetResponse {
-  results: Snippet[];
-}
+import { Snippet, SnippetListResponse } from '../types/interfaces';
 
 // Mock data
 const mockSnippet: Snippet = {
   id: '1',
   title: 'Test Snippet',
-  description: 'Test Description',
   language: 'javascript',
   code: 'console.log("test")',
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
+  created_at: new Date().toISOString(),
+  updated_at: new Date().toISOString(),
 }
 
 // Define your API handlers here
 export const handlers = [
   // Snippet handlers
   http.get('/snippets', () => {
-    return HttpResponse.json<SnippetResponse>({
+    return HttpResponse.json<SnippetListResponse>({
       results: [mockSnippet]
     })
   }),
@@ -43,11 +29,10 @@ export const handlers = [
     return HttpResponse.json<Snippet>({
       id: Date.now().toString(),
       title: body.title || 'Untitled Snippet',
-      description: body.description || '',
       language: body.language || 'plaintext',
       code: body.code || '',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
     })
   }),
 
@@ -56,7 +41,7 @@ export const handlers = [
     return HttpResponse.json<Snippet>({
       ...mockSnippet,
       ...body,
-      updatedAt: new Date().toISOString()
+      updated_at: new Date().toISOString()
     })
   }),
 
@@ -65,7 +50,7 @@ export const handlers = [
     return HttpResponse.json<Snippet>({
       ...mockSnippet,
       ...body,
-      updatedAt: new Date().toISOString()
+      updated_at: new Date().toISOString()
     })
   }),
 

@@ -1,20 +1,9 @@
+import React from 'react'
 import { Form, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useToast } from '../../contexts/ToastContext';
 import { Share, Save, XCircle, PencilSquare, Trash } from 'react-bootstrap-icons';
 import { useState } from 'react';
-
-interface SnippetHeaderProps {
-  isEditing: boolean;
-  editedTitle: string;
-  setEditedTitle: (title: string) => void;
-  saving: boolean;
-  handleCancel: () => void;
-  handleSave: () => void;
-  setIsEditing: (isEditing: boolean) => void;
-  setShowDeleteModal: (show: boolean) => void;
-  title: string;
-  isAuthenticated: boolean;
-}
+import { SnippetHeaderProps } from '../../types/interfaces'
 
 const SnippetHeader: React.FC<SnippetHeaderProps> = ({
   isEditing,

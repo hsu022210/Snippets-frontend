@@ -7,10 +7,7 @@ import SubmitButton from '../components/auth/SubmitButton';
 import { BASE_URL } from '../contexts/AuthContext';
 import { useApiRequest } from '../hooks/useApiRequest';
 import axios, { AxiosError } from 'axios';
-
-interface ApiErrorResponse {
-  message?: string;
-}
+import { ApiErrorResponse } from '../types/interfaces';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState<string>('');

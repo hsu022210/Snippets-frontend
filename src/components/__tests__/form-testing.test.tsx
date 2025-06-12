@@ -9,9 +9,9 @@ import { http, HttpResponse } from 'msw'
 const SnippetForm = () => {
   const [status, setStatus] = useState({ type: '', message: '' })
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const formData = new FormData(e.target)
+    const formData = new FormData(e.currentTarget)
     try {
       const response = await fetch('/snippets', {
         method: 'POST',
@@ -28,7 +28,7 @@ const SnippetForm = () => {
       
       const data = await response.json()
       setStatus({ type: 'success', message: `Created snippet: ${data.title}` })
-    } catch (error) {
+    } catch {
       setStatus({ type: 'error', message: 'Error creating snippet' })
     }
   }

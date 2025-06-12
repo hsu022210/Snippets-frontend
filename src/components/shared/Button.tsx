@@ -1,14 +1,5 @@
 import { Button as BootstrapButton } from 'react-bootstrap';
-import { ReactNode } from 'react';
-
-interface ButtonProps {
-  children: ReactNode;
-  variant?: string;
-  size?: 'sm' | 'lg';
-  className?: string;
-  isMobile?: boolean;
-  [key: string]: any; // for other props
-}
+import { ButtonProps } from '../../types/interfaces';
 
 const Button = ({ children, variant = 'primary', size, className, isMobile, ...props }: ButtonProps) => {
   const getButtonClasses = () => {

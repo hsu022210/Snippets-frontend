@@ -4,12 +4,7 @@ import Container from '../components/shared/Container';
 import CodeEditor from '../components/shared/CodeEditor';
 import { useCreateSnippet } from '../hooks/useSnippet';
 import { LANGUAGE_OPTIONS } from '../utils/languageUtils';
-
-interface SnippetData {
-  title: string;
-  code: string;
-  language: string;
-}
+import { SnippetData } from '../types/interfaces';
 
 const CreateSnippet: React.FC = () => {
   const [title, setTitle] = useState<string>('');

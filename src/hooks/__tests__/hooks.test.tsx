@@ -5,6 +5,7 @@ import { useSnippetList } from '../useSnippetList'
 import { useSnippet, useCreateSnippet } from '../useSnippet'
 import { TestProviders } from '../../test/setup'
 import { http, HttpResponse } from 'msw'
+import axios from 'axios'
 
 interface Snippet {
   id: string;
@@ -19,13 +20,12 @@ describe('Hooks (with MSW)', () => {
       const { result } = renderHook(() => useApiRequest(), {
         wrapper: TestProviders,
       })
-      let response
+      let response: any
       await act(async () => {
-        response = await result.current.makeRequest(() => fetch('/snippets/1'))
-        response = await response.json()
+        response = await result.current.makeRequest(() => axios.get('/snippets/1'))
       })
-      expect(response.id).toBe('1')
-      expect(response.title).toBe('Test Snippet')
+      expect(response?.data.id).toBe('1')
+      expect(response?.data.title).toBe('Test Snippet')
     })
 
     it('should handle API request error', async () => {
@@ -34,9 +34,13 @@ describe('Hooks (with MSW)', () => {
       })
       let response
       await act(async () => {
-        response = await result.current.makeRequest(() => fetch('/snippets/1/error'))
+        try {
+          response = await result.current.makeRequest(() => axios.get('/snippets/1/error'))
+        } catch {
+          // Error is expected
+        }
       })
-      expect(response.status).toBe(500)
+      expect(response).toBeUndefined()
     })
   })
 
@@ -91,7 +95,7 @@ describe('Hooks (with MSW)', () => {
     })
 
     it('should fetch and return a snippet', async () => {
-      const { result } = renderHook(() => useSnippet('1'), {
+      const { result } = renderHook(() => useSnippet(1), {
         wrapper: TestProviders,
       })
       
@@ -117,7 +121,7 @@ describe('Hooks (with MSW)', () => {
         })
       )
       
-      const { result } = renderHook(() => useSnippet('1'), {
+      const { result } = renderHook(() => useSnippet(1), {
         wrapper: TestProviders,
       })
       
@@ -130,7 +134,7 @@ describe('Hooks (with MSW)', () => {
     })
 
     it('should handle save operation', async () => {
-      const { result } = renderHook(() => useSnippet('1'), {
+      const { result } = renderHook(() => useSnippet(1), {
         wrapper: TestProviders,
       })
       
@@ -153,7 +157,7 @@ describe('Hooks (with MSW)', () => {
     })
 
     it('should handle delete operation', async () => {
-      const { result } = renderHook(() => useSnippet('1'), {
+      const { result } = renderHook(() => useSnippet(1), {
         wrapper: TestProviders,
       })
       
@@ -169,7 +173,7 @@ describe('Hooks (with MSW)', () => {
     })
 
     it('should handle cancel operation', async () => {
-      const { result } = renderHook(() => useSnippet('1'), {
+      const { result } = renderHook(() => useSnippet(1), {
         wrapper: TestProviders,
       })
       
@@ -246,7 +250,7 @@ describe('Hooks (with MSW)', () => {
       await act(async () => {
         try {
           await result.current.createSnippet(newSnippet)
-        } catch (error) {
+        } catch {
           // Error is expected
         }
       })
@@ -278,7 +282,7 @@ describe('Hooks (with MSW)', () => {
       await act(async () => {
         try {
           await result.current.createSnippet(newSnippet)
-        } catch (error) {
+        } catch {
           // Error is expected
         }
       })
