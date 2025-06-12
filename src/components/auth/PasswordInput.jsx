@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Form, InputGroup, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
-import { Eye, EyeSlash } from 'react-bootstrap-icons';
 
 const PasswordInput = ({ 
   value, 
@@ -49,11 +48,7 @@ const PasswordInput = ({
           type="button"
           aria-label={showPassword ? 'Hide password' : 'Show password'}
         >
-          {showPassword ? (
-            <EyeSlash size={18} className="password-icon" />
-          ) : (
-            <Eye size={18} className="password-icon" />
-          )}
+          <i className={`bi ${showPassword ? 'bi-eye-slash' : 'bi-eye'}`}></i>
         </Button>
         {error && (
           <Form.Control.Feedback type="invalid">
