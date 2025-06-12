@@ -36,7 +36,7 @@ const Home: React.FC = () => {
                 <Button 
                   as={Link} 
                   to="/create-snippet" 
-                  variant="success" 
+                  variant="outline-primary" 
                   size="lg"
                   className="w-100 w-md-auto"
                 >

@@ -36,15 +36,15 @@ const SnippetHeader: React.FC<SnippetHeaderProps> = ({
   return (
     <div className="mb-4 snippet-header">
       {isEditing ? (
-        <div className="d-flex flex-column flex-md-row align-items-start align-items-md-center w-100 gap-3">
+        <div className="d-flex flex-column flex-md-row justify-content-between w-100 gap-3">
           <Form.Control
             type="text"
             value={editedTitle}
             onChange={(e) => setEditedTitle(e.target.value)}
             placeholder="Enter snippet title"
-            className="w-100"
+            className="mb-0 flex-grow-0"
           />
-          <div className="d-flex gap-2 w-100 w-md-auto ms-md-auto">
+          <div className="d-flex gap-2">
             <Button
               variant="success"
               onClick={handleSave}
