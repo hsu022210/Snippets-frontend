@@ -1,18 +1,26 @@
-import { useState } from 'react';
+import { useState, FormEvent, ChangeEvent } from 'react';
 import { Form, Alert } from 'react-bootstrap';
 import Container from '../components/shared/Container';
 import CodeEditor from '../components/shared/CodeEditor';
 import { useCreateSnippet } from '../hooks/useSnippet';
+import { LANGUAGE_OPTIONS } from '../utils/languageUtils';
 
-const CreateSnippet = () => {
-  const [title, setTitle] = useState('');
-  const [code, setCode] = useState('');
-  const [language, setLanguage] = useState('');
+interface SnippetData {
+  title: string;
+  code: string;
+  language: string;
+}
+
+const CreateSnippet: React.FC = () => {
+  const [title, setTitle] = useState<string>('');
+  const [code, setCode] = useState<string>('');
+  const [language, setLanguage] = useState<string>('');
   const { createSnippet, loading, error } = useCreateSnippet();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await createSnippet({ title, code, language });
+    const snippetData: SnippetData = { title, code, language };
+    await createSnippet(snippetData);
   };
 
   return (
@@ -25,7 +33,7 @@ const CreateSnippet = () => {
           <Form.Control
             type="text"
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)}
             placeholder="Enter snippet title"
             required
           />
@@ -35,25 +43,15 @@ const CreateSnippet = () => {
           <Form.Label>Language</Form.Label>
           <Form.Select
             value={language}
-            onChange={(e) => setLanguage(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLSelectElement>) => setLanguage(e.target.value)}
             required
           >
             <option value="">Select language</option>
-            <option value="javascript">JavaScript</option>
-            <option value="python">Python</option>
-            <option value="html">HTML</option>
-            <option value="css">CSS</option>
-            <option value="java">Java</option>
-            <option value="cpp">C++</option>
-            <option value="c">C</option>
-            <option value="typescript">TypeScript</option>
-            <option value="sql">SQL</option>
-            <option value="json">JSON</option>
-            <option value="markdown">Markdown</option>
-            <option value="rust">Rust</option>
-            <option value="php">PHP</option>
-            <option value="xml">XML</option>
-            <option value="yaml">YAML</option>
+            {LANGUAGE_OPTIONS.map((lang) => (
+              <option key={lang} value={lang}>
+                {lang.charAt(0).toUpperCase() + lang.slice(1)}
+              </option>
+            ))}
           </Form.Select>
         </Form.Group>
 
@@ -79,4 +77,4 @@ const CreateSnippet = () => {
   );
 };
 
-export default CreateSnippet;
+export default CreateSnippet; 
