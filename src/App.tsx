@@ -17,6 +17,7 @@ import CreateSnippet from './pages/CreateSnippet';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import Container from './components/shared/Container';
+import Disclaimer from './components/Disclaimer';
 
 const App: React.FC = () => {
   return (
@@ -57,6 +58,7 @@ const App: React.FC = () => {
                         <Settings />
                       </PrivateRoute>
                     } />
+                    <Route path="/disclaimer" element={<Disclaimer />} />
                   </Routes>
                 </Container>
                 <Footer />
