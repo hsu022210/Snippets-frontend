@@ -63,7 +63,7 @@ describe('getLanguageExtension', () => {
     expect(getLanguageExtension('unknown')).toEqual([]);
     // No language returns []
     expect(getLanguageExtension('')).toEqual([]);
-    expect(getLanguageExtension(null)).toEqual([]);
+    expect(getLanguageExtension(null as unknown as string)).toEqual([]);
   });
 });
 

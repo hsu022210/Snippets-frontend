@@ -5,6 +5,15 @@ import Register from '../Register';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
+interface ApiErrorResponse {
+  response: {
+    data: {
+      detail: string;
+    };
+    status: number;
+  };
+}
+
 // Mock the hooks
 vi.mock('../../contexts/AuthContext', () => ({
   useAuth: vi.fn()
@@ -20,8 +29,8 @@ describe('Register Component', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    useAuth.mockReturnValue({ register: mockRegister });
-    useNavigate.mockReturnValue(mockNavigate);
+    (useAuth as ReturnType<typeof vi.fn>).mockReturnValue({ register: mockRegister });
+    (useNavigate as ReturnType<typeof vi.fn>).mockReturnValue(mockNavigate);
   });
 
   const renderRegister = () => {
@@ -45,8 +54,8 @@ describe('Register Component', () => {
   it('shows error when passwords do not match', async () => {
     renderRegister();
     
-    const passwordInput = screen.getByLabelText(/^password$/i);
-    const confirmPasswordInput = screen.getByLabelText(/confirm password/i);
+    const passwordInput = screen.getByLabelText(/^password$/i) as HTMLInputElement;
+    const confirmPasswordInput = screen.getByLabelText(/confirm password/i) as HTMLInputElement;
     const submitButton = screen.getByRole('button', { name: /register/i });
 
     fireEvent.change(passwordInput, { target: { value: 'password123' } });
@@ -57,13 +66,13 @@ describe('Register Component', () => {
   });
 
   it('handles successful registration', async () => {
-    mockRegister.mockResolvedValueOnce();
+    mockRegister.mockResolvedValueOnce(undefined);
     renderRegister();
 
-    const usernameInput = screen.getByLabelText(/username/i);
-    const emailInput = screen.getByLabelText(/email/i);
-    const passwordInput = screen.getByLabelText(/^password$/i);
-    const confirmPasswordInput = screen.getByLabelText(/confirm password/i);
+    const usernameInput = screen.getByLabelText(/username/i) as HTMLInputElement;
+    const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
+    const passwordInput = screen.getByLabelText(/^password$/i) as HTMLInputElement;
+    const confirmPasswordInput = screen.getByLabelText(/confirm password/i) as HTMLInputElement;
     const submitButton = screen.getByRole('button', { name: /register/i });
 
     fireEvent.change(usernameInput, { target: { value: 'testuser' } });
@@ -92,14 +101,14 @@ describe('Register Component', () => {
         },
         status: 400
       }
-    });
+    } as ApiErrorResponse);
 
     renderRegister();
 
-    const usernameInput = screen.getByLabelText(/username/i);
-    const emailInput = screen.getByLabelText(/email/i);
-    const passwordInput = screen.getByLabelText(/^password$/i);
-    const confirmPasswordInput = screen.getByLabelText(/confirm password/i);
+    const usernameInput = screen.getByLabelText(/username/i) as HTMLInputElement;
+    const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
+    const passwordInput = screen.getByLabelText(/^password$/i) as HTMLInputElement;
+    const confirmPasswordInput = screen.getByLabelText(/confirm password/i) as HTMLInputElement;
     const submitButton = screen.getByRole('button', { name: /register/i });
 
     fireEvent.change(usernameInput, { target: { value: 'testuser' } });
@@ -117,10 +126,10 @@ describe('Register Component', () => {
     mockRegister.mockImplementation(() => new Promise(resolve => setTimeout(resolve, 100)));
     renderRegister();
 
-    const usernameInput = screen.getByLabelText(/username/i);
-    const emailInput = screen.getByLabelText(/email/i);
-    const passwordInput = screen.getByLabelText(/^password$/i);
-    const confirmPasswordInput = screen.getByLabelText(/confirm password/i);
+    const usernameInput = screen.getByLabelText(/username/i) as HTMLInputElement;
+    const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
+    const passwordInput = screen.getByLabelText(/^password$/i) as HTMLInputElement;
+    const confirmPasswordInput = screen.getByLabelText(/confirm password/i) as HTMLInputElement;
     const submitButton = screen.getByRole('button', { name: /register/i });
 
     fireEvent.change(usernameInput, { target: { value: 'testuser' } });
@@ -142,10 +151,10 @@ describe('Register Component', () => {
 
     renderRegister();
 
-    const usernameInput = screen.getByLabelText(/username/i);
-    const emailInput = screen.getByLabelText(/email/i);
-    const passwordInput = screen.getByLabelText(/^password$/i);
-    const confirmPasswordInput = screen.getByLabelText(/confirm password/i);
+    const usernameInput = screen.getByLabelText(/username/i) as HTMLInputElement;
+    const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
+    const passwordInput = screen.getByLabelText(/^password$/i) as HTMLInputElement;
+    const confirmPasswordInput = screen.getByLabelText(/confirm password/i) as HTMLInputElement;
     const submitButton = screen.getByRole('button', { name: /register/i });
 
     fireEvent.change(usernameInput, { target: { value: 'testuser' } });

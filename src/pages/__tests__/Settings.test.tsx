@@ -5,9 +5,15 @@ import userEvent from '@testing-library/user-event'
 import { TestProviders } from '../../test/setup'
 import Settings from '../Settings'
 
+interface CodeMirrorProps {
+  value: string;
+  height: string;
+  editable: boolean;
+}
+
 // Mock CodeMirror component
 vi.mock('@uiw/react-codemirror', () => ({
-  default: ({ value, height, editable }) => (
+  default: ({ value, height, editable }: CodeMirrorProps) => (
     <div 
       data-testid="codemirror-mock"
       data-value={value}

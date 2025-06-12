@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { ToastProvider, useToast } from '../ToastContext';
 
 // Test component that uses the toast context
-const TestComponent = () => {
+const TestComponent: React.FC = () => {
   const { showToast, hideToast } = useToast();
   return (
     <div>

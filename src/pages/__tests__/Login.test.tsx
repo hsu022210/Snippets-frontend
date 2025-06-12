@@ -20,7 +20,7 @@ vi.mock('../../contexts/AuthContext', () => ({
   useAuth: () => ({
     login: mockLogin,
   }),
-  AuthProvider: ({ children }) => children,
+  AuthProvider: ({ children }: { children: React.ReactNode }) => children,
 }));
 
 const renderLogin = () => {
@@ -50,8 +50,8 @@ describe('Login Component', () => {
   it('handles input changes correctly', () => {
     renderLogin();
     
-    const emailInput = screen.getByLabelText(/email/i);
-    const passwordInput = screen.getByLabelText(/^password$/i);
+    const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
+    const passwordInput = screen.getByLabelText(/^password$/i) as HTMLInputElement;
 
     fireEvent.change(emailInput, { target: { name: 'email', value: 'test@example.com' } });
     fireEvent.change(passwordInput, { target: { name: 'password', value: 'testpass' } });

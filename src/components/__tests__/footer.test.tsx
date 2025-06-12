@@ -14,8 +14,8 @@ describe('Footer', () => {
   const currentYear = new Date().getFullYear();
   const copyrightText = `© ${currentYear} Alec Hsu. All rights reserved.`;
 
-  const renderFooter = (isDark = false) => {
-    useTheme.mockReturnValue({ isDark, toggleTheme: mockToggleTheme });
+  const renderFooter = (isDark = false): ReturnType<typeof render> => {
+    (useTheme as ReturnType<typeof vi.fn>).mockReturnValue({ isDark, toggleTheme: mockToggleTheme });
     return render(
       <TestProviders>
         <Footer />

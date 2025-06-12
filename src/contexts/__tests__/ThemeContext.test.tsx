@@ -3,15 +3,22 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ThemeProvider, useTheme } from '../ThemeContext';
 
+interface LocalStorageMock {
+  getItem: (key: string) => string | null;
+  setItem: (key: string, value: string) => void;
+  removeItem: (key: string) => void;
+  clear: () => void;
+}
+
 // Mock localStorage
-const localStorageMock = (() => {
-  let store = {};
+const localStorageMock = ((): LocalStorageMock => {
+  let store: Record<string, string> = {};
   return {
-    getItem: vi.fn(key => store[key]),
-    setItem: vi.fn((key, value) => {
+    getItem: vi.fn((key: string) => store[key] || null),
+    setItem: vi.fn((key: string, value: string) => {
       store[key] = value;
     }),
-    removeItem: vi.fn(key => {
+    removeItem: vi.fn((key: string) => {
       delete store[key];
     }),
     clear: () => {
@@ -24,7 +31,7 @@ Object.defineProperty(window, 'localStorage', { value: localStorageMock });
 // Mock matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
-  value: vi.fn().mockImplementation(query => ({
+  value: vi.fn().mockImplementation((query: string) => ({
     matches: false,
     media: query,
     onchange: null,
@@ -37,7 +44,7 @@ Object.defineProperty(window, 'matchMedia', {
 });
 
 // Test component that uses the theme context
-const TestComponent = () => {
+const TestComponent: React.FC = () => {
   const { isDark, toggleTheme } = useTheme();
   return (
     <div>
@@ -104,7 +111,7 @@ describe('ThemeContext', () => {
 
   it('initializes with system preference when no saved theme', () => {
     // Mock system preference to dark
-    window.matchMedia = vi.fn().mockImplementation(query => ({
+    window.matchMedia = vi.fn().mockImplementation((query: string) => ({
       matches: query === '(prefers-color-scheme: dark)',
       media: query,
       onchange: null,
