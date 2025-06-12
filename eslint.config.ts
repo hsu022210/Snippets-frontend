@@ -16,6 +16,8 @@ const config: Linter.Config[] = [
         ...globals.browser,
         React: 'readonly',
         NodeJS: 'readonly',
+        node: true, // 👈 This tells ESLint that Node.js globals (like `process`) are allowed,
+        process: true,
       },
       parser: tseslint.parser,
       parserOptions: {

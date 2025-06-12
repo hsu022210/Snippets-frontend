@@ -1,12 +1,66 @@
-# React + Vite
+# Code Snippets
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern web application for managing and organizing code snippets across multiple programming languages. Built with React, TypeScript, and Vite.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- ✨ Syntax highlighting for multiple programming languages
+- 🎨 Customizable themes for code display
+- 📝 Rich text editing with CodeMirror
+- 🔍 Search and filter functionality
+- 📱 Responsive design with Bootstrap
+- 🧪 Comprehensive test coverage with Vitest
 
-## Expanding the ESLint configuration
+## Supported Languages
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- JavaScript/TypeScript
+- Python
+- Java
+- C++
+- HTML/CSS
+- SQL
+- PHP
+- Rust
+- YAML
+- JSON
+- XML
+- Markdown
+
+## Getting Started
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+## Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run test` - Run tests
+- `npm run test:ui` - Run tests with UI
+- `npm run test:coverage` - Run tests with coverage report
+- `npm run lint` - Run ESLint
+
+## Tech Stack
+
+- React 19
+- TypeScript
+- Vite
+- CodeMirror
+- React Router
+- Bootstrap
+- Vitest for testing
+- ESLint for code quality
+
+## Development
+
+This project uses TypeScript with strict type checking and ESLint for code quality. The development environment is set up with Vite for fast development and hot module replacement (HMR).
+
+For production builds, we recommend using TypeScript with type-aware lint rules enabled. The project is already configured with TypeScript and `typescript-eslint` for optimal development experience.
