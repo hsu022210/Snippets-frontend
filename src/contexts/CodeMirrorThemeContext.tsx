@@ -1,6 +1,6 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import * as themes from '@uiw/codemirror-themes-all';
-import { ThemeOption, CodeMirrorThemeContextType, CodeMirrorThemeProviderProps } from '../types/interfaces';
+import { createContext, useContext, useState, useEffect } from 'react'
+import * as themes from '@uiw/codemirror-themes-all'
+import { ThemeOption, CodeMirrorThemeContextType, CodeMirrorThemeProviderProps } from '../types/interfaces'
 
 const CodeMirrorThemeContext = createContext<CodeMirrorThemeContextType | null>(null);
 

@@ -1,5 +1,5 @@
-import { Form } from 'react-bootstrap';
-import { PasswordRule, PasswordRulesProps } from '../../types/interfaces';
+import { Form } from 'react-bootstrap'
+import { PasswordRule, PasswordRulesProps } from '../../types/interfaces'
 
 const PasswordRules = ({ password }: PasswordRulesProps) => {
   const rules: PasswordRule[] = [

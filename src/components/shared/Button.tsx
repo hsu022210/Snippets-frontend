@@ -1,5 +1,5 @@
-import { Button as BootstrapButton } from 'react-bootstrap';
-import { ButtonProps } from '../../types/interfaces';
+import { Button as BootstrapButton } from 'react-bootstrap'
+import { ButtonProps } from '../../types/interfaces'
 
 const Button = ({ children, variant = 'primary', size, className, isMobile, ...props }: ButtonProps) => {
   const getButtonClasses = () => {

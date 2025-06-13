@@ -1,16 +1,16 @@
-import { useState, useMemo } from 'react';
-import { Alert, Breadcrumb } from 'react-bootstrap';
-import { useParams, Link } from 'react-router-dom';
-import ErrorBoundary from '../components/ErrorBoundary';
-import InlineLoadingSpinner from '../components/InlineLoadingSpinner';
-import { useSnippet } from '../hooks/useSnippet';
-import { processCode } from '../utils/languageUtils';
-import SnippetHeader from '../components/snippet/SnippetHeader';
-import SnippetLanguageSelector from '../components/snippet/SnippetLanguageSelector';
-import DeleteConfirmationModal from '../components/snippet/DeleteConfirmationModal';
-import Container from '../components/shared/Container';
-import CodeEditor from '../components/shared/CodeEditor';
-import { useAuth } from '../contexts/AuthContext';
+import { useState, useMemo } from 'react'
+import { Alert, Breadcrumb } from 'react-bootstrap'
+import { useParams, Link } from 'react-router-dom'
+import ErrorBoundary from '../components/ErrorBoundary'
+import InlineLoadingSpinner from '../components/InlineLoadingSpinner'
+import { useSnippet } from '../hooks/useSnippet'
+import { processCode } from '../utils/languageUtils'
+import SnippetHeader from '../components/snippet/SnippetHeader'
+import SnippetLanguageSelector from '../components/snippet/SnippetLanguageSelector'
+import DeleteConfirmationModal from '../components/snippet/DeleteConfirmationModal'
+import Container from '../components/shared/Container'
+import CodeEditor from '../components/shared/CodeEditor'
+import { useAuth } from '../contexts/AuthContext'
 
 const SnippetDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();

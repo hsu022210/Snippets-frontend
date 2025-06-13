@@ -1,5 +1,5 @@
-import { Spinner } from 'react-bootstrap';
-import { useState, useEffect } from 'react';
+import { Spinner } from 'react-bootstrap'
+import { useState, useEffect } from 'react'
 import { LogoutLoadingSpinnerProps } from '../types/interfaces'
 
 const LogoutLoadingSpinner: React.FC<LogoutLoadingSpinnerProps> = ({ 

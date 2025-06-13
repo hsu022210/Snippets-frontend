@@ -1,4 +1,4 @@
-import { Form } from 'react-bootstrap';
+import { Form } from 'react-bootstrap'
 import { FormFieldProps } from '../../types/interfaces'
 
 const FormField = ({

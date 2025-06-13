@@ -1,7 +1,7 @@
-import React, { ChangeEvent } from 'react';
-import { useCodeMirrorTheme } from '../contexts/CodeMirrorThemeContext';
-import { Container, Card, Form } from 'react-bootstrap';
-import CodeEditor from '../components/shared/CodeEditor';
+import React, { ChangeEvent } from 'react'
+import { useCodeMirrorTheme } from '../contexts/CodeMirrorThemeContext'
+import { Container, Card, Form } from 'react-bootstrap'
+import CodeEditor from '../components/shared/CodeEditor'
 
 const Settings: React.FC = () => {
   const { selectedTheme, setSelectedTheme, themeOptions } = useCodeMirrorTheme();

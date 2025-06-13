@@ -1,8 +1,8 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
-import { AuthProvider } from '../../contexts/AuthContext';
-import Login from '../Login';
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { BrowserRouter } from 'react-router-dom'
+import { AuthProvider } from '../../contexts/AuthContext'
+import Login from '../Login'
 
 // Mock the useNavigate hook
 const mockNavigate = vi.fn();

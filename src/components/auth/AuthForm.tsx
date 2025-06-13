@@ -1,5 +1,5 @@
-import { Card, Row, Col } from 'react-bootstrap';
-import { AuthFormProps } from '../../types/interfaces';
+import { Card, Row, Col } from 'react-bootstrap'
+import { AuthFormProps } from '../../types/interfaces'
 
 const AuthForm = ({ title, className = '', children }: AuthFormProps) => {
   const getContainerClasses = (): string => {

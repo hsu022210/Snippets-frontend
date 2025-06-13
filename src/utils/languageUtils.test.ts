@@ -1,9 +1,9 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi } from 'vitest'
 import {
   LANGUAGE_OPTIONS,
   getLanguageExtension,
   processCode
-} from './languageUtils';
+} from './languageUtils'
 
 // Mock the language extension functions to avoid requiring CodeMirror internals
 vi.mock('@codemirror/lang-javascript', () => ({ javascript: vi.fn(() => 'js-ext') }));

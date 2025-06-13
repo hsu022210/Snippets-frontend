@@ -1,8 +1,8 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { ThemeProvider, useTheme } from '../ThemeContext';
-import { localStorageMock } from '../../test/setup';
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { ThemeProvider, useTheme } from '../ThemeContext'
+import { localStorageMock } from '../../test/setup'
 
 Object.defineProperty(window, 'localStorage', { value: localStorageMock });
 

@@ -1,6 +1,6 @@
-import { Container } from 'react-bootstrap';
-import { useTheme } from '../contexts/ThemeContext';
-import { Link } from 'react-router-dom';
+import { Container } from 'react-bootstrap'
+import { useTheme } from '../contexts/ThemeContext'
+import { Link } from 'react-router-dom'
 
 const Footer: React.FC = () => {
   const { isDark } = useTheme();

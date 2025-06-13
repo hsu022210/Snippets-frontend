@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import { useApiRequest } from './useApiRequest';
+import { useState, useEffect, useCallback } from 'react'
+import { useAuth } from '../contexts/AuthContext'
+import { useApiRequest } from './useApiRequest'
 import { Snippet, SnippetListResponse } from '../types/interfaces'
 
 export const useSnippetList = () => {

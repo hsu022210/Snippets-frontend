@@ -1,23 +1,23 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
-import { ThemeProvider } from './contexts/ThemeContext';
-import { CodeMirrorThemeProvider } from './contexts/CodeMirrorThemeContext';
-import { ToastProvider } from './contexts/ToastContext';
-import PrivateRoute from './components/PrivateRoute';
-import Navigation from './components/Navigation';
-import Footer from './components/Footer';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import ForgotPassword from './pages/ForgotPassword';
-import ResetPassword from './pages/ResetPassword';
-import SnippetList from './pages/SnippetList';
-import SnippetDetail from './pages/SnippetDetail';
-import CreateSnippet from './pages/CreateSnippet';
-import Profile from './pages/Profile';
-import Settings from './pages/Settings';
-import Container from './components/shared/Container';
-import Disclaimer from './components/Disclaimer';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { AuthProvider } from './contexts/AuthContext'
+import { ThemeProvider } from './contexts/ThemeContext'
+import { CodeMirrorThemeProvider } from './contexts/CodeMirrorThemeContext'
+import { ToastProvider } from './contexts/ToastContext'
+import PrivateRoute from './components/PrivateRoute'
+import Navigation from './components/Navigation'
+import Footer from './components/Footer'
+import Home from './pages/Home'
+import Login from './pages/Login'
+import Register from './pages/Register'
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
+import SnippetList from './pages/SnippetList'
+import SnippetDetail from './pages/SnippetDetail'
+import CreateSnippet from './pages/CreateSnippet'
+import Profile from './pages/Profile'
+import Settings from './pages/Settings'
+import Container from './components/shared/Container'
+import Disclaimer from './components/Disclaimer'
 
 const App: React.FC = () => {
   return (

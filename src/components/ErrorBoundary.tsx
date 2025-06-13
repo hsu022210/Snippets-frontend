@@ -1,7 +1,7 @@
-import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary';
-import { Alert, Button } from 'react-bootstrap';
-import Container from './shared/Container';
-import { ErrorFallbackProps, ErrorBoundaryProps } from '../types/interfaces';
+import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary'
+import { Alert, Button } from 'react-bootstrap'
+import Container from './shared/Container'
+import { ErrorFallbackProps, ErrorBoundaryProps } from '../types/interfaces'
 
 const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, resetErrorBoundary }) => {
   return (

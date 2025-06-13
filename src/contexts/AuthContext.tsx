@@ -1,7 +1,7 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
-import { useApiRequest } from '../hooks/useApiRequest';
-import { User, AuthContextType, AuthProviderProps } from '../types/interfaces';
+import { createContext, useContext, useState, useEffect } from 'react'
+import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios'
+import { useApiRequest } from '../hooks/useApiRequest'
+import { User, AuthContextType, AuthProviderProps } from '../types/interfaces'
 
 // Constants
 const TOKEN_KEY = 'token';

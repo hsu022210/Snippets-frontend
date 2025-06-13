@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { useTheme } from '../contexts/ThemeContext';
-import { Navbar, Nav, NavDropdown, Button, Container } from 'react-bootstrap';
-import LogoutLoadingSpinner from './LogoutLoadingSpinner';
+import { useState, useEffect } from 'react'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { useAuth } from '../contexts/AuthContext'
+import { useTheme } from '../contexts/ThemeContext'
+import { Navbar, Nav, NavDropdown, Button, Container } from 'react-bootstrap'
+import LogoutLoadingSpinner from './LogoutLoadingSpinner'
 import { 
   CodeSquare,
   Sun,
@@ -14,7 +14,7 @@ import {
   BoxArrowInRight,
   PersonPlus,
   PersonGear
-} from 'react-bootstrap-icons';
+} from 'react-bootstrap-icons'
 
 const Navigation: React.FC = () => {
   const [expanded, setExpanded] = useState<boolean>(false);

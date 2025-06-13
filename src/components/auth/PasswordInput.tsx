@@ -1,5 +1,5 @@
-import { useState} from 'react';
-import { Form, InputGroup, Button } from 'react-bootstrap';
+import { useState} from 'react'
+import { Form, InputGroup, Button } from 'react-bootstrap'
 import { PasswordInputProps } from '../../types/interfaces'
 
 const PasswordInput = ({ 

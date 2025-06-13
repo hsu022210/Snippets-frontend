@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { server } from '../../test/setup.tsx'
 import { http, HttpResponse } from 'msw'
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'
 
 interface ApiResponse {
   message: string
