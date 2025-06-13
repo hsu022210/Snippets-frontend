@@ -1,5 +1,6 @@
 import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
-import { Form, Button, Alert, Card } from 'react-bootstrap';
+import { Form, Alert, Card } from 'react-bootstrap';
+import Button from '../components/shared/Button';
 import { useAuth } from '../contexts/AuthContext';
 import { useApiRequest } from '../hooks/useApiRequest';
 import Container from '../components/shared/Container';

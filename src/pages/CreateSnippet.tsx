@@ -1,5 +1,6 @@
 import { useState, FormEvent, ChangeEvent } from 'react';
-import { Form, Alert, Button } from 'react-bootstrap';
+import { Form, Alert } from 'react-bootstrap';
+import Button from '../components/shared/Button';
 import Container from '../components/shared/Container';
 import CodeEditor from '../components/shared/CodeEditor';
 import { useCreateSnippet } from '../hooks/useSnippet';
