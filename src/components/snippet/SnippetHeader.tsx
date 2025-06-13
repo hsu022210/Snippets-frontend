@@ -1,8 +1,8 @@
-import { Form, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import Button from '../shared/Button';
-import { useToast } from '../../contexts/ToastContext';
-import { Save, XCircle, PencilSquare, Trash, Link } from 'react-bootstrap-icons';
-import { useState } from 'react';
+import { Form, OverlayTrigger, Tooltip } from 'react-bootstrap'
+import Button from '../shared/Button'
+import { useToast } from '../../contexts/ToastContext'
+import { Save, XCircle, PencilSquare, Trash, Link } from 'react-bootstrap-icons'
+import { useState } from 'react'
 import { SnippetHeaderProps } from '../../types/interfaces'
 
 const SnippetHeader: React.FC<SnippetHeaderProps> = ({

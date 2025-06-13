@@ -1,14 +1,14 @@
-import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
-import { Form, Alert, Card } from 'react-bootstrap';
-import Button from '../components/shared/Button';
-import { useAuth } from '../contexts/AuthContext';
-import { useApiRequest } from '../hooks/useApiRequest';
-import Container from '../components/shared/Container';
-import InlineLoadingSpinner from '../components/InlineLoadingSpinner';
-import { BASE_URL } from '../contexts/AuthContext';
-import axios, { AxiosError } from 'axios';
-import { Key } from 'react-bootstrap-icons';
-import { UserProfile, ApiErrorResponse } from '../types/interfaces';
+import { useState, useEffect, FormEvent, ChangeEvent } from 'react'
+import { Form, Alert, Card } from 'react-bootstrap'
+import { useAuth } from '../contexts/AuthContext'
+import { useApiRequest } from '../hooks/useApiRequest'
+import Container from '../components/shared/Container'
+import InlineLoadingSpinner from '../components/InlineLoadingSpinner'
+import { BASE_URL } from '../contexts/AuthContext'
+import axios, { AxiosError } from 'axios'
+import { Key } from 'react-bootstrap-icons'
+import { UserProfile, ApiErrorResponse } from '../types/interfaces'
+import Button from '../components/shared/Button'
 
 const Profile: React.FC = () => {
   const { api } = useAuth();

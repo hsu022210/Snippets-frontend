@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom';
-import { Stack } from 'react-bootstrap';
-import Button from '../shared/Button';
+import { Link } from 'react-router-dom'
+import { Stack } from 'react-bootstrap'
+import Button from '../shared/Button'
 
 const SnippetListHeader: React.FC = () => {
   return (

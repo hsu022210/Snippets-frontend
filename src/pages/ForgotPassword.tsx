@@ -1,13 +1,13 @@
-import { useState, FormEvent, ChangeEvent } from 'react';
-import { Form, Alert } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import AuthForm from '../components/auth/AuthForm';
-import FormField from '../components/auth/FormField';
-import SubmitButton from '../components/auth/SubmitButton';
-import { BASE_URL } from '../contexts/AuthContext';
-import { useApiRequest } from '../hooks/useApiRequest';
-import axios, { AxiosError } from 'axios';
-import { ApiErrorResponse } from '../types/interfaces';
+import { useState, FormEvent, ChangeEvent } from 'react'
+import { Form, Alert } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
+import AuthForm from '../components/auth/AuthForm'
+import FormField from '../components/auth/FormField'
+import SubmitButton from '../components/auth/SubmitButton'
+import { BASE_URL } from '../contexts/AuthContext'
+import { useApiRequest } from '../hooks/useApiRequest'
+import axios, { AxiosError } from 'axios'
+import { ApiErrorResponse } from '../types/interfaces'
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState<string>('');

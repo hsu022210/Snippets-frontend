@@ -1,9 +1,9 @@
-import CodeMirror from '@uiw/react-codemirror';
-import { getLanguageExtension } from '../../utils/languageUtils';
-import { useCodeMirrorTheme } from '../../contexts/CodeMirrorThemeContext';
-import * as themes from '@uiw/codemirror-themes-all';
-import { Extension } from '@codemirror/state';
-import { CodeEditorProps } from '../../types/interfaces';
+import CodeMirror from '@uiw/react-codemirror'
+import { getLanguageExtension } from '../../utils/languageUtils'
+import { useCodeMirrorTheme } from '../../contexts/CodeMirrorThemeContext'
+import * as themes from '@uiw/codemirror-themes-all'
+import { Extension } from '@codemirror/state'
+import { CodeEditorProps } from '../../types/interfaces'
 
 const CodeEditor: React.FC<CodeEditorProps> = ({
   value,

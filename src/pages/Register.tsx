@@ -1,14 +1,14 @@
-import { useState, ChangeEvent, FormEvent } from 'react';
-import { Form, Alert } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import PasswordInput from '../components/auth/PasswordInput';
-import AuthForm from '../components/auth/AuthForm';
-import FormField from '../components/auth/FormField';
-import SubmitButton from '../components/auth/SubmitButton';
-import PasswordRules from '../components/auth/PasswordRules';
-import { AxiosError } from 'axios';
-import { RegisterFormData, ApiRegisterErrorResponse } from '../types/interfaces';
+import { useState, ChangeEvent, FormEvent } from 'react'
+import { Form, Alert } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../contexts/AuthContext'
+import PasswordInput from '../components/auth/PasswordInput'
+import AuthForm from '../components/auth/AuthForm'
+import FormField from '../components/auth/FormField'
+import SubmitButton from '../components/auth/SubmitButton'
+import PasswordRules from '../components/auth/PasswordRules'
+import { AxiosError } from 'axios'
+import { RegisterFormData, ApiRegisterErrorResponse } from '../types/interfaces'
 
 const Register = () => {
   const [formData, setFormData] = useState<RegisterFormData>({

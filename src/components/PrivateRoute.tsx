@@ -1,5 +1,5 @@
-import { Navigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { Navigate, useLocation } from 'react-router-dom'
+import { useAuth } from '../contexts/AuthContext'
 import { PrivateRouteProps } from '../types/interfaces'
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {

@@ -1,12 +1,12 @@
-import { useState, ChangeEvent, FormEvent } from 'react';
-import { Form, Alert } from 'react-bootstrap';
-import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import PasswordInput from '../components/auth/PasswordInput';
-import AuthForm from '../components/auth/AuthForm';
-import FormField from '../components/auth/FormField';
-import SubmitButton from '../components/auth/SubmitButton';
-import { FormData } from '../types/interfaces';
+import { useState, ChangeEvent, FormEvent } from 'react'
+import { Form, Alert } from 'react-bootstrap'
+import { useNavigate, Link } from 'react-router-dom'
+import { useAuth } from '../contexts/AuthContext'
+import PasswordInput from '../components/auth/PasswordInput'
+import AuthForm from '../components/auth/AuthForm'
+import FormField from '../components/auth/FormField'
+import SubmitButton from '../components/auth/SubmitButton'
+import { FormData } from '../types/interfaces'
 
 const Login = () => {
   const [formData, setFormData] = useState<FormData>({

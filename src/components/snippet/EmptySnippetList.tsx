@@ -1,7 +1,7 @@
-import { Link } from 'react-router-dom';
-import { Stack } from 'react-bootstrap';
-import Card, { Body, Text } from '../shared/Card';
-import Button from '../shared/Button';
+import { Link } from 'react-router-dom'
+import { Stack } from 'react-bootstrap'
+import Card, { Body, Text } from '../shared/Card'
+import Button from '../shared/Button'
 
 const EmptySnippetList: React.FC = () => {
   return (

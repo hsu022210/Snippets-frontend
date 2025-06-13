@@ -1,10 +1,10 @@
-import { Row, Col, Stack, Alert } from 'react-bootstrap';
-import Container from '../components/shared/Container';
-import InlineLoadingSpinner from '../components/InlineLoadingSpinner';
-import { useSnippetList } from '../hooks/useSnippetList';
-import SnippetListHeader from '../components/snippet/SnippetListHeader';
-import SnippetCard from '../components/snippet/SnippetCard';
-import EmptySnippetList from '../components/snippet/EmptySnippetList';
+import { Row, Col, Stack, Alert } from 'react-bootstrap'
+import Container from '../components/shared/Container'
+import InlineLoadingSpinner from '../components/InlineLoadingSpinner'
+import { useSnippetList } from '../hooks/useSnippetList'
+import SnippetListHeader from '../components/snippet/SnippetListHeader'
+import SnippetCard from '../components/snippet/SnippetCard'
+import EmptySnippetList from '../components/snippet/EmptySnippetList'
 
 const SnippetList: React.FC = () => {
   const { snippets, loading, error } = useSnippetList();

@@ -1,11 +1,11 @@
-import { useState, FormEvent, ChangeEvent } from 'react';
-import { Form, Alert } from 'react-bootstrap';
-import Button from '../components/shared/Button';
-import Container from '../components/shared/Container';
-import CodeEditor from '../components/shared/CodeEditor';
-import { useCreateSnippet } from '../hooks/useSnippet';
-import { LANGUAGE_OPTIONS } from '../utils/languageUtils';
-import { SnippetData } from '../types/interfaces';
+import { useState, FormEvent, ChangeEvent } from 'react'
+import { Form, Alert } from 'react-bootstrap'
+import Button from '../components/shared/Button'
+import Container from '../components/shared/Container'
+import CodeEditor from '../components/shared/CodeEditor'
+import { useCreateSnippet } from '../hooks/useSnippet'
+import { LANGUAGE_OPTIONS } from '../utils/languageUtils'
+import { SnippetData } from '../types/interfaces'
 
 const CreateSnippet: React.FC = () => {
   const [title, setTitle] = useState<string>('');

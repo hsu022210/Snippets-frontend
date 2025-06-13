@@ -1,6 +1,6 @@
-import { Button as BootstrapButton } from 'react-bootstrap';
-import { ButtonProps } from '../../types/interfaces';
-import { unfocusActiveElement } from '../../utils/dom';
+import { Button as BootstrapButton } from 'react-bootstrap'
+import { ButtonProps } from '../../types/interfaces'
+import { unfocusActiveElement } from '../../utils/dom'
 
 const Button = ({ children, variant = 'primary', size, className, isMobile, onClick, ...props }: ButtonProps) => {
   const getButtonClasses = () => {

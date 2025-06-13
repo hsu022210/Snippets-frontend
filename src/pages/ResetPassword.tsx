@@ -1,14 +1,14 @@
-import { useState, FormEvent, ChangeEvent } from 'react';
-import { Form, Alert } from 'react-bootstrap';
-import { useNavigate, useParams } from 'react-router-dom';
-import AuthForm from '../components/auth/AuthForm';
-import PasswordInput from '../components/auth/PasswordInput';
-import SubmitButton from '../components/auth/SubmitButton';
-import PasswordRules from '../components/auth/PasswordRules';
-import { BASE_URL } from '../contexts/AuthContext';
-import { useApiRequest } from '../hooks/useApiRequest';
-import axios, { AxiosError } from 'axios';
-import { PasswordFormData, ApiErrorResponse } from '../types/interfaces';
+import { useState, FormEvent, ChangeEvent } from 'react'
+import { Form, Alert } from 'react-bootstrap'
+import { useNavigate, useParams } from 'react-router-dom'
+import AuthForm from '../components/auth/AuthForm'
+import PasswordInput from '../components/auth/PasswordInput'
+import SubmitButton from '../components/auth/SubmitButton'
+import PasswordRules from '../components/auth/PasswordRules'
+import { BASE_URL } from '../contexts/AuthContext'
+import { useApiRequest } from '../hooks/useApiRequest'
+import axios, { AxiosError } from 'axios'
+import { PasswordFormData, ApiErrorResponse } from '../types/interfaces'
 
 const ResetPassword = () => {
   const navigate = useNavigate();
