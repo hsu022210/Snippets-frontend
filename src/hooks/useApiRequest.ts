@@ -8,7 +8,7 @@ export const useApiRequest = (): UseApiRequestReturn => {
 
   const makeRequest = useCallback(async <T = any>(
     apiCall: ApiCall<T>,
-    loadingMessage?: string
+    loadingMessage: string = 'The site may be slow to respond after a certain time of inactivity.'
   ): Promise<AxiosResponse<T>> => {
     let timeoutId: ReturnType<typeof setTimeout> | undefined;
     

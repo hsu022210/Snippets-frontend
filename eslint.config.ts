@@ -41,7 +41,7 @@ const config: Linter.Config[] = [
       'no-unused-vars': 'warn',
       '@typescript-eslint/no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
       'react-refresh/only-export-components': [
-        'warn',
+        'off',
         { allowConstantExport: true },
       ],
       'react/jsx-uses-react': 'error',

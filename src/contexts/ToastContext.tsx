@@ -17,8 +17,8 @@ export const ToastProvider = ({ children }: ToastProviderProps) => {
   const [message, setMessage] = useState('');
   const [type, setType] = useState<ToastType>('primary');
 
-  const showToast = (msg = 'The site may be slow to respond after a certain time of inactivity.', toastType: ToastType = 'primary') => {
-    setMessage(msg);
+  const showToast = (message?: string, toastType: ToastType = 'primary') => {
+    setMessage(message || '');
     setType(toastType);
     setShow(true);
   };

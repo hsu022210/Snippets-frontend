@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { AxiosResponse } from 'axios';
 
 // Auth Related Interfaces
