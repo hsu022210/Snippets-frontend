@@ -1,4 +1,5 @@
-import { Modal, Button } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
+import Button from '../shared/Button';
 import { DeleteConfirmationModalProps } from '../../types/interfaces';
 
 const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
