@@ -9,7 +9,8 @@ import { ThemeProvider } from '../contexts/ThemeContext'
 import { ToastProvider } from '../contexts/ToastContext'
 import { AuthProvider } from '../contexts/AuthContext'
 import { CodeMirrorThemeProvider } from '../contexts/CodeMirrorThemeContext'
-import { TestProvidersProps } from '../types/interfaces';
+import { TestProvidersProps } from '../types/interfaces'
+import { LocalStorageMock } from '../types/interfaces'
 
 // Extend Vitest's expect method with testing-library matchers
 expect.extend(matchers)
@@ -34,13 +35,24 @@ beforeAll(() => {
   })
 })
 
-// Mock localStorage
-const localStorageMock = {
-  getItem: vi.fn(),
-  setItem: vi.fn(),
-  clear: vi.fn()
-}
-Object.defineProperty(window, 'localStorage', { value: localStorageMock })
+export const localStorageMock = ((): LocalStorageMock => {
+  let store: Record<string, string> = {};
+  return {
+    getItem: vi.fn((key: string) => store[key] || null),
+    setItem: vi.fn((key: string, value: string) => {
+      store[key] = value;
+    }),
+    removeItem: vi.fn((key: string) => {
+      delete store[key];
+    }),
+    clear: () => {
+      store = {};
+    }
+  };
+})();
+
+Object.defineProperty(window, 'localStorage', { value: localStorageMock });
+
 
 // Mock window.location.reload
 const originalLocation = window.location

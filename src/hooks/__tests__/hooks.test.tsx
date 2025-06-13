@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { describe, it, expect, beforeEach } from 'vitest'
 import { renderHook, act, waitFor } from '@testing-library/react'
 import { useApiRequest } from '../useApiRequest'
 import { useSnippetList } from '../useSnippetList'
@@ -6,6 +6,7 @@ import { useSnippet, useCreateSnippet } from '../useSnippet'
 import { TestProviders } from '../../test/setup'
 import { http, HttpResponse } from 'msw'
 import axios from 'axios'
+import { localStorageMock } from '../../test/setup'
 
 interface Snippet {
   id: string;
@@ -197,13 +198,6 @@ describe('Hooks (with MSW)', () => {
 
   describe('useCreateSnippet', () => {
     beforeEach(() => {
-      // Mock localStorage
-      const localStorageMock = {
-        getItem: vi.fn(),
-        setItem: vi.fn(),
-        removeItem: vi.fn(),
-        clear: vi.fn(),
-      };
       Object.defineProperty(window, 'localStorage', {
         value: localStorageMock,
         writable: true

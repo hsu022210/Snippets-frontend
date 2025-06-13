@@ -254,6 +254,13 @@ export interface TestProvidersProps {
   children: React.ReactNode
 }
 
+export interface LocalStorageMock {
+  getItem: (key: string) => string | null;
+  setItem: (key: string, value: string) => void;
+  removeItem: (key: string) => void;
+  clear: () => void;
+}
+
 // Route Related Interfaces
 export interface PrivateRouteProps {
   children: React.ReactNode;

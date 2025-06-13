@@ -2,30 +2,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ThemeProvider, useTheme } from '../ThemeContext';
+import { localStorageMock } from '../../test/setup';
 
-interface LocalStorageMock {
-  getItem: (key: string) => string | null;
-  setItem: (key: string, value: string) => void;
-  removeItem: (key: string) => void;
-  clear: () => void;
-}
-
-// Mock localStorage
-const localStorageMock = ((): LocalStorageMock => {
-  let store: Record<string, string> = {};
-  return {
-    getItem: vi.fn((key: string) => store[key] || null),
-    setItem: vi.fn((key: string, value: string) => {
-      store[key] = value;
-    }),
-    removeItem: vi.fn((key: string) => {
-      delete store[key];
-    }),
-    clear: () => {
-      store = {};
-    }
-  };
-})();
 Object.defineProperty(window, 'localStorage', { value: localStorageMock });
 
 // Mock matchMedia

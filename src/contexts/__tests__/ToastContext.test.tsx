@@ -40,7 +40,7 @@ describe('ToastContext', () => {
 
     await user.click(screen.getByText('Show Default Toast'));
     
-    expect(screen.getByText('The site may be slow to respond after a certain time of inactivity.')).toBeInTheDocument();
+    expect(screen.getByText('Please try to reload in a few seconds if still loading.')).toBeInTheDocument();
     expect(screen.getByText('Notification')).toBeInTheDocument();
   });
 

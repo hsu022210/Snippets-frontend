@@ -17,7 +17,7 @@ export const ToastProvider = ({ children }: ToastProviderProps) => {
   const [message, setMessage] = useState('');
   const [type, setType] = useState<ToastType>('primary');
 
-  const showToast = (message?: string, toastType: ToastType = 'primary') => {
+  const showToast = (message: string = 'Please try to reload in a few seconds if still loading.', toastType: ToastType = 'primary') => {
     setMessage(message || '');
     setType(toastType);
     setShow(true);
