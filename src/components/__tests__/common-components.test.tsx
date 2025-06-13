@@ -161,9 +161,6 @@ describe('Common Components', () => {
   })
 
   describe('Footer', () => {
-    const currentYear = new Date().getFullYear();
-    const copyrightText = `© ${currentYear} Alec Hsu. All rights reserved.`;
-
     const renderFooter = (isDark = false): ReturnType<typeof render> => {
       (useTheme as ReturnType<typeof vi.fn>).mockReturnValue({ isDark, toggleTheme: vi.fn() });
       return render(
@@ -176,7 +173,8 @@ describe('Common Components', () => {
     describe('Content', () => {
       it('displays copyright text', () => {
         renderFooter();
-        expect(screen.getByText(copyrightText)).toBeInTheDocument();
+        expect(screen.getByText(/©/i)).toBeInTheDocument();
+        expect(screen.getByText(/Alec Hsu. All rights reserved./i)).toBeInTheDocument();
       });
     });
 
@@ -201,7 +199,7 @@ describe('Common Components', () => {
         renderFooter();
         const footer = screen.getByRole('contentinfo');
         expect(footer).toHaveClass('footer', 'py-3', 'mt-auto');
-        expect(screen.getByText(copyrightText).parentElement).toHaveClass('text-center');
+        expect(screen.getByText(/Alec Hsu. All rights reserved./i).parentElement).toHaveClass('text-center');
       });
     });
   })

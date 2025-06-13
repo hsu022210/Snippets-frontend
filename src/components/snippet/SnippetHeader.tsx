@@ -1,6 +1,6 @@
 import { Form, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useToast } from '../../contexts/ToastContext';
-import { Share, Save, XCircle, PencilSquare, Trash } from 'react-bootstrap-icons';
+import { Save, XCircle, PencilSquare, Trash, Link } from 'react-bootstrap-icons';
 import { useState } from 'react';
 import { SnippetHeaderProps } from '../../types/interfaces'
 
@@ -80,7 +80,7 @@ const SnippetHeader: React.FC<SnippetHeaderProps> = ({
                 className="d-flex align-items-center share-btn"
                 aria-label="Share snippet"
               >
-                <Share size={18} />
+                <Link size={18} />
               </Button>
             </OverlayTrigger>
             {isAuthenticated && (
