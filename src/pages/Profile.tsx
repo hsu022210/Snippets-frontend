@@ -1,5 +1,5 @@
 import { useState, useEffect, FormEvent, ChangeEvent } from 'react'
-import { Form, Button, Alert, Card } from 'react-bootstrap'
+import { Form, Alert, Card } from 'react-bootstrap'
 import { useAuth } from '../contexts/AuthContext'
 import { useApiRequest } from '../hooks/useApiRequest'
 import Container from '../components/shared/Container'
@@ -8,6 +8,7 @@ import { BASE_URL } from '../contexts/AuthContext'
 import axios, { AxiosError } from 'axios'
 import { Key } from 'react-bootstrap-icons'
 import { UserProfile, ApiErrorResponse } from '../types/interfaces'
+import Button from '../components/shared/Button'
 
 const Profile: React.FC = () => {
   const { api } = useAuth();

@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { useTheme } from '../contexts/ThemeContext'
-import { Navbar, Nav, NavDropdown, Button, Container } from 'react-bootstrap'
+import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap'
+import Button from './shared/Button'
 import LogoutLoadingSpinner from './LogoutLoadingSpinner'
 import { 
   CodeSquare,
@@ -47,10 +48,11 @@ const Navigation: React.FC = () => {
     return () => document.removeEventListener('click', handleClickOutside);
   }, [expanded]);
 
-  const handleLogout = async () => {
+  const handleLogout = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setIsLoggingOut(true);
+    setExpanded(false);
     try {
-      setIsLoggingOut(true);
-      setExpanded(false);
       const success = await logout();
       if (success) {
         await new Promise(resolve => setTimeout(resolve, 500));

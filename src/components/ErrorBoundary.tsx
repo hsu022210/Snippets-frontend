@@ -1,5 +1,6 @@
 import { ErrorBoundary as ReactErrorBoundary } from 'react-error-boundary'
-import { Alert, Button } from 'react-bootstrap'
+import { Alert } from 'react-bootstrap'
+import Button from './shared/Button'
 import Container from './shared/Container'
 import { ErrorFallbackProps, ErrorBoundaryProps } from '../types/interfaces'
 
