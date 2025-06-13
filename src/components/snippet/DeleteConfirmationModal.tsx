@@ -15,10 +15,10 @@ const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
         Are you sure you want to delete this snippet? This action cannot be undone.
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={onHide}>
+        <Button variant="outline-secondary" onClick={onHide}>
           Cancel
         </Button>
-        <Button variant="danger" onClick={onConfirm}>
+        <Button variant="outline-danger" onClick={onConfirm}>
           Delete
         </Button>
       </Modal.Footer>

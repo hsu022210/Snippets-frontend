@@ -157,7 +157,7 @@ const Profile: React.FC = () => {
                   />
                 </Form.Group>
 
-                <Button type="submit" variant="primary" disabled={saving}>
+                <Button type="submit" variant="outline-primary" disabled={saving}>
                   {saving ? 'Saving...' : 'Save Changes'}
                 </Button>
               </Form>

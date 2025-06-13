@@ -46,7 +46,7 @@ const SnippetHeader: React.FC<SnippetHeaderProps> = ({
           />
           <div className="d-flex gap-2">
             <Button
-              variant="success"
+              variant="outline-success"
               onClick={handleSave}
               disabled={saving}
               className="d-flex align-items-center flex-grow-1 flex-md-grow-0"
@@ -55,7 +55,7 @@ const SnippetHeader: React.FC<SnippetHeaderProps> = ({
               {saving ? 'Saving...' : 'Save'}
             </Button>
             <Button
-              variant="secondary"
+              variant="outline-secondary"
               onClick={handleCancel}
               disabled={saving}
               className="d-flex align-items-center flex-grow-1 flex-md-grow-0"
@@ -86,7 +86,7 @@ const SnippetHeader: React.FC<SnippetHeaderProps> = ({
             {isAuthenticated && (
               <>
                 <Button
-                  variant="primary"
+                  variant="outline-primary"
                   onClick={() => setIsEditing(true)}
                   className="d-flex align-items-center flex-grow-1 flex-md-grow-0"
                 >
@@ -94,7 +94,7 @@ const SnippetHeader: React.FC<SnippetHeaderProps> = ({
                   Edit
                 </Button>
                 <Button
-                  variant="danger"
+                  variant="outline-danger"
                   onClick={() => setShowDeleteModal(true)}
                   className="d-flex align-items-center flex-grow-1 flex-md-grow-0"
                 >

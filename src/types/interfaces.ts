@@ -158,6 +158,11 @@ export interface PasswordRulesProps {
   password: string;
 }
 
+export interface PasswordFormData {
+  password: string;
+  confirmPassword: string;
+}
+
 export interface SubmitButtonProps {
   loading: boolean;
   loadingText: string;

@@ -4,7 +4,7 @@ import { SubmitButtonProps } from '../../types/interfaces';
 const SubmitButton = ({ loading, loadingText, children }: SubmitButtonProps) => {
   return (
     <Button
-      variant="primary"
+      variant="outline-primary"
       size="lg"
       className="w-100 d-flex align-items-center justify-content-center"
       type="submit"

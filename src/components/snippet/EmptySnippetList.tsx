@@ -12,7 +12,7 @@ const EmptySnippetList: React.FC = () => {
           <Button
             as={Link}
             to="/create-snippet"
-            variant="primary"
+            variant="outline-primary"
           >
             Create Snippet
           </Button>
