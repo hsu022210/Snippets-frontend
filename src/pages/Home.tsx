@@ -1,10 +1,9 @@
-import { Row, Col } from 'react-bootstrap'
+import { Row, Col, Stack } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import Container from '../components/shared/Container'
 import Card, { Body, Title, Text } from '../components/shared/Card'
 import Button from '../components/shared/Button'
-import { Stack } from 'react-bootstrap'
 
 const Home: React.FC = () => {
   const { user } = useAuth();
