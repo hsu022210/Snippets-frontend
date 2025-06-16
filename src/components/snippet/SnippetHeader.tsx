@@ -23,7 +23,7 @@ const SnippetHeader: React.FC<SnippetHeaderProps> = ({
   const handleShare = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
-      showToast('Link copied to clipboard!', 'success');
+      showToast('Link copied to clipboard!');
       setShareSnippetTooltip('Link copied!');
       await new Promise(resolve => setTimeout(resolve, 2000));
       setShareSnippetTooltip('Share snippet');
