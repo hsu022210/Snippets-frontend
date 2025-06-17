@@ -59,7 +59,7 @@ const SnippetSearch: React.FC<SnippetSearchProps> = ({
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder={`Search snippets by ${searchType}...`}
+            placeholder={`Search by ${searchType}...`}
           />
           {searchValue && (
             <Button
@@ -77,7 +77,7 @@ const SnippetSearch: React.FC<SnippetSearchProps> = ({
             className="d-flex align-items-center gap-2"
           >
             <Search size={16} />
-            Search
+            <span className="d-none d-sm-inline">Search</span>
           </Button>
         </InputGroup>
       </Form.Group>

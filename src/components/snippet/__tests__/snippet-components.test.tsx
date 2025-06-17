@@ -510,7 +510,7 @@ describe('Snippet Components', () => {
       render(<SnippetSearch {...defaultProps} />);
       
       expect(screen.getByText('Title', { selector: 'button' })).toBeInTheDocument();
-      expect(screen.getByPlaceholderText(/search snippets by title/i)).toBeInTheDocument();
+      expect(screen.getByPlaceholderText(/search by title/i)).toBeInTheDocument();
       expect(screen.getByRole('button', { name: /search/i })).toBeInTheDocument();
     });
 
@@ -524,13 +524,13 @@ describe('Snippet Components', () => {
       await userEvent.click(codeOption);
       
       expect(screen.getByText('Code', { selector: 'button' })).toBeInTheDocument();
-      expect(screen.getByPlaceholderText(/search snippets by code/i)).toBeInTheDocument();
+      expect(screen.getByPlaceholderText(/search by code/i)).toBeInTheDocument();
     });
 
     it('handles search input and submission', async () => {
       render(<SnippetSearch {...defaultProps} />);
       
-      const searchInput = screen.getByPlaceholderText(/search snippets by title/i);
+      const searchInput = screen.getByPlaceholderText(/search by title/i);
       const searchButton = screen.getByRole('button', { name: /search/i });
       
       // Test search button is disabled when input is empty
@@ -551,7 +551,7 @@ describe('Snippet Components', () => {
     it('handles search with Enter key', async () => {
       render(<SnippetSearch {...defaultProps} />);
       
-      const searchInput = screen.getByPlaceholderText(/search snippets by title/i);
+      const searchInput = screen.getByPlaceholderText(/search by title/i);
       await userEvent.type(searchInput, 'test search{enter}');
       
       expect(defaultProps.onSearchChange).toHaveBeenCalledWith('searchTitle', 'test search');
@@ -560,7 +560,7 @@ describe('Snippet Components', () => {
     it('handles clear search', async () => {
       render(<SnippetSearch {...defaultProps} />);
       
-      const searchInput = screen.getByPlaceholderText(/search snippets by title/i);
+      const searchInput = screen.getByPlaceholderText(/search by title/i);
       await userEvent.type(searchInput, 'test search');
       
       const clearButton = screen.getByRole('button', { name: /clear search/i });
@@ -580,7 +580,7 @@ describe('Snippet Components', () => {
       render(<SnippetSearch {...props} />);
       
       // Initial state should show title search
-      expect(screen.getByPlaceholderText(/search snippets by title/i)).toHaveValue('title search');
+      expect(screen.getByPlaceholderText(/search by title/i)).toHaveValue('title search');
       
       // Switch to code search
       const dropdownToggle = screen.getByText('Title', { selector: 'button' });
@@ -589,7 +589,7 @@ describe('Snippet Components', () => {
       await userEvent.click(codeOption);
       
       // Should now show code search value
-      expect(screen.getByPlaceholderText(/search snippets by code/i)).toHaveValue('code search');
+      expect(screen.getByPlaceholderText(/search by code/i)).toHaveValue('code search');
     });
   })
 }) 
