@@ -1,8 +1,8 @@
-import React from 'react';
 import { Offcanvas, Button, Badge } from 'react-bootstrap';
 import { Funnel } from 'react-bootstrap-icons';
 import SnippetFilter from './SnippetFilter';
 import { SnippetFilterSectionProps, SnippetFilterValues } from '../../types/interfaces';
+import { useState } from 'react';
 
 const SnippetFilterSection: React.FC<SnippetFilterSectionProps> = ({
   language,
@@ -11,8 +11,8 @@ const SnippetFilterSection: React.FC<SnippetFilterSectionProps> = ({
   onFilterChange,
   onReset,
 }) => {
-  const [show, setShow] = React.useState(false);
-  const [localFilters, setLocalFilters] = React.useState<SnippetFilterValues>({
+  const [show, setShow] = useState(false);
+  const [localFilters, setLocalFilters] = useState<SnippetFilterValues>({
     language,
     createdAfter,
     createdBefore,

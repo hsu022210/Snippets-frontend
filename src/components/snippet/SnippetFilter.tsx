@@ -1,4 +1,3 @@
-import React from 'react';
 import { Form, Stack } from 'react-bootstrap';
 import SnippetLanguageSelector from './SnippetLanguageSelector';
 import { SnippetFilterProps } from '../../types/interfaces';
