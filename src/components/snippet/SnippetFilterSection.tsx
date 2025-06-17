@@ -1,5 +1,5 @@
 import { Offcanvas, Button, Badge } from 'react-bootstrap';
-import { Funnel } from 'react-bootstrap-icons';
+import { BsFunnel } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 import SnippetFilter from './SnippetFilter';
 import { SnippetFilterSectionProps, SnippetFilterValues } from '../../types/interfaces';
@@ -70,7 +70,7 @@ const SnippetFilterSection: React.FC<SnippetFilterSectionProps> = ({
           className="d-flex align-items-center gap-2"
           disabled={loading}
         >
-          <Funnel size={16} />
+          <BsFunnel size={16} />
           Filters
           {activeFiltersCount > 0 && (
             <Badge bg="primary" pill>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Form, InputGroup, Button, Dropdown } from 'react-bootstrap';
-import { Search, X } from 'react-bootstrap-icons';
+import { BsSearch, BsX } from 'react-icons/bs';
 import { SnippetSearchProps } from '../../types/interfaces';
 import InlineLoadingSpinner from '../InlineLoadingSpinner';
 
@@ -70,7 +70,7 @@ const SnippetSearch: React.FC<SnippetSearchProps> = ({
               title="Clear search"
               disabled={loading}
             >
-              <X size={16} />
+              <BsX size={16} />
             </Button>
           )}
           <Button
@@ -83,7 +83,7 @@ const SnippetSearch: React.FC<SnippetSearchProps> = ({
               <InlineLoadingSpinner message="Searching..." />
             ) : (
               <>
-                <Search size={16} />
+                <BsSearch size={16} />
                 <span className="d-none d-sm-inline">Search</span>
               </>
             )}

@@ -6,16 +6,16 @@ import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap'
 import Button from './shared/Button'
 import LogoutLoadingSpinner from './LogoutLoadingSpinner'
 import { 
-  CodeSquare,
-  Sun,
-  Moon,
-  Person,
-  Gear,
-  BoxArrowRight,
-  BoxArrowInRight,
-  PersonPlus,
-  PersonGear
-} from 'react-bootstrap-icons'
+  BsCodeSquare,
+  BsSun,
+  BsMoon,
+  BsPerson,
+  BsGear,
+  BsBoxArrowRight,
+  BsBoxArrowInRight,
+  BsPersonPlus,
+  BsPersonGear
+} from 'react-icons/bs'
 
 const Navigation: React.FC = () => {
   const [expanded, setExpanded] = useState<boolean>(false);
@@ -80,7 +80,7 @@ const Navigation: React.FC = () => {
       >
         <Container fluid>
           <Navbar.Brand as={Link} to="/" onClick={() => setExpanded(false)}>
-            <CodeSquare className="me-2" size={20} />
+            <BsCodeSquare className="me-2" size={20} />
             Code Snippets
           </Navbar.Brand>
           <Nav.Item className="d-flex align-items-center me-2">
@@ -96,9 +96,9 @@ const Navigation: React.FC = () => {
             >
               <div className="theme-icon-wrapper">
                 {isDark ? (
-                  <Sun className="theme-icon" size={18} />
+                  <BsSun className="theme-icon" size={18} />
                 ) : (
-                  <Moon className="theme-icon" size={18} />
+                  <BsMoon className="theme-icon" size={18} />
                 )}
               </div>
             </Button>
@@ -122,7 +122,7 @@ const Navigation: React.FC = () => {
                 <NavDropdown 
                   title={
                     <span className="text-light d-flex align-items-center">
-                      <Person className="me-2" size={20} />
+                      <BsPerson className="me-2" size={20} />
                       <span>{user.username}</span>
                     </span>
                   } 
@@ -131,27 +131,27 @@ const Navigation: React.FC = () => {
                   className="nav-dropdown-custom d-flex align-items-center"
                 >
                   <NavDropdown.Item as={Link} to="/profile" onClick={() => setExpanded(false)}>
-                    <PersonGear className="me-2" size={18} />
+                    <BsPersonGear className="me-2" size={18} />
                     Profile
                   </NavDropdown.Item>
                   <NavDropdown.Item as={Link} to="/settings" onClick={() => setExpanded(false)}>
-                    <Gear className="me-2" size={18} />
+                    <BsGear className="me-2" size={18} />
                     Settings
                   </NavDropdown.Item>
                   <NavDropdown.Divider />
                   <NavDropdown.Item onClick={handleLogout}>
-                    <BoxArrowRight className="me-2" size={18} />
+                    <BsBoxArrowRight className="me-2" size={18} />
                     Logout
                   </NavDropdown.Item>
                 </NavDropdown>
               ) : (
                 <>
                   <Nav.Link as={Link} to="/login" className="px-3" onClick={() => setExpanded(false)}>
-                    <BoxArrowInRight className="me-2" size={18} />
+                    <BsBoxArrowInRight className="me-2" size={18} />
                     Login
                   </Nav.Link>
                   <Nav.Link as={Link} to="/register" className="px-3" onClick={() => setExpanded(false)}>
-                    <PersonPlus className="me-2" size={18} />
+                    <BsPersonPlus className="me-2" size={18} />
                     Register
                   </Nav.Link>
                 </>
