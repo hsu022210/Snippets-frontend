@@ -89,6 +89,160 @@ describe('Hooks (with MSW)', () => {
       expect(result.current.error).toMatch(/Failed to fetch/)
       expect(result.current.snippets).toEqual([])
     })
+
+    it('should filter snippets by language', async () => {
+      const { server } = await import('../../test/setup')
+      server.use(
+        http.get('/snippets', ({ request }) => {
+          const url = new URL(request.url)
+          expect(url.searchParams.get('language')).toBe('javascript')
+          return HttpResponse.json({
+            results: [
+              { id: '1', title: 'JS Snippet', code: 'console.log("test")', language: 'javascript' }
+            ]
+          })
+        })
+      )
+
+      const { result } = renderHook(() => useSnippetList({ language: 'javascript' }), {
+        wrapper: TestProviders,
+      })
+
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false)
+      })
+
+      expect(result.current.error).toBe('')
+      expect(result.current.snippets.length).toBe(1)
+      expect(result.current.snippets[0].language).toBe('javascript')
+    })
+
+    it('should filter snippets by date range', async () => {
+      const { server } = await import('../../test/setup')
+      const createdAfter = '2024-01-01'
+      const createdBefore = '2024-12-31'
+      
+      server.use(
+        http.get('/snippets', ({ request }) => {
+          const url = new URL(request.url)
+          expect(url.searchParams.get('created_after')).toBe(createdAfter)
+          expect(url.searchParams.get('created_before')).toBe(createdBefore)
+          return HttpResponse.json({
+            results: [
+              { id: '1', title: 'Date Filtered Snippet', code: 'test', language: 'python' }
+            ]
+          })
+        })
+      )
+
+      const { result } = renderHook(() => useSnippetList({ 
+        createdAfter,
+        createdBefore
+      }), {
+        wrapper: TestProviders,
+      })
+
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false)
+      })
+
+      expect(result.current.error).toBe('')
+      expect(result.current.snippets.length).toBe(1)
+    })
+
+    it('should filter snippets by search terms', async () => {
+      const { server } = await import('../../test/setup')
+      const searchTitle = 'test'
+      const searchCode = 'console.log'
+      
+      server.use(
+        http.get('/snippets', ({ request }) => {
+          const url = new URL(request.url)
+          expect(url.searchParams.get('search_title')).toBe(searchTitle)
+          expect(url.searchParams.get('search_code')).toBe(searchCode)
+          return HttpResponse.json({
+            results: [
+              { id: '1', title: 'Test Snippet', code: 'console.log("test")', language: 'javascript' }
+            ]
+          })
+        })
+      )
+
+      const { result } = renderHook(() => useSnippetList({ 
+        searchTitle,
+        searchCode
+      }), {
+        wrapper: TestProviders,
+      })
+
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false)
+      })
+
+      expect(result.current.error).toBe('')
+      expect(result.current.snippets.length).toBe(1)
+      expect(result.current.snippets[0].title.toLowerCase()).toContain(searchTitle)
+    })
+
+    it('should handle empty results', async () => {
+      const { server } = await import('../../test/setup')
+      server.use(
+        http.get('/snippets', () => {
+          return HttpResponse.json({
+            results: []
+          })
+        })
+      )
+
+      const { result } = renderHook(() => useSnippetList({ 
+        language: 'nonexistent'
+      }), {
+        wrapper: TestProviders,
+      })
+
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false)
+      })
+
+      expect(result.current.error).toBe('')
+      expect(result.current.snippets).toEqual([])
+    })
+
+    it('should combine multiple filters', async () => {
+      const { server } = await import('../../test/setup')
+      const filters = {
+        language: 'python',
+        searchTitle: 'test',
+        createdAfter: '2024-01-01'
+      }
+      
+      server.use(
+        http.get('/snippets', ({ request }) => {
+          const url = new URL(request.url)
+          expect(url.searchParams.get('language')).toBe(filters.language)
+          expect(url.searchParams.get('search_title')).toBe(filters.searchTitle)
+          expect(url.searchParams.get('created_after')).toBe(filters.createdAfter)
+          return HttpResponse.json({
+            results: [
+              { id: '1', title: 'Test Python Snippet', code: 'print("test")', language: 'python' }
+            ]
+          })
+        })
+      )
+
+      const { result } = renderHook(() => useSnippetList(filters), {
+        wrapper: TestProviders,
+      })
+
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false)
+      })
+
+      expect(result.current.error).toBe('')
+      expect(result.current.snippets.length).toBe(1)
+      expect(result.current.snippets[0].language).toBe(filters.language)
+      expect(result.current.snippets[0].title.toLowerCase()).toContain(filters.searchTitle)
+    })
   })
 
   describe('useSnippet', () => {
