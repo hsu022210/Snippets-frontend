@@ -1,5 +1,5 @@
 import { Spinner } from 'react-bootstrap'
-import { InlineLoadingSpinnerProps } from '../types/interfaces'
+import { InlineLoadingSpinnerProps } from '../types'
 
 const InlineLoadingSpinner: React.FC<InlineLoadingSpinnerProps> = ({ 
   message = 'Loading...', 

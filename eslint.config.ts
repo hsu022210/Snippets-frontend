@@ -38,8 +38,10 @@ const config: Linter.Config[] = [
       ...js.configs.recommended.rules,
       ...reactHooks.configs.recommended.rules,
       ...tseslint.configs.recommended.rules,
-      'no-unused-vars': 'warn',
-      '@typescript-eslint/no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": "error",
+      // "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+      // "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
       'react-refresh/only-export-components': [
         'off',
         { allowConstantExport: true },

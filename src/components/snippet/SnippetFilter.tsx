@@ -1,6 +1,6 @@
 import { Form, Stack } from 'react-bootstrap';
 import SnippetLanguageSelector from './SnippetLanguageSelector';
-import { SnippetFilterProps } from '../../types/interfaces';
+import { SnippetFilterProps } from '../../types';
 
 const SnippetFilter: React.FC<SnippetFilterProps> = ({
   language,

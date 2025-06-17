@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { PreviewHeightContextType, PreviewHeightProviderProps } from '../types/interfaces';
+import { PreviewHeightContextType, PreviewHeightProviderProps } from '../types';
 
 const PreviewHeightContext = createContext<PreviewHeightContextType | undefined>(undefined);
 

@@ -1,6 +1,6 @@
 import { Form } from 'react-bootstrap'
 import { LANGUAGE_OPTIONS } from '../../utils/languageUtils'
-import { SnippetLanguageSelectorProps, SnippetLanguageFilterProps } from '../../types/interfaces'
+import { SnippetLanguageSelectorProps, SnippetLanguageFilterProps } from '../../types'
 
 type Props = SnippetLanguageSelectorProps | SnippetLanguageFilterProps;
 

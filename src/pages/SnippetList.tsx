@@ -11,8 +11,8 @@ import {
   PaginationItemsProps,
   SnippetListHeaderProps,
   SnippetGridProps,
-  PaginationControlsProps
-} from '../types/interfaces'
+  PaginationControlsProps,
+} from '../types'
 import { useFilterState } from '../hooks/useFilterState'
 import { useState } from 'react'
 

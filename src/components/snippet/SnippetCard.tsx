@@ -9,7 +9,7 @@ import { usePreviewHeight } from '../../contexts/PreviewHeightContext'
 import { useShareSnippet } from '../../hooks/useShareSnippet'
 import { useTheme } from '../../contexts/ThemeContext'
 import * as themes from '@uiw/codemirror-themes-all'
-import { SnippetCardProps } from '../../types/interfaces'
+import { SnippetCardProps } from '../../types'
 import { TbLink, TbClock } from 'react-icons/tb'
 import { formatDistanceToNow } from 'date-fns'
 

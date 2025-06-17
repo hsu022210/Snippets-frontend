@@ -1,5 +1,5 @@
 import { Card as BootstrapCard } from 'react-bootstrap'
-import { CardProps } from '../../types/interfaces'
+import { CardProps } from '../../types'
 
 const Card = ({ children, className, hover = false, ...props }: CardProps) => {
   const getCardClasses = () => {

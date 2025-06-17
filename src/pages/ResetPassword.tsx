@@ -8,7 +8,7 @@ import PasswordRules from '../components/auth/PasswordRules'
 import { BASE_URL } from '../contexts/AuthContext'
 import { useApiRequest } from '../hooks/useApiRequest'
 import axios, { AxiosError } from 'axios'
-import { PasswordFormData, ApiErrorResponse } from '../types/interfaces'
+import { PasswordFormData, ApiErrorResponse } from '../types'
 
 const ResetPassword = () => {
   const navigate = useNavigate();

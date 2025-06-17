@@ -7,7 +7,7 @@ import InlineLoadingSpinner from '../components/InlineLoadingSpinner'
 import { BASE_URL } from '../contexts/AuthContext'
 import axios, { AxiosError } from 'axios'
 import { TbKey } from 'react-icons/tb'
-import { UserProfile, ApiErrorResponse } from '../types/interfaces'
+import { UserProfile, ApiErrorResponse } from '../types'
 import Button from '../components/shared/Button'
 
 const Profile: React.FC = () => {

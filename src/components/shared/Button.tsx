@@ -1,5 +1,5 @@
 import { Button as BootstrapButton } from 'react-bootstrap'
-import { ButtonProps } from '../../types/interfaces'
+import { ButtonProps } from '../../types'
 import { unfocusActiveElement } from '../../utils/dom'
 
 const Button = ({ children, variant = 'primary', size, className, isMobile, onClick, ...props }: ButtonProps) => {

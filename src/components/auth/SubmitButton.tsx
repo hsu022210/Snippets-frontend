@@ -1,6 +1,6 @@
 import { Spinner } from 'react-bootstrap'
 import Button from '../shared/Button'
-import { SubmitButtonProps } from '../../types/interfaces'
+import { SubmitButtonProps } from '../../types'
 
 const SubmitButton = ({ loading, loadingText, children }: SubmitButtonProps) => {
   return (

@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { useToast } from '../contexts/ToastContext'
 import { AxiosResponse } from 'axios'
-import { ApiCall, UseApiRequestReturn } from '../types/interfaces'
+import { ApiCall, UseApiRequestReturn } from '../types'
 
 export const useApiRequest = (): UseApiRequestReturn => {
   const { showToast, hideToast } = useToast();

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { useApiRequest } from './useApiRequest'
-import { Snippet, SnippetListResponse, FilterOptions } from '../types/interfaces'
+import { Snippet, SnippetListResponse, FilterOptions } from '../types'
 
 export const useSnippetList = (filters?: FilterOptions, page: number = 1) => {
   const [snippets, setSnippets] = useState<Snippet[]>([]);

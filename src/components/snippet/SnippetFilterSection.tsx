@@ -2,7 +2,7 @@ import { Offcanvas, Badge } from 'react-bootstrap';
 import { TbFilter } from 'react-icons/tb';
 import { Link } from 'react-router-dom';
 import SnippetFilter from './SnippetFilter';
-import { SnippetFilterSectionProps, SnippetFilterValues } from '../../types/interfaces';
+import { SnippetFilterSectionProps, SnippetFilterValues } from '../../types';
 import { useState } from 'react';
 import InlineLoadingSpinner from '../InlineLoadingSpinner';
 import Button from '../shared/Button';

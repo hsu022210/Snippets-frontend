@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useMemo, useState } from 'react'
 import { Toast, ToastContainer } from 'react-bootstrap'
-import { ToastType, ToastContextType, ToastProviderProps } from '../types/interfaces'
+import { ToastType, ToastContextType, ToastProviderProps } from '../types'
 
 const ToastContext = createContext<ToastContextType | null>(null);
 

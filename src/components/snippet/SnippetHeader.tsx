@@ -2,7 +2,7 @@ import { Form, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import Button from '../shared/Button'
 import { TbDeviceFloppy, TbX, TbEdit, TbTrash, TbLink } from 'react-icons/tb'
 import { useShareSnippet } from '../../hooks/useShareSnippet'
-import { SnippetHeaderProps } from '../../types/interfaces'
+import { SnippetHeaderProps } from '../../types'
 
 const SnippetHeader: React.FC<SnippetHeaderProps> = ({
   isEditing,

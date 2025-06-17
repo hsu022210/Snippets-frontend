@@ -1,5 +1,5 @@
 import { Form } from 'react-bootstrap'
-import { FormFieldProps } from '../../types/interfaces'
+import { FormFieldProps } from '../../types'
 
 const FormField = ({
   label,

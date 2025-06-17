@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw'
-import { Snippet, SnippetListResponse } from '../types/interfaces'
+import { Snippet, SnippetListResponse } from '../types'
 
 // Mock data
 const mockSnippet: Snippet = {
@@ -16,7 +16,9 @@ export const handlers = [
   http.get('/snippets', () => {
     return HttpResponse.json<SnippetListResponse>({
       results: [mockSnippet],
-      count: 1
+      count: 1,
+      next: null,
+      previous: null
     })
   }),
 

@@ -1,5 +1,5 @@
 import { Form } from 'react-bootstrap'
-import { PasswordRule, PasswordRulesProps } from '../../types/interfaces'
+import { PasswordRule, PasswordRulesProps } from '../../types'
 import { TbCircleCheck, TbCircle } from 'react-icons/tb'
 
 const PasswordRules = ({ password }: PasswordRulesProps) => {

@@ -9,8 +9,7 @@ import { ThemeProvider } from '../contexts/ThemeContext'
 import { ToastProvider } from '../contexts/ToastContext'
 import { AuthProvider } from '../contexts/AuthContext'
 import { CodeMirrorThemeProvider } from '../contexts/CodeMirrorThemeContext'
-import { TestProvidersProps } from '../types/interfaces'
-import { LocalStorageMock } from '../types/interfaces'
+import { TestProvidersProps, LocalStorageMock } from '../types'
 import { PreviewHeightProvider } from '@/contexts/PreviewHeightContext'
 
 // Extend Vitest's expect method with testing-library matchers

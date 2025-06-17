@@ -8,7 +8,7 @@ import FormField from '../components/auth/FormField'
 import SubmitButton from '../components/auth/SubmitButton'
 import PasswordRules from '../components/auth/PasswordRules'
 import { AxiosError } from 'axios'
-import { RegisterFormData, ApiRegisterErrorResponse } from '../types/interfaces'
+import { RegisterFormData, ApiRegisterErrorResponse } from '../types'
 
 const Register = () => {
   const [formData, setFormData] = useState<RegisterFormData>({

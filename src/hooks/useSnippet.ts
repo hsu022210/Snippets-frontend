@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { useApiRequest } from './useApiRequest'
 import { AxiosError } from 'axios'
-import { Snippet, ApiErrorResponse, SnippetData } from '../types/interfaces'
+import { Snippet, ApiErrorResponse, SnippetData } from '../types'
 
 export const useSnippet = (snippetId: number) => {
   const [snippet, setSnippet] = useState<Snippet | null>(null);

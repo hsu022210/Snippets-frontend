@@ -1,6 +1,6 @@
 import { Spinner } from 'react-bootstrap'
 import { useState, useEffect } from 'react'
-import { LogoutLoadingSpinnerProps } from '../types/interfaces'
+import { LogoutLoadingSpinnerProps } from '../types'
 
 const LogoutLoadingSpinner: React.FC<LogoutLoadingSpinnerProps> = ({ 
   show, 

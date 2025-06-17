@@ -1,5 +1,5 @@
 import { Container as BootstrapContainer } from 'react-bootstrap'
-import { ContainerProps } from '../../types/interfaces'
+import { ContainerProps } from '../../types'
 
 const Container = ({ children, className, fluid, pageContainer, ...props }: ContainerProps) => {
   const getContainerClasses = () => {

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Form, InputGroup, Dropdown } from 'react-bootstrap';
 import { TbSearch, TbX } from 'react-icons/tb';
-import { SnippetSearchProps } from '../../types/interfaces';
+import { SnippetSearchProps } from '../../types';
 import InlineLoadingSpinner from '../InlineLoadingSpinner';
 import Button from '../shared/Button';
 
