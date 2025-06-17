@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { TestProviders } from '../../../test/setup.tsx'
 import SnippetCard from '../SnippetCard'
@@ -11,6 +11,8 @@ import SnippetSearch from '../SnippetSearch'
 import { Snippet } from '@/types/interfaces.ts'
 import { useTheme } from '../../../contexts/ThemeContext'
 import SnippetFilter from '../SnippetFilter'
+import SnippetFilterSection from '../SnippetFilterSection'
+import { MemoryRouter } from 'react-router-dom'
 
 // Mock data
 const mockSnippet: Snippet = {
@@ -574,6 +576,88 @@ describe('Snippet Components', () => {
       
       // Should now show code search value
       expect(screen.getByPlaceholderText(/search by code/i)).toHaveValue('code search');
+    });
+
+    it('shows loading state correctly', async () => {
+      render(<SnippetSearch {...defaultProps} loading={true} />);
+      
+      // Check if loading spinner is present
+      expect(screen.getByText('Searching...', { selector: '.text-muted' })).toBeInTheDocument();
+      
+      // Check if search button is disabled
+      const searchButton = screen.getByRole('button', { name: /searching/i });
+      expect(searchButton).toBeDisabled();
+      
+      // Type in search input to show clear button
+      const searchInput = screen.getByPlaceholderText(/search by title/i);
+      await userEvent.type(searchInput, 'test search');
+      
+      // Wait for and check clear button
+      const clearButton = await screen.findByRole('button', { name: /clear/i });
+      expect(clearButton).toBeDisabled();
+    });
+  })
+
+  describe('SnippetFilterSection', () => {
+    const defaultProps = {
+      language: '',
+      createdAfter: '',
+      createdBefore: '',
+      onFilterChange: vi.fn(),
+      onReset: vi.fn(),
+    };
+
+    const renderWithRouter = (ui: React.ReactElement) => {
+      return render(
+        <TestProviders>
+          {ui}
+        </TestProviders>
+      );
+    };
+
+    it('renders filter section components', () => {
+      renderWithRouter(<SnippetFilterSection {...defaultProps} />);
+      
+      expect(screen.getByText('Filters')).toBeInTheDocument();
+      expect(screen.getByText('Create Snippet')).toBeInTheDocument();
+    });
+
+    it('shows filter offcanvas when clicking filters button', async () => {
+      renderWithRouter(<SnippetFilterSection {...defaultProps} />);
+      
+      const filtersButton = screen.getByText('Filters');
+      await userEvent.click(filtersButton);
+      
+      expect(screen.getByText('Filter Snippets')).toBeInTheDocument();
+      expect(screen.getByText('Apply Filters')).toBeInTheDocument();
+      expect(screen.getByText('Reset Filters')).toBeInTheDocument();
+    });
+
+    it('applies filters when clicking apply button', async () => {
+      renderWithRouter(<SnippetFilterSection {...defaultProps} />);
+      
+      // Open filter panel
+      const filtersButton = screen.getByText('Filters');
+      await userEvent.click(filtersButton);
+      
+      // Apply filters
+      const applyButton = screen.getByText('Apply Filters');
+      await userEvent.click(applyButton);
+      
+      expect(defaultProps.onFilterChange).toHaveBeenCalled();
+    });
+
+    it('shows active filters count badge', () => {
+      const props = {
+        ...defaultProps,
+        language: 'javascript',
+        createdAfter: '2024-01-01',
+      };
+      
+      renderWithRouter(<SnippetFilterSection {...props} />);
+      
+      const badge = screen.getByText('2');
+      expect(badge).toBeInTheDocument();
     });
   })
 }) 

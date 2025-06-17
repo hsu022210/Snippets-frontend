@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import SnippetFilter from './SnippetFilter';
 import { SnippetFilterSectionProps, SnippetFilterValues } from '../../types/interfaces';
 import { useState } from 'react';
+import InlineLoadingSpinner from '../InlineLoadingSpinner';
 
 const SnippetFilterSection: React.FC<SnippetFilterSectionProps> = ({
   language,
@@ -11,6 +12,7 @@ const SnippetFilterSection: React.FC<SnippetFilterSectionProps> = ({
   createdBefore,
   onFilterChange,
   onReset,
+  loading = false,
 }) => {
   const [show, setShow] = useState(false);
   const [localFilters, setLocalFilters] = useState<SnippetFilterValues>({
@@ -66,6 +68,7 @@ const SnippetFilterSection: React.FC<SnippetFilterSectionProps> = ({
           variant="outline-primary"
           onClick={handleShow}
           className="d-flex align-items-center gap-2"
+          disabled={loading}
         >
           <Funnel size={16} />
           Filters
@@ -79,6 +82,7 @@ const SnippetFilterSection: React.FC<SnippetFilterSectionProps> = ({
           <Button
             variant="outline-primary"
             className="d-flex align-items-center gap-2"
+            disabled={loading}
           >
             Create Snippet
           </Button>
@@ -104,7 +108,7 @@ const SnippetFilterSection: React.FC<SnippetFilterSectionProps> = ({
                 <Button
                   variant="secondary"
                   onClick={handleReset}
-                  disabled={activeFiltersCount === 0}
+                  disabled={activeFiltersCount === 0 || loading}
                   className="flex-grow-1"
                 >
                   Reset Filters
@@ -112,9 +116,14 @@ const SnippetFilterSection: React.FC<SnippetFilterSectionProps> = ({
                 <Button
                   variant="primary"
                   onClick={handleApplyFilters}
+                  disabled={loading}
                   className="flex-grow-1"
                 >
-                  Apply Filters
+                  {loading ? (
+                    <InlineLoadingSpinner message="Applying filters..." />
+                  ) : (
+                    'Apply Filters'
+                  )}
                 </Button>
               </div>
             </div>

@@ -326,6 +326,7 @@ export interface SnippetFilterSectionProps {
   searchCode?: string;
   onFilterChange: (filters: SnippetFilterValues) => void;
   onReset: () => void;
+  loading?: boolean;
 }
 
 export interface FilterOptions {
@@ -340,4 +341,5 @@ export interface SnippetSearchProps {
   searchTitle: string;
   searchCode: string;
   onSearchChange: (field: 'searchTitle' | 'searchCode', value: string) => void;
+  loading?: boolean;
 } 

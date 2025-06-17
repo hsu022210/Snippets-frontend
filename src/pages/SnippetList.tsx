@@ -71,6 +71,7 @@ const SnippetList: React.FC = () => {
         searchTitle={filters.searchTitle}
         searchCode={filters.searchCode}
         onSearchChange={handleSearchChange}
+        loading={loading}
       />
       <SnippetFilterSection
         language={filters.language}
@@ -78,6 +79,7 @@ const SnippetList: React.FC = () => {
         createdBefore={filters.createdBefore}
         onFilterChange={handleFilterChange}
         onReset={handleResetFilters}
+        loading={loading}
       />
       
       {snippets.length > 0 ? (

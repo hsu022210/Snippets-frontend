@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Form, InputGroup, Button, Dropdown } from 'react-bootstrap';
 import { Search, X } from 'react-bootstrap-icons';
 import { SnippetSearchProps } from '../../types/interfaces';
+import InlineLoadingSpinner from '../InlineLoadingSpinner';
 
 const SnippetSearch: React.FC<SnippetSearchProps> = ({
   searchTitle,
   searchCode,
   onSearchChange,
+  loading = false,
 }) => {
   const [searchType, setSearchType] = useState<'title' | 'code'>('title');
   const [searchValue, setSearchValue] = useState('');
@@ -66,6 +68,7 @@ const SnippetSearch: React.FC<SnippetSearchProps> = ({
               variant="outline-secondary"
               onClick={handleClear}
               title="Clear search"
+              disabled={loading}
             >
               <X size={16} />
             </Button>
@@ -73,11 +76,17 @@ const SnippetSearch: React.FC<SnippetSearchProps> = ({
           <Button
             variant="primary"
             onClick={handleSearch}
-            disabled={!searchValue}
+            disabled={!searchValue || loading}
             className="d-flex align-items-center gap-2"
           >
-            <Search size={16} />
-            <span className="d-none d-sm-inline">Search</span>
+            {loading ? (
+              <InlineLoadingSpinner message="Searching..." />
+            ) : (
+              <>
+                <Search size={16} />
+                <span className="d-none d-sm-inline">Search</span>
+              </>
+            )}
           </Button>
         </InputGroup>
       </Form.Group>
