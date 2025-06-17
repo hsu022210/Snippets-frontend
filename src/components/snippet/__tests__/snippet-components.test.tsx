@@ -519,8 +519,8 @@ describe('Snippet Components', () => {
       const searchInput = screen.getByPlaceholderText(/search by title/i);
       const searchButton = screen.getByRole('button', { name: /search/i });
       
-      // Test search button is disabled when input is empty
-      expect(searchButton).toBeDisabled();
+      // Test search button is enabled when input is empty
+      expect(searchButton).not.toBeDisabled();
       
       // Type in search input
       await userEvent.type(searchInput, 'test search');

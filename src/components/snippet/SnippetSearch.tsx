@@ -76,7 +76,7 @@ const SnippetSearch: React.FC<SnippetSearchProps> = ({
           <Button
             variant="primary"
             onClick={handleSearch}
-            disabled={!searchValue || loading}
+            disabled={loading}
             className="d-flex align-items-center gap-2"
           >
             {loading ? (
