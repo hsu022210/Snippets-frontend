@@ -11,23 +11,23 @@ const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className={`footer py-4 mt-auto ${isDark ? 'theme-dark' : 'theme-light'}`}>
+    <footer className={`footer py-3 py-md-4 mt-auto ${isDark ? 'theme-dark' : 'theme-light'}`}>
       <Container>
-        <Row className="align-items-center">
-          <Col xs={12} md={4} className="text-center text-md-start mb-3 mb-md-0">
+        <Row className="align-items-center g-3">
+          <Col xs={12} md={4} className="text-center text-md-start">
             <Link to="/" className={`text-decoration-none d-inline-flex align-items-center ${isDark ? 'text-light' : 'text-dark'}`}>
               <CodeSquare className="me-2" size={20} />
               <span className="fw-semibold">Code Snippets</span>
             </Link>
           </Col>
-          <Col xs={12} md={4} className="text-center mb-3 mb-md-0">
-            <small>
+          <Col xs={12} md={4} className="text-center">
+            <small className="d-block">
               © {currentYear} Alec Hsu. All rights reserved.
             </small>
           </Col>
           <Col xs={12} md={4} className="text-center text-md-end">
-            <div className="d-flex justify-content-center justify-content-md-end gap-3">
-              <div className="d-flex gap-2">
+            <div className="d-flex flex-column flex-md-row justify-content-center justify-content-md-end gap-2 gap-md-3">
+              <div className="d-flex justify-content-center gap-2">
                 <a 
                   href="https://github.com/hsu022210/Snippets-frontend" 
                   target="_blank" 
@@ -51,7 +51,7 @@ const Footer: React.FC = () => {
               </div>
               <Link 
                 to="/disclaimer" 
-                className={`text-decoration-none d-inline-flex align-items-center ${isDark ? 'text-light' : 'text-dark'}`}
+                className={`text-decoration-none d-inline-flex align-items-center justify-content-center ${isDark ? 'text-light' : 'text-dark'}`}
               >
                 <MdAnnouncement className="me-1" size={18} />
                 <span>Disclaimer</span>

@@ -232,7 +232,7 @@ describe('Common Components', () => {
       it('has correct classes and structure', () => {
         renderFooter();
         const footer = screen.getByRole('contentinfo');
-        expect(footer).toHaveClass('footer', 'py-4', 'mt-auto');
+        expect(footer).toHaveClass('footer', 'py-3', 'py-md-4', 'mt-auto');
         
         // Check container structure
         const container = footer.querySelector('.container');
@@ -240,7 +240,7 @@ describe('Common Components', () => {
         
         // Check row structure
         const row = container?.querySelector('.row');
-        expect(row).toHaveClass('align-items-center');
+        expect(row).toHaveClass('align-items-center', 'g-3');
         
         // Check columns
         const cols = row?.querySelectorAll('[class*="col-"]');
@@ -265,7 +265,7 @@ describe('Common Components', () => {
         expect(linksContainer).toHaveClass('gap-2');
         
         const mainContainer = screen.getByText('Disclaimer').closest('.d-flex');
-        expect(mainContainer).toHaveClass('gap-3');
+        expect(mainContainer).toHaveClass('gap-2', 'gap-md-3');
       });
     });
   })
