@@ -46,6 +46,8 @@ export interface SnippetData {
 export interface SnippetListResponse {
   results: Snippet[];
   count: number;
+  next: string | null;
+  previous: string | null;
 }
 
 export interface SnippetHeaderProps {

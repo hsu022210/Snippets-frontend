@@ -1,4 +1,4 @@
-import { Row, Col, Stack, Alert, Badge } from 'react-bootstrap'
+import { Row, Col, Stack, Alert, Badge, Pagination } from 'react-bootstrap'
 import Container from '../components/shared/Container'
 import InlineLoadingSpinner from '../components/InlineLoadingSpinner'
 import { useSnippetList } from '../hooks/useSnippetList'
@@ -8,6 +8,7 @@ import SnippetFilterSection from '../components/snippet/SnippetFilterSection'
 import SnippetSearch from '../components/snippet/SnippetSearch'
 import { SnippetFilterValues } from '../types/interfaces'
 import { useFilterState } from '../hooks/useFilterState'
+import { useState } from 'react'
 
 const initialFilters: SnippetFilterValues = {
   language: '',
@@ -18,8 +19,9 @@ const initialFilters: SnippetFilterValues = {
 };
 
 const SnippetList: React.FC = () => {
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const { filters, updateFilters, resetFilters } = useFilterState(initialFilters);
-  const { snippets, totalCount, loading, error } = useSnippetList(filters);
+  const { snippets, totalCount, loading, error, hasNextPage, hasPreviousPage } = useSnippetList(filters, currentPage);
 
   const handleFilterChange = (newFilters: SnippetFilterValues) => {
     updateFilters({
@@ -27,6 +29,7 @@ const SnippetList: React.FC = () => {
       createdAfter: newFilters.createdAfter,
       createdBefore: newFilters.createdBefore,
     });
+    setCurrentPage(1); // Reset to first page when filters change
   };
 
   const handleSearchChange = (field: 'searchTitle' | 'searchCode', value: string) => {
@@ -34,13 +37,20 @@ const SnippetList: React.FC = () => {
       searchTitle: field === 'searchTitle' ? value : '',
       searchCode: field === 'searchCode' ? value : '',
     });
+    setCurrentPage(1); // Reset to first page when search changes
   };
 
   const handleResetFilters = () => {
     resetFilters();
+    setCurrentPage(1); // Reset to first page when filters are reset
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
   };
 
   const hasActiveFilters = Object.values(filters).some(value => value !== '');
+  const totalPages = Math.ceil(totalCount / 6);
 
   if (loading) {
     return (
@@ -88,13 +98,38 @@ const SnippetList: React.FC = () => {
       </div>
       
       {snippets.length > 0 ? (
-        <Row xs={1} md={2} lg={3} className="g-4">
-          {snippets.map((snippet) => (
-            <Col key={snippet.id}>
-              <SnippetCard snippet={snippet} />
-            </Col>
-          ))}
-        </Row>
+        <>
+          <Row xs={1} md={2} lg={3} className="g-4 mb-4">
+            {snippets.map((snippet) => (
+              <Col key={snippet.id}>
+                <SnippetCard snippet={snippet} />
+              </Col>
+            ))}
+          </Row>
+          {totalPages > 1 && (
+            <div className="d-flex justify-content-center">
+              <Pagination>
+                <Pagination.Prev 
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={!hasPreviousPage}
+                />
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <Pagination.Item
+                    key={page}
+                    active={page === currentPage}
+                    onClick={() => handlePageChange(page)}
+                  >
+                    {page}
+                  </Pagination.Item>
+                ))}
+                <Pagination.Next 
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={!hasNextPage}
+                />
+              </Pagination>
+            </div>
+          )}
+        </>
       ) : (
         <EmptySnippetList />
       )}

@@ -3,11 +3,13 @@ import { useAuth } from '../contexts/AuthContext'
 import { useApiRequest } from './useApiRequest'
 import { Snippet, SnippetListResponse, FilterOptions } from '../types/interfaces'
 
-export const useSnippetList = (filters?: FilterOptions) => {
+export const useSnippetList = (filters?: FilterOptions, page: number = 1) => {
   const [snippets, setSnippets] = useState<Snippet[]>([]);
   const [totalCount, setTotalCount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
+  const [hasNextPage, setHasNextPage] = useState<boolean>(false);
+  const [hasPreviousPage, setHasPreviousPage] = useState<boolean>(false);
   const { api } = useAuth();
   const { makeRequest } = useApiRequest();
 
@@ -29,12 +31,17 @@ export const useSnippetList = (filters?: FilterOptions) => {
       if (filters?.searchCode) {
         params.append('search_code', filters.searchCode);
       }
+      // Add pagination parameters
+      params.append('page', page.toString());
+      params.append('page_size', '6'); // Request 6 snippets per page
 
       const response = await makeRequest<SnippetListResponse>(
         () => api.get(`/snippets/?${params.toString()}`)
       );
       setSnippets(response.data.results);
       setTotalCount(response.data.count);
+      setHasNextPage(!!response.data.next);
+      setHasPreviousPage(!!response.data.previous);
       setError('');
     } catch (error) {
       setError('Failed to fetch snippets');
@@ -42,7 +49,7 @@ export const useSnippetList = (filters?: FilterOptions) => {
     } finally {
       setLoading(false);
     }
-  }, [api, makeRequest, filters]);
+  }, [api, makeRequest, filters, page]);
 
   useEffect(() => {
     fetchSnippets();
@@ -52,6 +59,8 @@ export const useSnippetList = (filters?: FilterOptions) => {
     snippets,
     totalCount,
     loading,
-    error
+    error,
+    hasNextPage,
+    hasPreviousPage
   };
 }; 
