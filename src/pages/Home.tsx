@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext'
 import Container from '../components/shared/Container'
 import Card, { Body, Title, Text } from '../components/shared/Card'
 import Button from '../components/shared/Button'
-import { BsCodeSquare, BsPalette, BsShare } from 'react-icons/bs'
+import { TbCode, TbPalette, TbShare } from 'react-icons/tb'
 
 const Home: React.FC = () => {
   const { user } = useAuth();
@@ -79,7 +79,7 @@ const Home: React.FC = () => {
         <Col md={4}>
           <Card className="mb-4" hover>
             <Body>
-              <BsCodeSquare className="mb-3" size={32} />
+              <TbCode className="mb-3" size={32} />
               <Title>Store</Title>
               <Text>
                 Save your code snippets in a secure and organized way.
@@ -90,7 +90,7 @@ const Home: React.FC = () => {
         <Col md={4}>
           <Card className="mb-4" hover>
             <Body>
-              <BsPalette className="mb-3" size={32} />
+              <TbPalette className="mb-3" size={32} />
               <Title>Syntax Highlighting</Title>
               <Text>
                 Beautiful syntax highlighting for multiple programming languages.
@@ -101,7 +101,7 @@ const Home: React.FC = () => {
         <Col md={4}>
           <Card className="mb-4" hover>
             <Body>
-              <BsShare className="mb-3" size={32} />
+              <TbShare className="mb-3" size={32} />
               <Title>Share</Title>
               <Text>
                 Share your snippets with others or keep them private.

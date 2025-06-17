@@ -12,7 +12,7 @@ import Container from '../components/shared/Container'
 import CodeEditor from '../components/shared/CodeEditor'
 import { useAuth } from '../contexts/AuthContext'
 import { formatDistanceToNow, format } from 'date-fns'
-import { BsClock } from 'react-icons/bs'
+import { TbClock } from 'react-icons/tb'
 
 const SnippetDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -139,7 +139,7 @@ const SnippetDetail: React.FC = () => {
             language={snippet.language}
           />
           <div className="d-flex align-items-center gap-1 text-muted">
-            <BsClock size={14} />
+            <TbClock size={14} />
             <small>
               Created {createdTime.relative} 
               ({createdTime.absolute})

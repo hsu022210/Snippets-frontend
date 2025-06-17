@@ -6,7 +6,7 @@ import Container from '../components/shared/Container'
 import InlineLoadingSpinner from '../components/InlineLoadingSpinner'
 import { BASE_URL } from '../contexts/AuthContext'
 import axios, { AxiosError } from 'axios'
-import { BsKey } from 'react-icons/bs'
+import { TbKey } from 'react-icons/tb'
 import { UserProfile, ApiErrorResponse } from '../types/interfaces'
 import Button from '../components/shared/Button'
 
@@ -179,7 +179,7 @@ const Profile: React.FC = () => {
                 onClick={handleResetPassword}
                 className="w-100"
               >
-                <BsKey className="me-2" size={18} />
+                <TbKey className="me-2" size={18} />
                 Reset Password
               </Button>
             </Card.Body>

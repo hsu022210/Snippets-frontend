@@ -1,6 +1,6 @@
 import { Form, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import Button from '../shared/Button'
-import { BsSave, BsXCircle, BsPencilSquare, BsTrash, BsLink } from 'react-icons/bs'
+import { TbDeviceFloppy, TbX, TbEdit, TbTrash, TbLink } from 'react-icons/tb'
 import { useShareSnippet } from '../../hooks/useShareSnippet'
 import { SnippetHeaderProps } from '../../types/interfaces'
 
@@ -37,7 +37,7 @@ const SnippetHeader: React.FC<SnippetHeaderProps> = ({
               disabled={saving}
               className="d-flex align-items-center flex-grow-1 flex-md-grow-0"
             >
-              <BsSave className="me-2" size={18} />
+              <TbDeviceFloppy className="me-2" size={18} />
               {saving ? 'Saving...' : 'Save'}
             </Button>
             <Button
@@ -46,7 +46,7 @@ const SnippetHeader: React.FC<SnippetHeaderProps> = ({
               disabled={saving}
               className="d-flex align-items-center flex-grow-1 flex-md-grow-0"
             >
-              <BsXCircle className="me-2" size={18} />
+              <TbX className="me-2" size={18} />
               Cancel
             </Button>
           </div>
@@ -66,7 +66,7 @@ const SnippetHeader: React.FC<SnippetHeaderProps> = ({
                 className="d-flex align-items-center share-btn"
                 aria-label="Share snippet"
               >
-                <BsLink size={18} />
+                <TbLink size={18} />
               </Button>
             </OverlayTrigger>
             {isAuthenticated && (
@@ -76,7 +76,7 @@ const SnippetHeader: React.FC<SnippetHeaderProps> = ({
                   onClick={() => setIsEditing(true)}
                   className="d-flex align-items-center flex-grow-1 flex-md-grow-0"
                 >
-                  <BsPencilSquare className="me-2" size={18} />
+                  <TbEdit className="me-2" size={18} />
                   Edit
                 </Button>
                 <Button
@@ -84,7 +84,7 @@ const SnippetHeader: React.FC<SnippetHeaderProps> = ({
                   onClick={() => setShowDeleteModal(true)}
                   className="d-flex align-items-center flex-grow-1 flex-md-grow-0"
                 >
-                  <BsTrash className="me-2" size={18} />
+                  <TbTrash className="me-2" size={18} />
                   Delete
                 </Button>
               </>

@@ -10,7 +10,7 @@ import { useShareSnippet } from '../../hooks/useShareSnippet'
 import { useTheme } from '../../contexts/ThemeContext'
 import * as themes from '@uiw/codemirror-themes-all'
 import { SnippetCardProps } from '../../types/interfaces'
-import { BsLink, BsClock } from 'react-icons/bs'
+import { TbLink, TbClock } from 'react-icons/tb'
 import { formatDistanceToNow } from 'date-fns'
 
 export const SnippetCard = ({ snippet }: SnippetCardProps) => {
@@ -57,7 +57,7 @@ export const SnippetCard = ({ snippet }: SnippetCardProps) => {
                     className="d-flex align-items-center share-btn"
                     aria-label="Share snippet"
                   >
-                    <BsLink size={18} />
+                    <TbLink size={18} />
                   </Button>
                 </OverlayTrigger>
               </div>
@@ -66,7 +66,7 @@ export const SnippetCard = ({ snippet }: SnippetCardProps) => {
                   Language: {snippet.language || 'None'}
                 </Subtitle>
                 <div className="d-flex align-items-center gap-1">
-                  <BsClock size={14} />
+                  <TbClock size={14} />
                   <small>{formatCreatedTime()}</small>
                 </div>
               </div>

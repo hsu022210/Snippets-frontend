@@ -1,7 +1,7 @@
 import { Container, Row, Col } from 'react-bootstrap'
 import { useTheme } from '../contexts/ThemeContext'
 import { Link } from 'react-router-dom'
-import { BsCodeSquare } from 'react-icons/bs'
+import { TbCode } from 'react-icons/tb'
 import { TbApi } from 'react-icons/tb'
 import { MdAnnouncement } from "react-icons/md"
 import { VscGithub } from "react-icons/vsc"
@@ -16,7 +16,7 @@ const Footer: React.FC = () => {
         <Row className="align-items-center g-3">
           <Col xs={12} md={4} className="text-center text-md-start">
             <Link to="/" className={`text-decoration-none d-inline-flex align-items-center ${isDark ? 'text-light' : 'text-dark'}`}>
-              <BsCodeSquare className="me-2" size={20} />
+              <TbCode className="me-2" size={20} />
               <span className="fw-semibold">Code Snippets</span>
             </Link>
           </Col>
