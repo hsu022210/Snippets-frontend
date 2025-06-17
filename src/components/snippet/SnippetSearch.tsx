@@ -36,7 +36,7 @@ const SnippetSearch: React.FC<SnippetSearchProps> = ({
       <Form.Group>
         <InputGroup>
           <Dropdown id="search-type-dropdown">
-            <Dropdown.Toggle variant="secondary">
+            <Dropdown.Toggle variant="primary">
               {searchType === 'title' ? 'Title' : 'Code'}
             </Dropdown.Toggle>
             <Dropdown.Menu>

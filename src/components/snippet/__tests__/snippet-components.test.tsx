@@ -4,7 +4,6 @@ import userEvent from '@testing-library/user-event'
 import { TestProviders } from '../../../test/setup.tsx'
 import SnippetCard from '../SnippetCard'
 import EmptySnippetList from '../EmptySnippetList'
-import SnippetListHeader from '../SnippetListHeader'
 import DeleteConfirmationModal from '../DeleteConfirmationModal'
 import SnippetLanguageSelector from '../SnippetLanguageSelector'
 import SnippetHeader from '../SnippetHeader'
@@ -128,21 +127,6 @@ describe('Snippet Components', () => {
       const createButton = screen.getByRole('button', { name: /create snippet/i })
       expect(createButton).toHaveAttribute('href', '/create-snippet')
       expect(createButton).not.toBeDisabled()
-    })
-  })
-
-  describe('SnippetListHeader', () => {
-    it('renders header with create button', () => {
-      render(
-        <TestProviders>
-          <SnippetListHeader />
-        </TestProviders>
-      )
-      
-      expect(screen.getAllByText(/my snippets/i)).toHaveLength(2)
-      const createButtons = screen.getAllByRole('button', { name: /create snippet/i })
-      expect(createButtons).toHaveLength(2)
-      expect(createButtons[0]).toHaveAttribute('href', '/create-snippet')
     })
   })
 

@@ -3,7 +3,6 @@ import { Row, Col, Stack, Alert } from 'react-bootstrap'
 import Container from '../components/shared/Container'
 import InlineLoadingSpinner from '../components/InlineLoadingSpinner'
 import { useSnippetList } from '../hooks/useSnippetList'
-import SnippetListHeader from '../components/snippet/SnippetListHeader'
 import SnippetCard from '../components/snippet/SnippetCard'
 import EmptySnippetList from '../components/snippet/EmptySnippetList'
 import SnippetFilterSection from '../components/snippet/SnippetFilterSection'
@@ -67,7 +66,7 @@ const SnippetList: React.FC = () => {
 
   return (
     <Container fluid>
-      <SnippetListHeader />
+      <h2 className="h3 mb-4">My Snippets</h2>
       <SnippetSearch
         searchTitle={filters.searchTitle}
         searchCode={filters.searchCode}

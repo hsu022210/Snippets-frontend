@@ -1,5 +1,6 @@
 import { Offcanvas, Button, Badge } from 'react-bootstrap';
 import { Funnel } from 'react-bootstrap-icons';
+import { Link } from 'react-router-dom';
 import SnippetFilter from './SnippetFilter';
 import { SnippetFilterSectionProps, SnippetFilterValues } from '../../types/interfaces';
 import { useState } from 'react';
@@ -74,6 +75,14 @@ const SnippetFilterSection: React.FC<SnippetFilterSectionProps> = ({
             </Badge>
           )}
         </Button>
+        <Link to="/create-snippet" className="text-decoration-none">
+          <Button
+            variant="outline-primary"
+            className="d-flex align-items-center gap-2"
+          >
+            Create Snippet
+          </Button>
+        </Link>
       </div>
 
       <Offcanvas show={show} onHide={handleClose} placement="end">
