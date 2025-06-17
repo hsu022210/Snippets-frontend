@@ -1,5 +1,6 @@
 import { Form } from 'react-bootstrap'
 import { PasswordRule, PasswordRulesProps } from '../../types/interfaces'
+import { BsCheckCircleFill, BsCircle } from 'react-icons/bs'
 
 const PasswordRules = ({ password }: PasswordRulesProps) => {
   const rules: PasswordRule[] = [
@@ -22,7 +23,11 @@ const PasswordRules = ({ password }: PasswordRulesProps) => {
         {rules.map((rule, index) => (
           <li key={index} className="d-flex align-items-center mb-1">
             <span className={`me-2 ${rule.isValid ? 'text-success' : 'text-muted'}`}>
-              {rule.isValid ? '✓' : '○'}
+              {rule.isValid ? (
+                <BsCheckCircleFill size={16} data-testid="valid-icon" />
+              ) : (
+                <BsCircle size={16} data-testid="invalid-icon" />
+              )}
             </span>
             <small className={rule.isValid ? 'text-success' : 'text-muted'}>
               {rule.label}

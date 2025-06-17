@@ -3,6 +3,7 @@ import { useCodeMirrorTheme } from '../contexts/CodeMirrorThemeContext'
 import { usePreviewHeight } from '../contexts/PreviewHeightContext'
 import { Container, Card, Form, Row, Col } from 'react-bootstrap'
 import CodeEditor from '../components/shared/CodeEditor'
+// import { BsCodeSquare, BsPalette, BsBell } from 'react-icons/bs'
 
 const Settings: React.FC = () => {
   const { selectedTheme, setSelectedTheme, themeOptions } = useCodeMirrorTheme();
@@ -42,15 +43,15 @@ console.log('Sum:', result);`;
             <Card.Body className="p-0">
               <Nav className="flex-column">
                 <Nav.Link href="#editor" className="active">
-                  <i className="bi bi-code-square me-2"></i>
+                  <BsCodeSquare className="me-2" size={18} />
                   Editor Settings
                 </Nav.Link>
                 <Nav.Link href="#appearance">
-                  <i className="bi bi-palette me-2"></i>
+                  <BsPalette className="me-2" size={18} />
                   Appearance
                 </Nav.Link>
                 <Nav.Link href="#notifications">
-                  <i className="bi bi-bell me-2"></i>
+                  <BsBell className="me-2" size={18} />
                   Notifications
                 </Nav.Link>
               </Nav>

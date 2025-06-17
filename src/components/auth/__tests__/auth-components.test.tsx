@@ -190,25 +190,25 @@ describe('Auth Components', () => {
     it('shows invalid state for empty password', () => {
       render(<PasswordRules password="" />);
       
-      const checkmarks = screen.getAllByText('○');
-      expect(checkmarks).toHaveLength(2);
+      const invalidIcons = screen.getAllByTestId('invalid-icon');
+      expect(invalidIcons).toHaveLength(2);
     });
 
     it('shows valid state for password meeting all requirements', () => {
       render(<PasswordRules password="Password123" />);
       
-      const checkmarks = screen.getAllByText('✓');
-      expect(checkmarks).toHaveLength(2);
+      const validIcons = screen.getAllByTestId('valid-icon');
+      expect(validIcons).toHaveLength(2);
     });
 
     it('shows partial valid state for password meeting some requirements', () => {
       render(<PasswordRules password="Pass" />);
       
-      const validCheckmark = screen.getByText('✓');
-      const invalidCheckmark = screen.getByText('○');
+      const validIcon = screen.getByTestId('valid-icon');
+      const invalidIcon = screen.getByTestId('invalid-icon');
       
-      expect(validCheckmark).toBeInTheDocument();
-      expect(invalidCheckmark).toBeInTheDocument();
+      expect(validIcon).toBeInTheDocument();
+      expect(invalidIcon).toBeInTheDocument();
     });
 
     it('applies correct styling for valid and invalid states', () => {
