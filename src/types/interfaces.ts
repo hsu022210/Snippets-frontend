@@ -73,6 +73,11 @@ export interface SnippetLanguageSelectorProps {
   language: string;
 }
 
+export interface SnippetLanguageFilterProps {
+  language: string;
+  onLanguageChange: (language: string) => void;
+}
+
 // API Related Interfaces
 export interface ApiErrorResponse {
   detail?: string;
@@ -294,4 +299,25 @@ export interface ImportMetaEnv {
 
 export interface ImportMeta {
   readonly env: ImportMetaEnv;
+}
+
+export interface SnippetFilterValues {
+  language: string;
+  createdAfter: string;
+  createdBefore: string;
+}
+
+export interface SnippetFilterProps {
+  language: string;
+  createdAfter: string;
+  createdBefore: string;
+  onFilterChange: (filters: SnippetFilterValues) => void;
+}
+
+export interface SnippetFilterSectionProps {
+  language: string;
+  createdAfter: string;
+  createdBefore: string;
+  onFilterChange: (filters: SnippetFilterValues) => void;
+  onReset: () => void;
 } 

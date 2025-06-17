@@ -8,7 +8,7 @@ const EmptySnippetList: React.FC = () => {
     <Card className="text-center">
       <Body>
         <Stack gap={3} className="align-items-center">
-          <Text>No snippets found. Create your first snippet!</Text>
+          <Text>No snippets found.</Text>
           <Button
             as={Link}
             to="/create-snippet"
