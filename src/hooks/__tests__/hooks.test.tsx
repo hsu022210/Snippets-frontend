@@ -276,6 +276,106 @@ describe('Hooks (with MSW)', () => {
       // The snippets array might be different due to filtering
       expect(Array.isArray(result.current.snippets)).toBe(true)
     })
+
+    it('should handle pagination correctly', async () => {
+      const { server } = await import('../../test/setup')
+      server.use(
+        http.get('/snippets', ({ request }) => {
+          const url = new URL(request.url)
+          expect(url.searchParams.get('page')).toBe('1')
+          expect(url.searchParams.get('page_size')).toBe('6')
+          return HttpResponse.json({
+            results: [
+              { id: '1', title: 'Snippet 1', code: 'test1', language: 'python' },
+              { id: '2', title: 'Snippet 2', code: 'test2', language: 'python' },
+              { id: '3', title: 'Snippet 3', code: 'test3', language: 'python' },
+              { id: '4', title: 'Snippet 4', code: 'test4', language: 'python' },
+              { id: '5', title: 'Snippet 5', code: 'test5', language: 'python' },
+              { id: '6', title: 'Snippet 6', code: 'test6', language: 'python' }
+            ],
+            count: 12,
+            next: 'http://localhost:8000/snippets/?page=2&page_size=6',
+            previous: null
+          })
+        })
+      )
+
+      const { result } = renderHook(() => useSnippetList({}, 1), {
+        wrapper: TestProviders,
+      })
+
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false)
+      })
+
+      expect(result.current.error).toBe('')
+      expect(result.current.snippets.length).toBe(6)
+      expect(result.current.totalCount).toBe(12)
+      expect(result.current.hasNextPage).toBe(true)
+      expect(result.current.hasPreviousPage).toBe(false)
+    })
+
+    it('should handle pagination with filters', async () => {
+      const { server } = await import('../../test/setup')
+      server.use(
+        http.get('/snippets', ({ request }) => {
+          const url = new URL(request.url)
+          expect(url.searchParams.get('page')).toBe('1')
+          expect(url.searchParams.get('page_size')).toBe('6')
+          expect(url.searchParams.get('language')).toBe('python')
+          return HttpResponse.json({
+            results: [
+              { id: '1', title: 'Python Snippet 1', code: 'test1', language: 'python' },
+              { id: '2', title: 'Python Snippet 2', code: 'test2', language: 'python' },
+              { id: '3', title: 'Python Snippet 3', code: 'test3', language: 'python' },
+              { id: '4', title: 'Python Snippet 4', code: 'test4', language: 'python' },
+              { id: '5', title: 'Python Snippet 5', code: 'test5', language: 'python' },
+              { id: '6', title: 'Python Snippet 6', code: 'test6', language: 'python' }
+            ],
+            count: 8,
+            next: 'http://localhost:8000/snippets/?page=2&page_size=6&language=python',
+            previous: null
+          })
+        })
+      )
+
+      const { result } = renderHook(() => useSnippetList({ language: 'python' }, 1), {
+        wrapper: TestProviders,
+      })
+
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false)
+      })
+
+      expect(result.current.error).toBe('')
+      expect(result.current.snippets.length).toBe(6)
+      expect(result.current.totalCount).toBe(8)
+      expect(result.current.hasNextPage).toBe(true)
+      expect(result.current.hasPreviousPage).toBe(false)
+    })
+
+    it('should handle pagination errors', async () => {
+      const { server } = await import('../../test/setup')
+      server.use(
+        http.get('/snippets', () => {
+          return new HttpResponse(null, { status: 500 })
+        })
+      )
+
+      const { result } = renderHook(() => useSnippetList({}, 1), {
+        wrapper: TestProviders,
+      })
+
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false)
+      })
+
+      expect(result.current.error).toBe('Failed to fetch snippets')
+      expect(result.current.snippets).toEqual([])
+      expect(result.current.totalCount).toBe(0)
+      expect(result.current.hasNextPage).toBe(false)
+      expect(result.current.hasPreviousPage).toBe(false)
+    })
   })
 
   describe('useSnippet', () => {
