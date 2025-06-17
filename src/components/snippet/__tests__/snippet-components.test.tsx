@@ -10,6 +10,7 @@ import SnippetLanguageSelector from '../SnippetLanguageSelector'
 import SnippetHeader from '../SnippetHeader'
 import { Snippet } from '@/types/interfaces.ts'
 import { useTheme } from '../../../contexts/ThemeContext'
+import SnippetFilter from '../SnippetFilter'
 
 // Mock data
 const mockSnippet: Snippet = {
@@ -340,5 +341,154 @@ describe('Snippet Components', () => {
       
       expect(defaultProps.setShowDeleteModal).toHaveBeenCalledWith(true)
     })
+  })
+
+  describe('SnippetFilter', () => {
+    const defaultProps = {
+      language: '',
+      createdAfter: '',
+      createdBefore: '',
+      onFilterChange: vi.fn(),
+    };
+
+    it('renders filter components', () => {
+      render(<SnippetFilter {...defaultProps} />);
+      
+      expect(screen.getByText('Language')).toBeInTheDocument();
+      expect(screen.getByText('Date Range')).toBeInTheDocument();
+      expect(screen.getByText('Created After')).toBeInTheDocument();
+      expect(screen.getByText('Created Before')).toBeInTheDocument();
+    });
+
+    it('handles language filter change', async () => {
+      render(<SnippetFilter {...defaultProps} />);
+      
+      const languageSelect = screen.getByRole('combobox');
+      await userEvent.selectOptions(languageSelect, 'javascript');
+      
+      expect(defaultProps.onFilterChange).toHaveBeenCalledWith({
+        language: 'javascript',
+        createdAfter: '',
+        createdBefore: '',
+      });
+    });
+
+    it('handles date filter changes', async () => {
+      render(<SnippetFilter {...defaultProps} />);
+      
+      const createdAfterInput = screen.getByLabelText('Created After');
+      const createdBeforeInput = screen.getByLabelText('Created Before');
+      
+      // Test created after date change
+      await userEvent.type(createdAfterInput, '2024-01-01');
+      expect(defaultProps.onFilterChange).toHaveBeenCalledWith({
+        language: '',
+        createdAfter: '2024-01-01',
+        createdBefore: '',
+      });
+
+      // Reset the mock to clear previous calls
+      defaultProps.onFilterChange.mockClear();
+      
+      // Test created before date change
+      await userEvent.type(createdBeforeInput, '2024-12-31');
+      expect(defaultProps.onFilterChange).toHaveBeenCalledWith({
+        language: '',
+        createdAfter: '',
+        createdBefore: '2024-12-31',
+      });
+    });
+
+    it('displays helper text for filters', () => {
+      render(<SnippetFilter {...defaultProps} />);
+      
+      expect(screen.getByText('Filter snippets by programming language')).toBeInTheDocument();
+      expect(screen.getByText('Show snippets created after this date')).toBeInTheDocument();
+      expect(screen.getByText('Show snippets created before this date')).toBeInTheDocument();
+    });
+  });
+
+  describe('SnippetLanguageSelector', () => {
+    describe('Filter Mode', () => {
+      const filterProps = {
+        language: '',
+        onLanguageChange: vi.fn(),
+      };
+
+      it('renders filter language selector', () => {
+        render(<SnippetLanguageSelector {...filterProps} />);
+        
+        expect(screen.getByText('Language')).toBeInTheDocument();
+        expect(screen.getByRole('combobox')).toBeInTheDocument();
+        expect(screen.getByText('All Languages')).toBeInTheDocument();
+      });
+
+      it('handles language change in filter mode', async () => {
+        render(<SnippetLanguageSelector {...filterProps} />);
+        
+        const select = screen.getByRole('combobox');
+        await userEvent.selectOptions(select, 'python');
+        
+        expect(filterProps.onLanguageChange).toHaveBeenCalledWith('python');
+      });
+
+      it('displays helper text in filter mode', () => {
+        render(<SnippetLanguageSelector {...filterProps} />);
+        
+        expect(screen.getByText('Filter snippets by programming language')).toBeInTheDocument();
+      });
+    });
+
+    describe('Edit Mode', () => {
+      const editProps = {
+        isEditing: true,
+        editedLanguage: '',
+        setEditedLanguage: vi.fn(),
+        language: '',
+      };
+
+      it('renders edit language selector', () => {
+        render(<SnippetLanguageSelector {...editProps} />);
+        
+        expect(screen.getByText('Language:')).toBeInTheDocument();
+        expect(screen.getByRole('combobox')).toBeInTheDocument();
+        expect(screen.getByText('None')).toBeInTheDocument();
+      });
+
+      it('handles language change in edit mode', async () => {
+        render(<SnippetLanguageSelector {...editProps} />);
+        
+        const select = screen.getByRole('combobox');
+        await userEvent.selectOptions(select, 'javascript');
+        
+        expect(editProps.setEditedLanguage).toHaveBeenCalledWith('javascript');
+      });
+
+      it('displays current language in view mode', () => {
+        const viewProps = {
+          ...editProps,
+          isEditing: false,
+          language: 'python',
+        };
+        
+        render(<SnippetLanguageSelector {...viewProps} />);
+        
+        expect(screen.getByText('Language:')).toBeInTheDocument();
+        expect(screen.getByText('python')).toBeInTheDocument();
+      });
+
+      it('displays "None" when language is empty in view mode', () => {
+        const viewProps = {
+          ...editProps,
+          isEditing: false,
+          language: '',
+        };
+        
+        render(<SnippetLanguageSelector {...viewProps} />);
+        
+        expect(screen.getByText('Language:')).toBeInTheDocument();
+        expect(screen.getByText('None')).toBeInTheDocument();
+      });
+    });
   })
 }) 

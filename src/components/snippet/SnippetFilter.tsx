@@ -1,3 +1,4 @@
+import React from 'react';
 import { Form, Stack } from 'react-bootstrap';
 import SnippetLanguageSelector from './SnippetLanguageSelector';
 import { SnippetFilterProps } from '../../types/interfaces';
@@ -35,8 +36,9 @@ const SnippetFilter: React.FC<SnippetFilterProps> = ({
         <Form.Label className="fw-bold">Date Range</Form.Label>
         <Stack gap={3}>
           <div>
-            <Form.Label>Created After</Form.Label>
+            <Form.Label htmlFor="createdAfter">Created After</Form.Label>
             <Form.Control
+              id="createdAfter"
               type="date"
               value={createdAfter}
               onChange={(e) => handleDateChange('createdAfter', e.target.value)}
@@ -47,8 +49,9 @@ const SnippetFilter: React.FC<SnippetFilterProps> = ({
             </Form.Text>
           </div>
           <div>
-            <Form.Label>Created Before</Form.Label>
+            <Form.Label htmlFor="createdBefore">Created Before</Form.Label>
             <Form.Control
+              id="createdBefore"
               type="date"
               value={createdBefore}
               onChange={(e) => handleDateChange('createdBefore', e.target.value)}
