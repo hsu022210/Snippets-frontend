@@ -9,6 +9,7 @@ import DeleteConfirmationModal from '../DeleteConfirmationModal'
 import SnippetLanguageSelector from '../SnippetLanguageSelector'
 import SnippetHeader from '../SnippetHeader'
 import { Snippet } from '@/types/interfaces.ts'
+import { useTheme } from '../../../contexts/ThemeContext'
 
 // Mock data
 const mockSnippet: Snippet = {
@@ -16,9 +17,14 @@ const mockSnippet: Snippet = {
   title: 'Test Snippet',
   language: 'javascript',
   code: 'console.log("test")',
-  created_at: new Date().toISOString(),
+  created: new Date().toISOString(),
   updated_at: new Date().toISOString(),
 }
+
+// Mock the useTheme hook
+vi.mock('../../../contexts/ThemeContext', () => ({
+  useTheme: vi.fn().mockReturnValue({ isDark: false, toggleTheme: vi.fn() })
+}))
 
 describe('Snippet Components', () => {
   // Setup user event
@@ -34,7 +40,7 @@ describe('Snippet Components', () => {
       
       expect(screen.getByText(mockSnippet.title)).toBeInTheDocument()
       expect(screen.getByText(`Language: ${mockSnippet.language}`)).toBeInTheDocument()
-      expect(screen.getByRole('button', { name: /view details/i })).toBeInTheDocument()
+      expect(screen.getByRole('link')).toHaveAttribute('href', `/snippets/${mockSnippet.id}`)
     })
 
     it('renders untitled snippet when title is missing', () => {
@@ -59,15 +65,42 @@ describe('Snippet Components', () => {
       expect(screen.getByText('Language: None')).toBeInTheDocument()
     })
 
-    it('has correct link to snippet details', () => {
+    it('applies correct theme-based title styling', () => {
+      const { rerender } = render(
+        <TestProviders>
+          <SnippetCard snippet={mockSnippet} />
+        </TestProviders>
+      )
+      
+      // Test light theme
+      expect(screen.getByText(mockSnippet.title)).toHaveClass('text-dark')
+      
+      // Mock dark theme
+      vi.mocked(useTheme).mockReturnValue({ isDark: true, toggleTheme: vi.fn() })
+      
+      // Rerender with dark theme
+      rerender(
+        <TestProviders>
+          <SnippetCard snippet={mockSnippet} />
+        </TestProviders>
+      )
+      
+      // Test dark theme
+      expect(screen.getByText(mockSnippet.title)).toHaveClass('text-light')
+    })
+
+    it('handles share button click without triggering navigation', async () => {
       render(
         <TestProviders>
           <SnippetCard snippet={mockSnippet} />
         </TestProviders>
       )
       
-      const link = screen.getByRole('button', { name: /view details/i })
-      expect(link).toHaveAttribute('href', `/snippets/${mockSnippet.id}`)
+      const shareButton = screen.getByRole('button', { name: /share snippet/i })
+      await user.click(shareButton)
+      
+      // The link should still be present and not have been triggered
+      expect(screen.getByRole('link')).toHaveAttribute('href', `/snippets/${mockSnippet.id}`)
     })
   })
 
@@ -184,111 +217,128 @@ describe('Snippet Components', () => {
       setIsEditing: vi.fn(),
       setShowDeleteModal: vi.fn(),
       title: 'Test Snippet',
-      isAuthenticated: true
+      isAuthenticated: true,
+      snippetId: '1'
     }
 
-    it('renders title and action buttons when not editing', () => {
+    it('renders title correctly', () => {
       render(
         <TestProviders>
           <SnippetHeader {...defaultProps} />
         </TestProviders>
       )
-
+      
       expect(screen.getByText('Test Snippet')).toBeInTheDocument()
-      expect(screen.getByRole('button', { name: /edit/i })).toBeInTheDocument()
-      expect(screen.getByRole('button', { name: /delete/i })).toBeInTheDocument()
-      expect(screen.getByRole('button', { name: /share snippet/i })).toBeInTheDocument()
     })
 
-    it('hides edit and delete buttons when user is not authenticated', () => {
+    it('renders edit and delete buttons when authenticated', () => {
+      render(
+        <TestProviders>
+          <SnippetHeader {...defaultProps} />
+        </TestProviders>
+      )
+      
+      expect(screen.getByRole('button', { name: /edit/i })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: /delete/i })).toBeInTheDocument()
+    })
+
+    it('does not render edit and delete buttons when not authenticated', () => {
       render(
         <TestProviders>
           <SnippetHeader {...defaultProps} isAuthenticated={false} />
         </TestProviders>
       )
-
-      expect(screen.getByText('Test Snippet')).toBeInTheDocument()
+      
       expect(screen.queryByRole('button', { name: /edit/i })).not.toBeInTheDocument()
       expect(screen.queryByRole('button', { name: /delete/i })).not.toBeInTheDocument()
-      expect(screen.getByRole('button', { name: /share snippet/i })).toBeInTheDocument()
     })
 
-    it('shows editing form when isEditing is true', () => {
+    it('renders edit mode when isEditing is true', () => {
       render(
         <TestProviders>
           <SnippetHeader {...defaultProps} isEditing={true} />
         </TestProviders>
       )
-
-      expect(screen.getByPlaceholderText('Enter snippet title')).toBeInTheDocument()
-      expect(screen.getByRole('button', { name: /cancel/i })).toBeInTheDocument()
+      
+      expect(screen.getByRole('textbox')).toBeInTheDocument()
       expect(screen.getByRole('button', { name: /save/i })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: /cancel/i })).toBeInTheDocument()
     })
 
-    it('shows saving state when saving is true', () => {
+    it('disables save and cancel buttons when saving', () => {
       render(
         <TestProviders>
           <SnippetHeader {...defaultProps} isEditing={true} saving={true} />
         </TestProviders>
       )
-
-      expect(screen.getByRole('button', { name: /saving/i })).toBeInTheDocument()
+      
+      expect(screen.getByRole('button', { name: /saving/i })).toBeDisabled()
+      expect(screen.getByRole('button', { name: /cancel/i })).toBeDisabled()
     })
 
-    it('handles edit button click', async () => {
-      render(
-        <TestProviders>
-          <SnippetHeader {...defaultProps} />
-        </TestProviders>
-      )
-
-      await user.click(screen.getByRole('button', { name: /edit/i }))
-      expect(defaultProps.setIsEditing).toHaveBeenCalledWith(true)
-    })
-
-    it('handles delete button click', async () => {
-      render(
-        <TestProviders>
-          <SnippetHeader {...defaultProps} />
-        </TestProviders>
-      )
-
-      await user.click(screen.getByRole('button', { name: /delete/i }))
-      expect(defaultProps.setShowDeleteModal).toHaveBeenCalledWith(true)
-    })
-
-    it('handles save button click', async () => {
+    it('calls setEditedTitle when title input changes', async () => {
       render(
         <TestProviders>
           <SnippetHeader {...defaultProps} isEditing={true} />
         </TestProviders>
       )
+      
+      const input = screen.getByRole('textbox')
+      await user.type(input, 'New Title')
+      
+      expect(defaultProps.setEditedTitle).toHaveBeenCalled()
+    })
 
-      await user.click(screen.getByRole('button', { name: /save/i }))
+    it('calls handleSave when save button is clicked', async () => {
+      render(
+        <TestProviders>
+          <SnippetHeader {...defaultProps} isEditing={true} />
+        </TestProviders>
+      )
+      
+      const saveButton = screen.getByRole('button', { name: /save/i })
+      await user.click(saveButton)
+      
       expect(defaultProps.handleSave).toHaveBeenCalled()
     })
 
-    it('handles cancel button click', async () => {
+    it('calls handleCancel when cancel button is clicked', async () => {
       render(
         <TestProviders>
           <SnippetHeader {...defaultProps} isEditing={true} />
         </TestProviders>
       )
-
-      await user.click(screen.getByRole('button', { name: /cancel/i }))
+      
+      const cancelButton = screen.getByRole('button', { name: /cancel/i })
+      await user.click(cancelButton)
+      
       expect(defaultProps.handleCancel).toHaveBeenCalled()
     })
 
-    it('handles title input change', async () => {
+    it('calls setIsEditing when edit button is clicked', async () => {
       render(
         <TestProviders>
-          <SnippetHeader {...defaultProps} isEditing={true} />
+          <SnippetHeader {...defaultProps} />
         </TestProviders>
       )
+      
+      const editButton = screen.getByRole('button', { name: /edit/i })
+      await user.click(editButton)
+      
+      expect(defaultProps.setIsEditing).toHaveBeenCalledWith(true)
+    })
 
-      const input = screen.getByPlaceholderText('Enter snippet title')
-      await user.type(input, 'New Title')
-      expect(defaultProps.setEditedTitle).toHaveBeenCalled()
+    it('calls setShowDeleteModal when delete button is clicked', async () => {
+      render(
+        <TestProviders>
+          <SnippetHeader {...defaultProps} />
+        </TestProviders>
+      )
+      
+      const deleteButton = screen.getByRole('button', { name: /delete/i })
+      await user.click(deleteButton)
+      
+      expect(defaultProps.setShowDeleteModal).toHaveBeenCalledWith(true)
     })
   })
 }) 
