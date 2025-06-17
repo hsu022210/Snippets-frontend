@@ -252,7 +252,7 @@ export interface PreviewHeightProviderProps {
 export type ToastType = 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
 
 export interface ToastContextType {
-  showToast: (message?: string, type?: ToastType) => void;
+  showToast: (message?: string, type?: ToastType, autoHideDuration?: number) => void;
   hideToast: () => void;
 }
 

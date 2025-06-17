@@ -16,11 +16,19 @@ export const ToastProvider = ({ children }: ToastProviderProps) => {
   const [show, setShow] = useState(false);
   const [message, setMessage] = useState('');
   const [type, setType] = useState<ToastType>('primary');
+  const [autoHideDuration, setAutoHideDuration] = useState<number | undefined>(undefined);
 
-  const showToast = useCallback((message: string = 'Please try to reload in a few seconds if still loading.', toastType: ToastType = 'primary') => {
+  const showToast = useCallback((message: string = 'Please try to reload in a few seconds if still loading.', toastType: ToastType = 'primary', autoHideDuration?: number) => {
     setMessage(message || '');
     setType(toastType);
     setShow(true);
+    setAutoHideDuration(autoHideDuration);
+
+    if (autoHideDuration) {
+      setTimeout(() => {
+        setShow(false);
+      }, autoHideDuration * 1000);
+    }
   }, []);
 
   const hideToast = useCallback(() => {
@@ -39,8 +47,8 @@ export const ToastProvider = ({ children }: ToastProviderProps) => {
         <Toast 
           show={show} 
           onClose={hideToast} 
-          // delay={3000} 
-          // autohide
+          autohide={!!autoHideDuration}
+          delay={autoHideDuration ? autoHideDuration * 1000 : undefined}
           bg={type}
         >
           <Toast.Header closeButton>

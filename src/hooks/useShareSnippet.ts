@@ -8,7 +8,7 @@ export const useShareSnippet = () => {
   const handleShare = useCallback(async (snippetId: string) => {
     try {
       await navigator.clipboard.writeText(`${window.location.origin}/snippets/${snippetId}`);
-      showToast('Link copied to clipboard!');
+      showToast('Link copied to clipboard!', undefined, 2);
       setShareSnippetTooltip('Link copied!');
       
       // Use a separate timeout to reset the tooltip
