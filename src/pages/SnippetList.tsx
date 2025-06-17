@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Row, Col, Stack, Alert, Badge } from 'react-bootstrap'
 import Container from '../components/shared/Container'
 import InlineLoadingSpinner from '../components/InlineLoadingSpinner'
@@ -8,42 +7,37 @@ import EmptySnippetList from '../components/snippet/EmptySnippetList'
 import SnippetFilterSection from '../components/snippet/SnippetFilterSection'
 import SnippetSearch from '../components/snippet/SnippetSearch'
 import { SnippetFilterValues } from '../types/interfaces'
+import { useFilterState } from '../hooks/useFilterState'
+
+const initialFilters: SnippetFilterValues = {
+  language: '',
+  createdAfter: '',
+  createdBefore: '',
+  searchTitle: '',
+  searchCode: '',
+};
 
 const SnippetList: React.FC = () => {
-  const [filters, setFilters] = useState<SnippetFilterValues>({
-    language: '',
-    createdAfter: '',
-    createdBefore: '',
-    searchTitle: '',
-    searchCode: '',
-  });
-
+  const { filters, updateFilters, resetFilters } = useFilterState(initialFilters);
   const { snippets, totalCount, loading, error } = useSnippetList(filters);
 
   const handleFilterChange = (newFilters: SnippetFilterValues) => {
-    setFilters(prev => ({
-      ...prev,
+    updateFilters({
       language: newFilters.language,
       createdAfter: newFilters.createdAfter,
       createdBefore: newFilters.createdBefore,
-    }));
+    });
   };
 
   const handleSearchChange = (field: 'searchTitle' | 'searchCode', value: string) => {
-    setFilters(prev => ({
-      ...prev,
+    updateFilters({
       searchTitle: field === 'searchTitle' ? value : '',
       searchCode: field === 'searchCode' ? value : '',
-    }));
+    });
   };
 
   const handleResetFilters = () => {
-    setFilters(prev => ({
-      ...prev,
-      language: '',
-      createdAfter: '',
-      createdBefore: '',
-    }));
+    resetFilters();
   };
 
   const hasActiveFilters = Object.values(filters).some(value => value !== '');

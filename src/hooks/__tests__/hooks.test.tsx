@@ -4,6 +4,7 @@ import { useApiRequest } from '../useApiRequest'
 import { useSnippetList } from '../useSnippetList'
 import { useSnippet, useCreateSnippet } from '../useSnippet'
 import { useShareSnippet } from '../useShareSnippet'
+import { useFilterState } from '../useFilterState'
 import { TestProviders } from '../../test/setup'
 import { http, HttpResponse } from 'msw'
 import axios from 'axios'
@@ -538,6 +539,152 @@ describe('Hooks (with MSW)', () => {
       });
 
       expect(result.current.shareSnippetTooltip).toBe('Share snippet');
+    });
+  });
+
+  describe('useFilterState', () => {
+    const initialFilters = {
+      language: '',
+      createdAfter: '',
+      createdBefore: '',
+      searchTitle: '',
+      searchCode: '',
+    };
+
+    beforeEach(() => {
+      localStorage.clear();
+    });
+
+    afterEach(() => {
+      localStorage.clear();
+    });
+
+    it('should initialize with default filters when no stored filters exist', () => {
+      const { result } = renderHook(() => useFilterState(initialFilters), {
+        wrapper: TestProviders,
+      });
+
+      expect(result.current.filters).toEqual(initialFilters);
+    });
+
+    it('should initialize with stored filters from localStorage', () => {
+      const storedFilters = {
+        language: 'javascript',
+        createdAfter: '2024-01-01',
+        createdBefore: '',
+        searchTitle: 'test',
+        searchCode: '',
+      };
+
+      localStorage.setItem('snippet_filters', JSON.stringify(storedFilters));
+
+      const { result } = renderHook(() => useFilterState(initialFilters), {
+        wrapper: TestProviders,
+      });
+
+      expect(result.current.filters).toEqual(storedFilters);
+    });
+
+    it('should update filters and persist to localStorage', () => {
+      const { result } = renderHook(() => useFilterState(initialFilters), {
+        wrapper: TestProviders,
+      });
+
+      const newFilters = {
+        language: 'python',
+        createdAfter: '2024-01-01',
+      };
+
+      act(() => {
+        result.current.updateFilters(newFilters);
+      });
+
+      expect(result.current.filters).toEqual({
+        ...initialFilters,
+        ...newFilters,
+      });
+
+      const storedFilters = JSON.parse(localStorage.getItem('snippet_filters') || '{}');
+      expect(storedFilters).toEqual({
+        ...initialFilters,
+        ...newFilters,
+      });
+    });
+
+    it('should reset filters and clear localStorage', () => {
+      const storedFilters = {
+        language: 'javascript',
+        createdAfter: '2024-01-01',
+        createdBefore: '',
+        searchTitle: 'test',
+        searchCode: '',
+      };
+
+      localStorage.setItem('snippet_filters', JSON.stringify(storedFilters));
+
+      const { result } = renderHook(() => useFilterState(initialFilters), {
+        wrapper: TestProviders,
+      });
+
+      act(() => {
+        result.current.resetFilters();
+      });
+
+      expect(result.current.filters).toEqual(initialFilters);
+      expect(localStorage.getItem('snippet_filters')).toBeNull();
+    });
+
+    it('should clear localStorage when all filters are empty', () => {
+      const { result } = renderHook(() => useFilterState(initialFilters), {
+        wrapper: TestProviders,
+      });
+
+      // First set some filters
+      act(() => {
+        result.current.updateFilters({
+          language: 'javascript',
+          searchTitle: 'test'
+        });
+      });
+
+      // Then clear all filters
+      act(() => {
+        result.current.updateFilters({
+          language: '',
+          searchTitle: '',
+          searchCode: '',
+          createdAfter: '',
+          createdBefore: ''
+        });
+      });
+
+      expect(result.current.filters).toEqual(initialFilters);
+      expect(localStorage.getItem('snippet_filters')).toBeNull();
+    });
+
+    it('should handle partial filter updates', () => {
+      const { result } = renderHook(() => useFilterState(initialFilters), {
+        wrapper: TestProviders,
+      });
+
+      act(() => {
+        result.current.updateFilters({ language: 'javascript' });
+      });
+
+      expect(result.current.filters).toEqual({
+        ...initialFilters,
+        language: 'javascript',
+      });
+
+      act(() => {
+        result.current.updateFilters({ searchTitle: 'test' });
+      });
+
+      expect(result.current.filters).toEqual({
+        ...initialFilters,
+        language: 'javascript',
+        searchTitle: 'test',
+      });
     });
   });
 }) 
