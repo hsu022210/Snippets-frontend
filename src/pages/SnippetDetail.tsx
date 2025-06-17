@@ -108,7 +108,7 @@ const SnippetDetail: React.FC = () => {
       <Container>
         {!!token && (
         <Breadcrumb className="mb-4">
-          <Breadcrumb.Item linkAs={Link} linkProps={{ to: "/snippets" }}>
+          <Breadcrumb.Item linkAs={Link} linkProps={{ to: "/snippets", className: "text-decoration-none" }}>
             Snippets
           </Breadcrumb.Item>
           <Breadcrumb.Item active>
