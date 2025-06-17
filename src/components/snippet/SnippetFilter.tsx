@@ -14,6 +14,8 @@ const SnippetFilter: React.FC<SnippetFilterProps> = ({
       language: newLanguage,
       createdAfter,
       createdBefore,
+      searchTitle: '',
+      searchCode: '',
     });
   };
 
@@ -22,6 +24,8 @@ const SnippetFilter: React.FC<SnippetFilterProps> = ({
       language,
       createdAfter: field === 'createdAfter' ? value : createdAfter,
       createdBefore: field === 'createdBefore' ? value : createdBefore,
+      searchTitle: '',
+      searchCode: '',
     });
   };
 

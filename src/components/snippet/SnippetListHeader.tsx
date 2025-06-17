@@ -11,7 +11,7 @@ const SnippetListHeader: React.FC = () => {
           <Button
             as={Link}
             to="/create-snippet"
-            variant="primary"
+            variant="outline-primary"
             size="lg"
             className="w-100"
             isMobile
@@ -28,7 +28,7 @@ const SnippetListHeader: React.FC = () => {
         <Button
           as={Link}
           to="/create-snippet"
-          variant="primary"
+          variant="outline-primary"
         >
           Create Snippet
         </Button>

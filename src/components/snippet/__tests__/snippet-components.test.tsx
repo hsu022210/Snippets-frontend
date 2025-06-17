@@ -370,6 +370,8 @@ describe('Snippet Components', () => {
         language: 'javascript',
         createdAfter: '',
         createdBefore: '',
+        searchTitle: '',
+        searchCode: '',
       });
     });
 
@@ -385,6 +387,8 @@ describe('Snippet Components', () => {
         language: '',
         createdAfter: '2024-01-01',
         createdBefore: '',
+        searchTitle: '',
+        searchCode: '',
       });
 
       // Reset the mock to clear previous calls
@@ -396,6 +400,8 @@ describe('Snippet Components', () => {
         language: '',
         createdAfter: '',
         createdBefore: '2024-12-31',
+        searchTitle: '',
+        searchCode: '',
       });
     });
 

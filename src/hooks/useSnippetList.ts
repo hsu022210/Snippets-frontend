@@ -1,13 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { useApiRequest } from './useApiRequest'
-import { Snippet, SnippetListResponse } from '../types/interfaces'
-
-interface FilterOptions {
-  language?: string;
-  createdAfter?: string;
-  createdBefore?: string;
-}
+import { Snippet, SnippetListResponse, FilterOptions } from '../types/interfaces'
 
 export const useSnippetList = (filters?: FilterOptions) => {
   const [snippets, setSnippets] = useState<Snippet[]>([]);
@@ -27,6 +21,12 @@ export const useSnippetList = (filters?: FilterOptions) => {
       }
       if (filters?.createdBefore) {
         params.append('created_before', filters.createdBefore);
+      }
+      if (filters?.searchTitle) {
+        params.append('search_title', filters.searchTitle);
+      }
+      if (filters?.searchCode) {
+        params.append('search_code', filters.searchCode);
       }
 
       const response = await makeRequest<SnippetListResponse>(

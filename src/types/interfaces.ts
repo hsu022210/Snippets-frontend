@@ -305,12 +305,16 @@ export interface SnippetFilterValues {
   language: string;
   createdAfter: string;
   createdBefore: string;
+  searchTitle: string;
+  searchCode: string;
 }
 
 export interface SnippetFilterProps {
   language: string;
   createdAfter: string;
   createdBefore: string;
+  searchTitle?: string;
+  searchCode?: string;
   onFilterChange: (filters: SnippetFilterValues) => void;
 }
 
@@ -318,6 +322,22 @@ export interface SnippetFilterSectionProps {
   language: string;
   createdAfter: string;
   createdBefore: string;
+  searchTitle?: string;
+  searchCode?: string;
   onFilterChange: (filters: SnippetFilterValues) => void;
   onReset: () => void;
+}
+
+export interface FilterOptions {
+  language?: string;
+  createdAfter?: string;
+  createdBefore?: string;
+  searchTitle?: string;
+  searchCode?: string;
+}
+
+export interface SnippetSearchProps {
+  searchTitle: string;
+  searchCode: string;
+  onSearchChange: (field: 'searchTitle' | 'searchCode', value: string) => void;
 } 

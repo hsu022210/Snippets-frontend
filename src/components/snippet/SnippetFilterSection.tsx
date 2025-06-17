@@ -16,6 +16,8 @@ const SnippetFilterSection: React.FC<SnippetFilterSectionProps> = ({
     language,
     createdAfter,
     createdBefore,
+    searchTitle: '',
+    searchCode: '',
   });
 
   const activeFiltersCount = [language, createdAfter, createdBefore].filter(Boolean).length;
@@ -27,6 +29,8 @@ const SnippetFilterSection: React.FC<SnippetFilterSectionProps> = ({
       language,
       createdAfter,
       createdBefore,
+      searchTitle: '',
+      searchCode: '',
     });
   };
 
@@ -46,6 +50,8 @@ const SnippetFilterSection: React.FC<SnippetFilterSectionProps> = ({
       language: '',
       createdAfter: '',
       createdBefore: '',
+      searchTitle: '',
+      searchCode: '',
     };
     setLocalFilters(emptyFilters);
     onReset();

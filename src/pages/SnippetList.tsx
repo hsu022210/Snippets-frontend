@@ -7,6 +7,7 @@ import SnippetListHeader from '../components/snippet/SnippetListHeader'
 import SnippetCard from '../components/snippet/SnippetCard'
 import EmptySnippetList from '../components/snippet/EmptySnippetList'
 import SnippetFilterSection from '../components/snippet/SnippetFilterSection'
+import SnippetSearch from '../components/snippet/SnippetSearch'
 import { SnippetFilterValues } from '../types/interfaces'
 
 const SnippetList: React.FC = () => {
@@ -14,20 +15,36 @@ const SnippetList: React.FC = () => {
     language: '',
     createdAfter: '',
     createdBefore: '',
+    searchTitle: '',
+    searchCode: '',
   });
 
   const { snippets, loading, error } = useSnippetList(filters);
 
   const handleFilterChange = (newFilters: SnippetFilterValues) => {
-    setFilters(newFilters);
+    setFilters(prev => ({
+      ...prev,
+      language: newFilters.language,
+      createdAfter: newFilters.createdAfter,
+      createdBefore: newFilters.createdBefore,
+    }));
+  };
+
+  const handleSearchChange = (field: 'searchTitle' | 'searchCode', value: string) => {
+    setFilters(prev => ({
+      ...prev,
+      searchTitle: field === 'searchTitle' ? value : '',
+      searchCode: field === 'searchCode' ? value : '',
+    }));
   };
 
   const handleResetFilters = () => {
-    setFilters({
+    setFilters(prev => ({
+      ...prev,
       language: '',
       createdAfter: '',
       createdBefore: '',
-    });
+    }));
   };
 
   if (loading) {
@@ -51,6 +68,11 @@ const SnippetList: React.FC = () => {
   return (
     <Container fluid>
       <SnippetListHeader />
+      <SnippetSearch
+        searchTitle={filters.searchTitle}
+        searchCode={filters.searchCode}
+        onSearchChange={handleSearchChange}
+      />
       <SnippetFilterSection
         language={filters.language}
         createdAfter={filters.createdAfter}
