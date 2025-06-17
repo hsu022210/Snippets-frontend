@@ -11,6 +11,7 @@ import { AuthProvider } from '../contexts/AuthContext'
 import { CodeMirrorThemeProvider } from '../contexts/CodeMirrorThemeContext'
 import { TestProvidersProps } from '../types/interfaces'
 import { LocalStorageMock } from '../types/interfaces'
+import { PreviewHeightProvider } from '@/contexts/PreviewHeightContext'
 
 // Extend Vitest's expect method with testing-library matchers
 expect.extend(matchers)
@@ -94,11 +95,13 @@ export const TestProviders: React.FC<TestProvidersProps> = ({ children }) => {
     <ToastProvider>
       <ThemeProvider>
         <CodeMirrorThemeProvider>
-          <AuthProvider>
-          <MemoryRouter>
-            {children}
-          </MemoryRouter>
-          </AuthProvider>
+          <PreviewHeightProvider>
+            <AuthProvider>
+              <MemoryRouter>
+                {children}
+              </MemoryRouter>
+            </AuthProvider>
+          </PreviewHeightProvider>
         </CodeMirrorThemeProvider>
       </ThemeProvider>
     </ToastProvider>

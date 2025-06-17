@@ -239,6 +239,15 @@ export interface CodeMirrorThemeProviderProps {
   children: React.ReactNode;
 }
 
+export interface PreviewHeightContextType {
+  previewHeight: number;
+  setPreviewHeight: (height: number) => void;
+}
+
+export interface PreviewHeightProviderProps {
+  children: React.ReactNode;
+}
+
 export type ToastType = 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
 
 export interface ToastContextType {

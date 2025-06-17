@@ -5,11 +5,13 @@ import Button from '../shared/Button'
 import CodeMirror from '@uiw/react-codemirror'
 import { getLanguageExtension } from '../../utils/languageUtils'
 import { useCodeMirrorTheme } from '../../contexts/CodeMirrorThemeContext'
+import { usePreviewHeight } from '../../contexts/PreviewHeightContext'
 import * as themes from '@uiw/codemirror-themes-all'
 import { SnippetCardProps } from '../../types/interfaces'
 
 export const SnippetCard = ({ snippet }: SnippetCardProps) => {
   const { selectedTheme } = useCodeMirrorTheme();
+  const { previewHeight } = usePreviewHeight();
   const theme = (themes as Record<string, any>)[selectedTheme] || (themes as Record<string, any>)['copilot'];
 
   return (
@@ -28,7 +30,7 @@ export const SnippetCard = ({ snippet }: SnippetCardProps) => {
           <div className="snippet-preview flex-grow-1">
             <CodeMirror
               value={snippet.code}
-              maxHeight="75px"
+              maxHeight={`${previewHeight}px`}
               theme={theme}
               editable={false}
               basicSetup={{

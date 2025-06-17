@@ -51,7 +51,7 @@ describe('Settings Page', () => {
     const editor = screen.getByTestId('codemirror-mock')
     expect(editor).toBeInTheDocument()
     expect(editor).toHaveAttribute('data-editable', 'false')
-    expect(editor).toHaveAttribute('data-height', '200px')
+    expect(editor).toHaveAttribute('data-height', '75px')
   })
 
   it('displays sample code in preview', () => {
