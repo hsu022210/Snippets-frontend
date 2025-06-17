@@ -8,6 +8,7 @@ import SnippetListHeader from '../SnippetListHeader'
 import DeleteConfirmationModal from '../DeleteConfirmationModal'
 import SnippetLanguageSelector from '../SnippetLanguageSelector'
 import SnippetHeader from '../SnippetHeader'
+import SnippetSearch from '../SnippetSearch'
 import { Snippet } from '@/types/interfaces.ts'
 import { useTheme } from '../../../contexts/ThemeContext'
 import SnippetFilter from '../SnippetFilter'
@@ -495,6 +496,100 @@ describe('Snippet Components', () => {
         expect(screen.getByText('Language:')).toBeInTheDocument();
         expect(screen.getByText('None')).toBeInTheDocument();
       });
+    });
+  })
+
+  describe('SnippetSearch', () => {
+    const defaultProps = {
+      searchTitle: '',
+      searchCode: '',
+      onSearchChange: vi.fn(),
+    };
+
+    it('renders search components', () => {
+      render(<SnippetSearch {...defaultProps} />);
+      
+      expect(screen.getByText('Title', { selector: 'button' })).toBeInTheDocument();
+      expect(screen.getByPlaceholderText(/search snippets by title/i)).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /search/i })).toBeInTheDocument();
+    });
+
+    it('handles search type change', async () => {
+      render(<SnippetSearch {...defaultProps} />);
+      
+      const dropdownToggle = screen.getByText('Title', { selector: 'button' });
+      await userEvent.click(dropdownToggle);
+      
+      const codeOption = screen.getByText('Code');
+      await userEvent.click(codeOption);
+      
+      expect(screen.getByText('Code', { selector: 'button' })).toBeInTheDocument();
+      expect(screen.getByPlaceholderText(/search snippets by code/i)).toBeInTheDocument();
+    });
+
+    it('handles search input and submission', async () => {
+      render(<SnippetSearch {...defaultProps} />);
+      
+      const searchInput = screen.getByPlaceholderText(/search snippets by title/i);
+      const searchButton = screen.getByRole('button', { name: /search/i });
+      
+      // Test search button is disabled when input is empty
+      expect(searchButton).toBeDisabled();
+      
+      // Type in search input
+      await userEvent.type(searchInput, 'test search');
+      
+      // Test search button is enabled
+      expect(searchButton).not.toBeDisabled();
+      
+      // Click search button
+      await userEvent.click(searchButton);
+      
+      expect(defaultProps.onSearchChange).toHaveBeenCalledWith('searchTitle', 'test search');
+    });
+
+    it('handles search with Enter key', async () => {
+      render(<SnippetSearch {...defaultProps} />);
+      
+      const searchInput = screen.getByPlaceholderText(/search snippets by title/i);
+      await userEvent.type(searchInput, 'test search{enter}');
+      
+      expect(defaultProps.onSearchChange).toHaveBeenCalledWith('searchTitle', 'test search');
+    });
+
+    it('handles clear search', async () => {
+      render(<SnippetSearch {...defaultProps} />);
+      
+      const searchInput = screen.getByPlaceholderText(/search snippets by title/i);
+      await userEvent.type(searchInput, 'test search');
+      
+      const clearButton = screen.getByRole('button', { name: /clear search/i });
+      await userEvent.click(clearButton);
+      
+      expect(searchInput).toHaveValue('');
+      expect(defaultProps.onSearchChange).toHaveBeenCalledWith('searchTitle', '');
+    });
+
+    it('updates search value when switching search type', async () => {
+      const props = {
+        ...defaultProps,
+        searchTitle: 'title search',
+        searchCode: 'code search',
+      };
+      
+      render(<SnippetSearch {...props} />);
+      
+      // Initial state should show title search
+      expect(screen.getByPlaceholderText(/search snippets by title/i)).toHaveValue('title search');
+      
+      // Switch to code search
+      const dropdownToggle = screen.getByText('Title', { selector: 'button' });
+      await userEvent.click(dropdownToggle);
+      const codeOption = screen.getByText('Code');
+      await userEvent.click(codeOption);
+      
+      // Should now show code search value
+      expect(screen.getByPlaceholderText(/search snippets by code/i)).toHaveValue('code search');
     });
   })
 }) 
