@@ -11,7 +11,7 @@ const Footer: React.FC = () => {
       <Container fluid className={`text-center ${isDark ? 'text-light' : 'text-dark'}`}>
         <p className="mb-0">
           © {currentYear} Alec Hsu. All rights reserved. |{' '}
-          <Link to="/disclaimer" className={isDark ? 'text-light' : 'text-dark'} style={{ textDecoration: 'none' }}>
+          <Link to="/disclaimer" className={`text-decoration-none ${isDark ? 'text-light' : 'text-dark'}`}>
             Disclaimer
           </Link>
         </p>

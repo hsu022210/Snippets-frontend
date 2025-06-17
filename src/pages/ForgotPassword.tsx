@@ -67,7 +67,7 @@ const ForgotPassword = () => {
           Send Reset Instructions
         </SubmitButton>
         <div className="text-center mt-3">
-          <Link to="/login">Back to Login</Link>
+          <Link className="text-decoration-none" to="/login">Back to Login</Link>
         </div>
       </Form>
     </AuthForm>

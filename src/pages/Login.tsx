@@ -77,7 +77,7 @@ const Login = () => {
           Login
         </SubmitButton>
         <div className="text-center mt-3">
-          <Link to="/forgot-password">Forgot Password?</Link>
+          <Link className="text-decoration-none" to="/forgot-password">Forgot Password?</Link>
         </div>
       </Form>
     </AuthForm>
