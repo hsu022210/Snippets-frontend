@@ -9,13 +9,24 @@ import { usePreviewHeight } from '../../contexts/PreviewHeightContext'
 import { useShareSnippet } from '../../hooks/useShareSnippet'
 import * as themes from '@uiw/codemirror-themes-all'
 import { SnippetCardProps } from '../../types/interfaces'
-import { Link as LinkIcon } from 'react-bootstrap-icons'
+import { Link as LinkIcon, Clock } from 'react-bootstrap-icons'
+import { formatDistanceToNow } from 'date-fns'
 
 export const SnippetCard = ({ snippet }: SnippetCardProps) => {
   const { selectedTheme } = useCodeMirrorTheme();
   const { previewHeight } = usePreviewHeight();
   const { shareSnippetTooltip, handleShare } = useShareSnippet();
   const theme = (themes as Record<string, any>)[selectedTheme] || (themes as Record<string, any>)['copilot'];
+
+  const formatCreatedTime = () => {
+    try {
+      if (!snippet.created) return 'Unknown time';
+      return formatDistanceToNow(new Date(snippet.created), { addSuffix: true });
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return 'Unknown time';
+    }
+  };
 
   return (
     <Card hover className="h-100">
@@ -41,9 +52,15 @@ export const SnippetCard = ({ snippet }: SnippetCardProps) => {
                 </Button>
               </OverlayTrigger>
             </div>
-            <Subtitle className="text-muted">
-              Language: {snippet.language || 'None'}
-            </Subtitle>
+            <div className="d-flex flex-column gap-1 text-muted">
+              <Subtitle className="mb-0">
+                Language: {snippet.language || 'None'}
+              </Subtitle>
+              <div className="d-flex align-items-center gap-1">
+                <Clock size={14} />
+                <small>{formatCreatedTime()}</small>
+              </div>
+            </div>
           </div>
           
           <div className="snippet-preview flex-grow-1">

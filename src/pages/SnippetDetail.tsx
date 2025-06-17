@@ -11,6 +11,8 @@ import DeleteConfirmationModal from '../components/snippet/DeleteConfirmationMod
 import Container from '../components/shared/Container'
 import CodeEditor from '../components/shared/CodeEditor'
 import { useAuth } from '../contexts/AuthContext'
+import { formatDistanceToNow, format } from 'date-fns'
+import { Clock } from 'react-bootstrap-icons'
 
 const SnippetDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -35,6 +37,28 @@ const SnippetDetail: React.FC = () => {
     handleDelete,
     handleCancel
   } = useSnippet(Number(id));
+
+  const formatCreatedTime = () => {
+    try {
+      if (!snippet?.created) {
+        return {
+          relative: 'Unknown time',
+          absolute: 'Unknown time'
+        };
+      }
+      const date = new Date(snippet.created);
+      return {
+        relative: formatDistanceToNow(date, { addSuffix: true }),
+        absolute: format(date, 'MMM d, yyyy h:mm a')
+      };
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return {
+        relative: 'Unknown time',
+        absolute: 'Unknown time'
+      };
+    }
+  };
 
   const processedCode = useMemo(() => {
     const codeToProcess = isEditing ? editedCode : snippet?.code;
@@ -77,6 +101,8 @@ const SnippetDetail: React.FC = () => {
     );
   }
 
+  const createdTime = formatCreatedTime();
+
   return (
     <ErrorBoundary>
       <Container>
@@ -105,12 +131,21 @@ const SnippetDetail: React.FC = () => {
           snippetId={snippet.id}
         />
 
-        <SnippetLanguageSelector
-          isEditing={isEditing}
-          editedLanguage={editedLanguage}
-          setEditedLanguage={setEditedLanguage}
-          language={snippet.language}
-        />
+        <div className="d-flex flex-column gap-2 mb-3">
+          <SnippetLanguageSelector
+            isEditing={isEditing}
+            editedLanguage={editedLanguage}
+            setEditedLanguage={setEditedLanguage}
+            language={snippet.language}
+          />
+          <div className="d-flex align-items-center gap-1 text-muted">
+            <Clock size={14} />
+            <small>
+              Created {createdTime.relative} 
+              ({createdTime.absolute})
+            </small>
+          </div>
+        </div>
 
         {saveError && (
           <Alert variant="danger" className="mb-3">

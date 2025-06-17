@@ -33,7 +33,7 @@ export interface Snippet {
   title: string;
   code: string;
   language: string;
-  created_at: string;
+  created: string;
   updated_at: string;
   user?: number;
 }
