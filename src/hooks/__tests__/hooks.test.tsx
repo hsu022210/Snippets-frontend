@@ -1,8 +1,9 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { renderHook, act, waitFor } from '@testing-library/react'
 import { useApiRequest } from '../useApiRequest'
 import { useSnippetList } from '../useSnippetList'
 import { useSnippet, useCreateSnippet } from '../useSnippet'
+import { useShareSnippet } from '../useShareSnippet'
 import { TestProviders } from '../../test/setup'
 import { http, HttpResponse } from 'msw'
 import axios from 'axios'
@@ -287,4 +288,70 @@ describe('Hooks (with MSW)', () => {
       })
     })
   })
+
+  describe('useShareSnippet', () => {
+    const mockClipboard = {
+      writeText: vi.fn(),
+    };
+
+    beforeEach(() => {
+      // Mock clipboard API
+      Object.assign(navigator, {
+        clipboard: mockClipboard,
+      });
+      vi.clearAllMocks();
+      // Mock timers
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it('should copy snippet URL to clipboard and show success toast', async () => {
+      const { result } = renderHook(() => useShareSnippet(), {
+        wrapper: TestProviders,
+      });
+
+      const snippetId = '123';
+      const expectedUrl = `${window.location.origin}/snippets/${snippetId}`;
+
+      await act(async () => {
+        await result.current.handleShare(snippetId);
+      });
+
+      expect(mockClipboard.writeText).toHaveBeenCalledWith(expectedUrl);
+      expect(result.current.shareSnippetTooltip).toBe('Link copied!');
+
+      // Fast-forward timers
+      await act(async () => {
+        vi.advanceTimersByTime(2000);
+      });
+
+      expect(result.current.shareSnippetTooltip).toBe('Share snippet');
+    });
+
+    it('should handle clipboard error and show error toast', async () => {
+      const { result } = renderHook(() => useShareSnippet(), {
+        wrapper: TestProviders,
+      });
+
+      // Mock clipboard error
+      mockClipboard.writeText.mockRejectedValueOnce(new Error('Clipboard error'));
+
+      await act(async () => {
+        await result.current.handleShare('123');
+      });
+
+      expect(result.current.shareSnippetTooltip).toBe('Failed to copy link');
+    });
+
+    it('should initialize with default tooltip text', () => {
+      const { result } = renderHook(() => useShareSnippet(), {
+        wrapper: TestProviders,
+      });
+
+      expect(result.current.shareSnippetTooltip).toBe('Share snippet');
+    });
+  });
 }) 

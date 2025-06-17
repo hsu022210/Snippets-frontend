@@ -59,6 +59,7 @@ export interface SnippetHeaderProps {
   setShowDeleteModal: (show: boolean) => void;
   title: string;
   isAuthenticated: boolean;
+  snippetId: string;
 }
 
 export interface SnippetCardProps {

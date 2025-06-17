@@ -102,6 +102,7 @@ const SnippetDetail: React.FC = () => {
           setShowDeleteModal={setShowDeleteModal}
           title={snippet.title}
           isAuthenticated={!!token}
+          snippetId={snippet.id}
         />
 
         <SnippetLanguageSelector

@@ -1,17 +1,20 @@
 import { Link } from 'react-router-dom'
-import { Stack } from 'react-bootstrap'
+import { Stack, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import Card, { Body, Title, Subtitle } from '../shared/Card'
 import Button from '../shared/Button'
 import CodeMirror from '@uiw/react-codemirror'
 import { getLanguageExtension } from '../../utils/languageUtils'
 import { useCodeMirrorTheme } from '../../contexts/CodeMirrorThemeContext'
 import { usePreviewHeight } from '../../contexts/PreviewHeightContext'
+import { useShareSnippet } from '../../hooks/useShareSnippet'
 import * as themes from '@uiw/codemirror-themes-all'
 import { SnippetCardProps } from '../../types/interfaces'
+import { Link as LinkIcon } from 'react-bootstrap-icons'
 
 export const SnippetCard = ({ snippet }: SnippetCardProps) => {
   const { selectedTheme } = useCodeMirrorTheme();
   const { previewHeight } = usePreviewHeight();
+  const { shareSnippetTooltip, handleShare } = useShareSnippet();
   const theme = (themes as Record<string, any>)[selectedTheme] || (themes as Record<string, any>)['copilot'];
 
   return (
@@ -19,9 +22,25 @@ export const SnippetCard = ({ snippet }: SnippetCardProps) => {
       <Body className="d-flex flex-column">
         <Stack gap={3}>
           <div>
-            <Title className="mb-3">
-              {snippet.title || 'Untitled Snippet'}
-            </Title>
+            <div className="d-flex justify-content-between align-items-start mb-3">
+              <Title className="mb-0">
+                {snippet.title || 'Untitled Snippet'}
+              </Title>
+              <OverlayTrigger
+                placement="top"
+                overlay={<Tooltip>{shareSnippetTooltip}</Tooltip>}
+              >
+                <Button
+                  variant="outline-secondary"
+                  size="sm"
+                  onClick={() => handleShare(snippet.id)}
+                  className="d-flex align-items-center share-btn"
+                  aria-label="Share snippet"
+                >
+                  <LinkIcon size={18} />
+                </Button>
+              </OverlayTrigger>
+            </div>
             <Subtitle className="text-muted">
               Language: {snippet.language || 'None'}
             </Subtitle>

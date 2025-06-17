@@ -1,8 +1,7 @@
 import { Form, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import Button from '../shared/Button'
-import { useToast } from '../../contexts/ToastContext'
 import { Save, XCircle, PencilSquare, Trash, Link } from 'react-bootstrap-icons'
-import { useState } from 'react'
+import { useShareSnippet } from '../../hooks/useShareSnippet'
 import { SnippetHeaderProps } from '../../types/interfaces'
 
 const SnippetHeader: React.FC<SnippetHeaderProps> = ({
@@ -15,24 +14,10 @@ const SnippetHeader: React.FC<SnippetHeaderProps> = ({
   setIsEditing,
   setShowDeleteModal,
   title,
-  isAuthenticated
+  isAuthenticated,
+  snippetId
 }) => {
-  const { showToast } = useToast();
-  const [shareSnippetTooltip, setShareSnippetTooltip] = useState<string>('Share snippet');
-
-  const handleShare = async () => {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      showToast('Link copied to clipboard!');
-      setShareSnippetTooltip('Link copied!');
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      setShareSnippetTooltip('Share snippet');
-    } catch (error) {
-      console.error('Failed to copy link:', error);
-      showToast('Failed to copy link', 'danger');
-      setShareSnippetTooltip('Failed to copy link');
-    }
-  };
+  const { shareSnippetTooltip, handleShare } = useShareSnippet();
 
   return (
     <div className="mb-4 snippet-header">
@@ -77,7 +62,7 @@ const SnippetHeader: React.FC<SnippetHeaderProps> = ({
               <Button
                 variant="outline-secondary"
                 size="sm"
-                onClick={handleShare}
+                onClick={() => handleShare(snippetId)}
                 className="d-flex align-items-center share-btn"
                 aria-label="Share snippet"
               >
