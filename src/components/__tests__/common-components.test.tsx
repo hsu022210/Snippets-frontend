@@ -7,6 +7,7 @@ import PrivateRoute from '../PrivateRoute'
 import ErrorBoundary from '../ErrorBoundary'
 import LogoutLoadingSpinner from '../LogoutLoadingSpinner'
 import Footer from '../Footer'
+import Disclaimer from '../Disclaimer'
 import { useTheme } from '../../contexts/ThemeContext'
 
 // Mock the useTheme hook
@@ -268,5 +269,86 @@ describe('Common Components', () => {
         expect(mainContainer).toHaveClass('gap-2', 'gap-md-3');
       });
     });
+  })
+
+  describe('Disclaimer', () => {
+    const renderDisclaimer = () => {
+      return render(
+        <TestProviders>
+          <Disclaimer />
+        </TestProviders>
+      )
+    }
+
+    it('renders disclaimer content correctly', () => {
+      renderDisclaimer()
+      
+      // Check title
+      expect(screen.getByText('DISCLAIMER')).toBeInTheDocument()
+      
+      // Check last updated text
+      expect(screen.getByText(/Last updated/)).toBeInTheDocument()
+      expect(screen.getByText('June 05, 2025')).toBeInTheDocument()
+      
+      // Check website disclaimer heading
+      expect(screen.getByText('WEBSITE DISCLAIMER')).toBeInTheDocument()
+      
+      // Check disclaimer text
+      expect(screen.getByText(/The information provided by Alec Hsu/)).toBeInTheDocument()
+      expect(screen.getByText(/UNDER NO CIRCUMSTANCE SHALL WE HAVE ANY LIABILITY/)).toBeInTheDocument()
+    })
+
+    it('renders logo correctly', () => {
+      renderDisclaimer()
+      
+      const logo = screen.getByAltText('Logo')
+      expect(logo).toBeInTheDocument()
+      expect(logo).toHaveAttribute('src', '/code-icon-lg.svg')
+      expect(logo).toHaveAttribute('width', '96')
+      expect(logo).toHaveAttribute('height', '20')
+    })
+
+    it('renders website link correctly', () => {
+      renderDisclaimer()
+      
+      const link = screen.getByText('https://snippets-frontend-ogbf.onrender.com')
+      expect(link).toBeInTheDocument()
+      expect(link.closest('a')).toHaveAttribute('href', 'https://snippets-frontend-ogbf.onrender.com')
+      expect(link.closest('a')).toHaveAttribute('target', '_blank')
+      expect(link.closest('a')).toHaveAttribute('rel', 'noopener noreferrer')
+    })
+
+    it('has correct Bootstrap classes and structure', () => {
+      renderDisclaimer()
+      
+      // Check container
+      const container = screen.getByTestId('disclaimer-container')
+      expect(container).toHaveClass('py-4')
+      
+      // Check row
+      const row = container.querySelector('.row')
+      expect(row).toHaveClass('justify-content-center')
+      
+      // Check column
+      const col = row?.querySelector('.col-lg-8')
+      expect(col).toHaveClass('col-md-10', 'col-12')
+      
+      // Check card
+      const card = col?.querySelector('.card')
+      expect(card).toHaveClass('border-0')
+      
+      // Check card body
+      const cardBody = card?.querySelector('.card-body')
+      expect(cardBody).toBeInTheDocument()
+      
+      // Check figure
+      const figure = screen.getByRole('figure')
+      expect(figure).toHaveClass('figure')
+      
+      // Check headings
+      const headings = screen.getAllByRole('heading')
+      expect(headings[0]).toHaveClass('h2', 'fw-bold', 'mb-3')
+      expect(headings[1]).toHaveClass('h4', 'fw-bold', 'mb-3')
+    })
   })
 })
