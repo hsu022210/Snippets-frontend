@@ -344,4 +344,27 @@ export interface SnippetSearchProps {
   searchCode: string;
   onSearchChange: (field: 'searchTitle' | 'searchCode', value: string) => void;
   loading?: boolean;
+}
+
+export interface PaginationItemsProps {
+  totalPages: number;
+  currentPage: number;
+  onPageChange: (page: number) => void;
+}
+
+export interface SnippetListHeaderProps {
+  totalCount: number;
+  hasActiveFilters: boolean;
+}
+
+export interface SnippetGridProps {
+  snippets: Snippet[];
+}
+
+export interface PaginationControlsProps {
+  currentPage: number;
+  totalPages: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
+  onPageChange: (page: number) => void;
 } 
