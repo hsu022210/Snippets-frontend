@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react'
+import { ChangeEvent } from 'react'
 import { useCodeMirrorTheme } from '../contexts/CodeMirrorThemeContext'
 import { usePreviewHeight } from '../contexts/PreviewHeightContext'
 import { Container, Card, Form, Row, Col } from 'react-bootstrap'

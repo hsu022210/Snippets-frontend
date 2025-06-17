@@ -1,10 +1,11 @@
-import { Offcanvas, Button, Badge } from 'react-bootstrap';
+import { Offcanvas, Badge } from 'react-bootstrap';
 import { TbFilter } from 'react-icons/tb';
 import { Link } from 'react-router-dom';
 import SnippetFilter from './SnippetFilter';
 import { SnippetFilterSectionProps, SnippetFilterValues } from '../../types/interfaces';
 import { useState } from 'react';
 import InlineLoadingSpinner from '../InlineLoadingSpinner';
+import Button from '../shared/Button';
 
 const SnippetFilterSection: React.FC<SnippetFilterSectionProps> = ({
   language,
@@ -67,8 +68,8 @@ const SnippetFilterSection: React.FC<SnippetFilterSectionProps> = ({
         <Button
           variant="outline-primary"
           onClick={handleShow}
-          className="d-flex align-items-center gap-2"
           disabled={loading}
+          className="d-flex align-items-center gap-2"
         >
           <TbFilter size={16} />
           Filters
@@ -81,8 +82,8 @@ const SnippetFilterSection: React.FC<SnippetFilterSectionProps> = ({
         <Link to="/create-snippet" className="text-decoration-none">
           <Button
             variant="outline-primary"
-            className="d-flex align-items-center gap-2"
             disabled={loading}
+            className="d-flex align-items-center gap-2"
           >
             Create Snippet
           </Button>
