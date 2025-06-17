@@ -70,11 +70,6 @@ const SnippetList: React.FC = () => {
     <Container fluid>
       <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
         <h2 className="h3 mb-3 mb-md-0">My Snippets</h2>
-        <div className="d-flex align-items-center gap-2">
-          <Badge bg="secondary" className="fs-6 px-3 py-2">
-            {`${hasActiveFilters ? 'Filtered:' : 'Total:'} ${totalCount}`}
-          </Badge>
-        </div>
       </div>
       <SnippetSearch
         searchTitle={filters.searchTitle}
@@ -82,14 +77,21 @@ const SnippetList: React.FC = () => {
         onSearchChange={handleSearchChange}
         loading={loading}
       />
-      <SnippetFilterSection
-        language={filters.language}
-        createdAfter={filters.createdAfter}
-        createdBefore={filters.createdBefore}
-        onFilterChange={handleFilterChange}
-        onReset={handleResetFilters}
-        loading={loading}
-      />
+      <div className="d-flex flex-column gap-2 mb-4">
+        <SnippetFilterSection
+          language={filters.language}
+          createdAfter={filters.createdAfter}
+          createdBefore={filters.createdBefore}
+          onFilterChange={handleFilterChange}
+          onReset={handleResetFilters}
+          loading={loading}
+        />
+        <div className="d-flex justify-content-start">
+          <Badge bg="secondary" className="fs-6 px-3 py-2 rounded-pill">
+            {`${hasActiveFilters ? 'Filtered:' : 'Total:'} ${totalCount}`}
+          </Badge>
+        </div>
+      </div>
       
       {snippets.length > 0 ? (
         <Row xs={1} md={2} lg={3} className="g-4">
