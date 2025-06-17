@@ -9,6 +9,7 @@ A modern web application for managing and organizing code snippets across multip
 - 📝 Rich text editing with CodeMirror
 - 📱 Responsive design with Bootstrap
 - 🧪 Comprehensive test coverage with Vitest
+- 🔍 Advanced search and filtering capabilities
 
 ## Supported Languages
 
@@ -25,31 +26,9 @@ A modern web application for managing and organizing code snippets across multip
 - XML
 - Markdown
 
-## Getting Started
-
-1. Clone the repository
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Start the development server:
-   ```bash
-   npm run dev
-   ```
-
-## Available Scripts
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run test` - Run tests
-- `npm run test:ui` - Run tests with UI
-- `npm run test:coverage` - Run tests with coverage report
-- `npm run lint` - Run ESLint
-
 ## Tech Stack
 
-- React 19
+- React
 - TypeScript
 - Vite
 - CodeMirror
@@ -62,4 +41,33 @@ A modern web application for managing and organizing code snippets across multip
 
 This project uses TypeScript with strict type checking and ESLint for code quality. The development environment is set up with Vite for fast development and hot module replacement (HMR).
 
-For production builds, we recommend using TypeScript with type-aware lint rules enabled. The project is already configured with TypeScript and `typescript-eslint` for optimal development experience.
+### Code Style
+
+- Follow the TypeScript strict mode guidelines
+- Use functional components with hooks
+- Implement proper error boundaries
+- Write tests for new features
+- Follow the existing code style and patterns
+
+### Testing
+
+The project uses Vitest for testing. Write tests for:
+- Component rendering
+- User interactions
+- API calls
+- Utility functions
+
+Run tests with:
+```bash
+npm run test        # Run tests in watch mode
+npm run test:ui     # Run tests with UI
+npm run test:coverage  # Generate coverage report
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
