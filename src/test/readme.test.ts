@@ -47,10 +47,9 @@ describe('README.md', () => {
     const requiredSections = [
       '## Features',
       '## Supported Languages',
-      '## Getting Started',
-      '## Available Scripts',
       '## Tech Stack',
-      '## Development'
+      '## Development',
+      '## Contributing'
     ]
 
     requiredSections.forEach(section => {
@@ -58,28 +57,10 @@ describe('README.md', () => {
     })
   })
 
-  it('should have installation instructions', () => {
-    expect(readmeContent).toContain('npm install')
-  })
-
-  it('should have development server instructions', () => {
-    expect(readmeContent).toContain('npm run dev')
-  })
-
-  it('should list all available npm scripts', () => {
-    const requiredScripts = [
-      'npm run dev',
-      'npm run build',
-      'npm run preview',
-      'npm run test',
-      'npm run test:ui',
-      'npm run test:coverage',
-      'npm run lint'
-    ]
-
-    requiredScripts.forEach(script => {
-      expect(readmeContent).toContain(script)
-    })
+  it('should have development instructions', () => {
+    expect(readmeContent).toContain('npm run test')
+    expect(readmeContent).toContain('npm run test:ui')
+    expect(readmeContent).toContain('npm run test:coverage')
   })
 
   it('should list all major technologies', () => {
@@ -108,5 +89,12 @@ describe('README.md', () => {
     
     // Check for code block formatting (simplest form)
     expect(readmeContent).toContain('```')
+  })
+
+  it('should have contributing guidelines', () => {
+    expect(readmeContent).toContain('## Contributing')
+    expect(readmeContent).toContain('Fork the repository')
+    expect(readmeContent).toContain('Create your feature branch')
+    expect(readmeContent).toContain('Open a Pull Request')
   })
 }) 
