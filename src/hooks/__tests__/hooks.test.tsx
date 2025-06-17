@@ -51,7 +51,7 @@ describe('Hooks (with MSW)', () => {
       // MSW handlers reset automatically
     })
 
-    it('should fetch and return snippets', async () => {
+    it('should fetch and return snippets with total count', async () => {
       const { result } = renderHook(() => useSnippetList(), {
         wrapper: TestProviders,
       })
@@ -59,6 +59,7 @@ describe('Hooks (with MSW)', () => {
       expect(result.current.loading).toBe(true)
       expect(result.current.error).toBe('')
       expect(result.current.snippets).toEqual([])
+      expect(result.current.totalCount).toBe(0)
       
       await waitFor(() => {
         expect(result.current.loading).toBe(false)
@@ -66,6 +67,7 @@ describe('Hooks (with MSW)', () => {
       
       expect(result.current.error).toBe('')
       expect(result.current.snippets.length).toBeGreaterThan(0)
+      expect(result.current.totalCount).toBeGreaterThan(0)
       const snippet = result.current.snippets[0] as Snippet
       expect(snippet.id).toBe('1')
     })
@@ -88,6 +90,7 @@ describe('Hooks (with MSW)', () => {
       
       expect(result.current.error).toMatch(/Failed to fetch/)
       expect(result.current.snippets).toEqual([])
+      expect(result.current.totalCount).toBe(0)
     })
 
     it('should filter snippets by language', async () => {
@@ -242,6 +245,35 @@ describe('Hooks (with MSW)', () => {
       expect(result.current.snippets.length).toBe(1)
       expect(result.current.snippets[0].language).toBe(filters.language)
       expect(result.current.snippets[0].title.toLowerCase()).toContain(filters.searchTitle)
+    })
+
+    it('should update snippets and total count when filters change', async () => {
+      const { result, rerender } = renderHook(
+        ({ filters }) => useSnippetList(filters),
+        {
+          wrapper: TestProviders,
+          initialProps: { filters: {} },
+        }
+      )
+
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false)
+      })
+
+      const initialCount = result.current.totalCount
+
+      // Update filters
+      rerender({ filters: { language: 'javascript' } })
+
+      // Wait for loading to complete
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false)
+      })
+
+      // The total count should remain the same, but filtered snippets might be different
+      expect(result.current.totalCount).toBe(initialCount)
+      // The snippets array might be different due to filtering
+      expect(Array.isArray(result.current.snippets)).toBe(true)
     })
   })
 

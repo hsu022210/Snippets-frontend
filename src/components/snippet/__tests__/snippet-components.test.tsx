@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { TestProviders } from '../../../test/setup.tsx'
 import SnippetCard from '../SnippetCard'
@@ -12,7 +12,6 @@ import { Snippet } from '@/types/interfaces.ts'
 import { useTheme } from '../../../contexts/ThemeContext'
 import SnippetFilter from '../SnippetFilter'
 import SnippetFilterSection from '../SnippetFilterSection'
-import { MemoryRouter } from 'react-router-dom'
 
 // Mock data
 const mockSnippet: Snippet = {
@@ -21,7 +20,6 @@ const mockSnippet: Snippet = {
   language: 'javascript',
   code: 'console.log("test")',
   created: new Date().toISOString(),
-  updated_at: new Date().toISOString(),
 }
 
 // Mock the useTheme hook

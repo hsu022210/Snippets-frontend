@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Row, Col, Stack, Alert } from 'react-bootstrap'
+import { Row, Col, Stack, Alert, Badge } from 'react-bootstrap'
 import Container from '../components/shared/Container'
 import InlineLoadingSpinner from '../components/InlineLoadingSpinner'
 import { useSnippetList } from '../hooks/useSnippetList'
@@ -18,7 +18,7 @@ const SnippetList: React.FC = () => {
     searchCode: '',
   });
 
-  const { snippets, loading, error } = useSnippetList(filters);
+  const { snippets, totalCount, loading, error } = useSnippetList(filters);
 
   const handleFilterChange = (newFilters: SnippetFilterValues) => {
     setFilters(prev => ({
@@ -46,6 +46,8 @@ const SnippetList: React.FC = () => {
     }));
   };
 
+  const hasActiveFilters = Object.values(filters).some(value => value !== '');
+
   if (loading) {
     return (
       <Container fluid className="d-flex align-items-center justify-content-center">
@@ -66,7 +68,14 @@ const SnippetList: React.FC = () => {
 
   return (
     <Container fluid>
-      <h2 className="h3 mb-4">My Snippets</h2>
+      <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
+        <h2 className="h3 mb-3 mb-md-0">My Snippets</h2>
+        <div className="d-flex align-items-center gap-2">
+          <Badge bg="secondary" className="fs-6 px-3 py-2">
+            {`${hasActiveFilters ? 'Filtered:' : 'Total:'} ${totalCount}`}
+          </Badge>
+        </div>
+      </div>
       <SnippetSearch
         searchTitle={filters.searchTitle}
         searchCode={filters.searchCode}

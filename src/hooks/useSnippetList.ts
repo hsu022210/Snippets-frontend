@@ -5,6 +5,7 @@ import { Snippet, SnippetListResponse, FilterOptions } from '../types/interfaces
 
 export const useSnippetList = (filters?: FilterOptions) => {
   const [snippets, setSnippets] = useState<Snippet[]>([]);
+  const [totalCount, setTotalCount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
   const { api } = useAuth();
@@ -33,6 +34,7 @@ export const useSnippetList = (filters?: FilterOptions) => {
         () => api.get(`/snippets/?${params.toString()}`)
       );
       setSnippets(response.data.results);
+      setTotalCount(response.data.count);
       setError('');
     } catch (error) {
       setError('Failed to fetch snippets');
@@ -48,6 +50,7 @@ export const useSnippetList = (filters?: FilterOptions) => {
 
   return {
     snippets,
+    totalCount,
     loading,
     error
   };

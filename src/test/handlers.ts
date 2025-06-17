@@ -7,8 +7,7 @@ const mockSnippet: Snippet = {
   title: 'Test Snippet',
   language: 'javascript',
   code: 'console.log("test")',
-  created_at: new Date().toISOString(),
-  updated_at: new Date().toISOString(),
+  created: new Date().toISOString(),
 }
 
 // Define your API handlers here
@@ -16,7 +15,8 @@ export const handlers = [
   // Snippet handlers
   http.get('/snippets', () => {
     return HttpResponse.json<SnippetListResponse>({
-      results: [mockSnippet]
+      results: [mockSnippet],
+      count: 1
     })
   }),
 
@@ -31,8 +31,7 @@ export const handlers = [
       title: body.title || 'Untitled Snippet',
       language: body.language || 'plaintext',
       code: body.code || '',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
+      created: new Date().toISOString(),
     })
   }),
 
@@ -41,7 +40,6 @@ export const handlers = [
     return HttpResponse.json<Snippet>({
       ...mockSnippet,
       ...body,
-      updated_at: new Date().toISOString()
     })
   }),
 
@@ -50,7 +48,6 @@ export const handlers = [
     return HttpResponse.json<Snippet>({
       ...mockSnippet,
       ...body,
-      updated_at: new Date().toISOString()
     })
   }),
 

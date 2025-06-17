@@ -34,7 +34,6 @@ export interface Snippet {
   code: string;
   language: string;
   created: string;
-  updated_at: string;
   user?: number;
 }
 
@@ -46,6 +45,7 @@ export interface SnippetData {
 
 export interface SnippetListResponse {
   results: Snippet[];
+  count: number;
 }
 
 export interface SnippetHeaderProps {
