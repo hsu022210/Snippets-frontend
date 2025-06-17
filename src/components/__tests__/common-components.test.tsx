@@ -176,6 +176,40 @@ describe('Common Components', () => {
         expect(screen.getByText(/©/i)).toBeInTheDocument();
         expect(screen.getByText(/Alec Hsu. All rights reserved./i)).toBeInTheDocument();
       });
+
+      it('displays app name with logo', () => {
+        renderFooter();
+        const appLink = screen.getByText('Code Snippets');
+        expect(appLink).toBeInTheDocument();
+        expect(appLink.closest('a')).toHaveAttribute('href', '/');
+      });
+
+      it('displays frontend GitHub link with correct icon', () => {
+        renderFooter();
+        const frontendLink = screen.getByText('Frontend');
+        expect(frontendLink).toBeInTheDocument();
+        expect(frontendLink.closest('a')).toHaveAttribute('href', 'https://github.com/hsu022210/Snippets-frontend');
+        expect(frontendLink.closest('a')).toHaveAttribute('target', '_blank');
+        expect(frontendLink.closest('a')).toHaveAttribute('rel', 'noopener noreferrer');
+        expect(frontendLink.closest('a')).toHaveAttribute('aria-label', 'Frontend GitHub Repository');
+      });
+
+      it('displays backend API link with correct icon', () => {
+        renderFooter();
+        const backendLink = screen.getByText('Backend');
+        expect(backendLink).toBeInTheDocument();
+        expect(backendLink.closest('a')).toHaveAttribute('href', 'https://snippets-backend-69z8.onrender.com/swagger/');
+        expect(backendLink.closest('a')).toHaveAttribute('target', '_blank');
+        expect(backendLink.closest('a')).toHaveAttribute('rel', 'noopener noreferrer');
+        expect(backendLink.closest('a')).toHaveAttribute('aria-label', 'Backend GitHub Repository');
+      });
+
+      it('displays disclaimer link with correct icon', () => {
+        renderFooter();
+        const disclaimerLink = screen.getByText('Disclaimer');
+        expect(disclaimerLink).toBeInTheDocument();
+        expect(disclaimerLink.closest('a')).toHaveAttribute('href', '/disclaimer');
+      });
     });
 
     describe('Theme', () => {
@@ -195,11 +229,43 @@ describe('Common Components', () => {
     });
 
     describe('Layout', () => {
-      it('has correct classes', () => {
+      it('has correct classes and structure', () => {
         renderFooter();
         const footer = screen.getByRole('contentinfo');
-        expect(footer).toHaveClass('footer', 'py-3', 'mt-auto');
-        expect(screen.getByText(/Alec Hsu. All rights reserved./i).parentElement).toHaveClass('text-center');
+        expect(footer).toHaveClass('footer', 'py-4', 'mt-auto');
+        
+        // Check container structure
+        const container = footer.querySelector('.container');
+        expect(container).toBeInTheDocument();
+        
+        // Check row structure
+        const row = container?.querySelector('.row');
+        expect(row).toHaveClass('align-items-center');
+        
+        // Check columns
+        const cols = row?.querySelectorAll('[class*="col-"]');
+        expect(cols).toHaveLength(3);
+        
+        // Check responsive classes
+        cols?.forEach(col => {
+          expect(col).toHaveClass('text-center');
+          if (col.classList.contains('col-md-4')) {
+            if (col.classList.contains('text-md-start')) {
+              expect(col).toHaveClass('text-md-start');
+            } else if (col.classList.contains('text-md-end')) {
+              expect(col).toHaveClass('text-md-end');
+            }
+          }
+        });
+      });
+
+      it('maintains proper spacing between elements', () => {
+        renderFooter();
+        const linksContainer = screen.getByText('Frontend').closest('.d-flex');
+        expect(linksContainer).toHaveClass('gap-2');
+        
+        const mainContainer = screen.getByText('Disclaimer').closest('.d-flex');
+        expect(mainContainer).toHaveClass('gap-3');
       });
     });
   })
