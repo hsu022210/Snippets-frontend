@@ -97,4 +97,10 @@ describe('README.md', () => {
     expect(readmeContent).toContain('Create your feature branch')
     expect(readmeContent).toContain('Open a Pull Request')
   })
+
+  it('should mention primary color customization', () => {
+    expect(readmeContent.toLowerCase()).toMatch(/primary color/)
+    expect(readmeContent).toMatch(/color picker modal/i)
+    expect(readmeContent).toMatch(/live preview/i)
+  })
 }) 

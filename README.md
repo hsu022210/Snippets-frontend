@@ -6,6 +6,7 @@ A modern web application for managing and organizing code snippets across multip
 
 - ✨ Syntax highlighting for multiple programming languages
 - 🎨 Customizable themes for code display
+- 🖌️ Customizable primary color for components (buttons, pagination, etc.)
 - 📝 Rich text editing with CodeMirror
 - 📱 Responsive design with Bootstrap
 - 🧪 Comprehensive test coverage with Vitest
@@ -48,6 +49,10 @@ This project uses TypeScript with strict type checking and ESLint for code quali
 - Implement proper error boundaries
 - Write tests for new features
 - Follow the existing code style and patterns
+
+### Customizing the Primary Color
+
+You can customize the primary color used throughout the app (for all Bootstrap components) from the Settings page. The color picker modal provides a live preview for buttons and pagination.
 
 ### Testing
 

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Container, Row, Col, Card, Figure } from 'react-bootstrap';
 
 const Disclaimer: React.FC = () => {

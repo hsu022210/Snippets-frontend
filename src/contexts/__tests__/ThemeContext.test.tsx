@@ -3,7 +3,6 @@ import userEvent from '@testing-library/user-event'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { ThemeProvider, useTheme } from '../ThemeContext'
 import { localStorageMock } from '../../test/setup'
-import { PRIMARY_COLORS } from '../../utils/primaryColor'
 
 // Mock document.documentElement with working setAttribute/getAttribute
 const attributeStore: Record<string, string> = {};
@@ -50,7 +49,7 @@ describe('ThemeContext', () => {
     );
 
     expect(screen.getByTestId('is-dark')).toHaveTextContent('false');
-    expect(screen.getByTestId('primary-color')).toHaveTextContent(PRIMARY_COLORS[0].value);
+    expect(screen.getByTestId('primary-color')).toHaveTextContent('#0d6efd');
     expect(document.documentElement.getAttribute('data-bs-theme')).toBe('light');
   });
 
@@ -64,7 +63,7 @@ describe('ThemeContext', () => {
     );
 
     expect(screen.getByTestId('is-dark')).toHaveTextContent('true');
-    expect(screen.getByTestId('primary-color')).toHaveTextContent(PRIMARY_COLORS[0].value);
+    expect(screen.getByTestId('primary-color')).toHaveTextContent('#0d6efd');
     expect(document.documentElement.getAttribute('data-bs-theme')).toBe('dark');
   });
 
@@ -79,19 +78,19 @@ describe('ThemeContext', () => {
 
     // Initial state
     expect(screen.getByTestId('is-dark')).toHaveTextContent('false');
-    expect(screen.getByTestId('primary-color')).toHaveTextContent(PRIMARY_COLORS[0].value);
+    expect(screen.getByTestId('primary-color')).toHaveTextContent('#0d6efd');
     expect(document.documentElement.getAttribute('data-bs-theme')).toBe('light');
 
     // Toggle to dark
     await user.click(screen.getByTestId('toggle-theme'));
     expect(screen.getByTestId('is-dark')).toHaveTextContent('true');
-    expect(screen.getByTestId('primary-color')).toHaveTextContent(PRIMARY_COLORS[0].value);
+    expect(screen.getByTestId('primary-color')).toHaveTextContent('#0d6efd');
     expect(localStorageMock.setItem).toHaveBeenCalledWith('theme', 'dark');
 
     // Toggle back to light
     await user.click(screen.getByTestId('toggle-theme'));
     expect(screen.getByTestId('is-dark')).toHaveTextContent('false');
-    expect(screen.getByTestId('primary-color')).toHaveTextContent(PRIMARY_COLORS[0].value);
+    expect(screen.getByTestId('primary-color')).toHaveTextContent('#0d6efd');
     expect(localStorageMock.setItem).toHaveBeenCalledWith('theme', 'light');
   });
 
@@ -144,7 +143,7 @@ describe('ThemeContext', () => {
     );
 
     expect(screen.getByTestId('is-dark')).toHaveTextContent('true');
-    expect(screen.getByTestId('primary-color')).toHaveTextContent(PRIMARY_COLORS[0].value);
+    expect(screen.getByTestId('primary-color')).toHaveTextContent('#0d6efd');
     expect(document.documentElement.getAttribute('data-bs-theme')).toBe('dark');
   });
 }); 
