@@ -15,8 +15,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
 }) => {
   const { selectedTheme } = useCodeMirrorTheme();
   // Type assertion to handle theme access
-  const theme = (themes as unknown as Record<string, Extension>)[selectedTheme] || 
-                (themes as unknown as Record<string, Extension>)['copilot'];
+  const theme = (themes as unknown as Record<string, Extension>)[selectedTheme];
 
   return (
     <div className={className} style={{ border: '1px solid #dee2e6', borderRadius: '4px', overflow: 'hidden' }}>

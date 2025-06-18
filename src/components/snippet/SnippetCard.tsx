@@ -18,7 +18,7 @@ export const SnippetCard = ({ snippet }: SnippetCardProps) => {
   const { previewHeight } = usePreviewHeight();
   const { shareSnippetTooltip, handleShare } = useShareSnippet();
   const { isDark } = useTheme();
-  const theme = (themes as Record<string, any>)[selectedTheme] || (themes as Record<string, any>)['copilot'];
+  const theme = (themes as Record<string, any>)[selectedTheme];
 
   const formatCreatedTime = () => {
     try {
