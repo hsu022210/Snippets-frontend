@@ -12,7 +12,6 @@ import { php } from '@codemirror/lang-php'
 import { xml } from '@codemirror/lang-xml'
 import { yaml } from '@codemirror/lang-yaml'
 import { Extension } from '@codemirror/state'
-import { Language } from '@/types/snippet'
 
 // Define supported languages as a const object for better type safety
 export const SUPPORTED_LANGUAGES = {
@@ -33,9 +32,6 @@ export const SUPPORTED_LANGUAGES = {
   YAML: 'yaml'
 } as const;
 
-// Create a type from the values of SUPPORTED_LANGUAGES
-// type Language = typeof SUPPORTED_LANGUAGES[keyof typeof SUPPORTED_LANGUAGES];
-
 // Define the language configuration interface
 interface LanguageConfig {
   extension: () => Extension;
@@ -43,7 +39,7 @@ interface LanguageConfig {
 }
 
 // Map of language configurations
-const LANGUAGE_CONFIGS: Record<Language, LanguageConfig> = {
+const LANGUAGE_CONFIGS: Record<string, LanguageConfig> = {
   [SUPPORTED_LANGUAGES.JAVASCRIPT]: {
     extension: () => javascript({ jsx: true }),
     displayName: 'JavaScript'
@@ -113,7 +109,7 @@ const LANGUAGE_CONFIGS: Record<Language, LanguageConfig> = {
  */
 export const getLanguageExtension = (language: string): Extension[] => {
   if (!language) return [];
-  language = language.toLowerCase() as Language;
+  language = language.toLowerCase();
   
   try {
     const config = LANGUAGE_CONFIGS[language];
@@ -126,7 +122,7 @@ export const getLanguageExtension = (language: string): Extension[] => {
 
 export const getLanguageDisplayName = (language: string): string => {
   if (!language) return 'None';
-  language = language.toLowerCase() as Language;
+  language = language.toLowerCase();
   return LANGUAGE_CONFIGS[language]?.displayName || 'None';
 };
 
