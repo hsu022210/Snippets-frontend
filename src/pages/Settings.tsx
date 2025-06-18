@@ -325,7 +325,7 @@ const Settings: React.FC = () => {
         <h2 className="mb-0">Settings</h2>
       </div>
 
-      <Tab.Container defaultActiveKey="editor">
+      <Tab.Container defaultActiveKey="general">
         <Row className="g-4">
           <Col lg={3}>
             <Card className={`shadow-sm ${isDark ? 'bg-dark' : 'bg-light'}`}>
