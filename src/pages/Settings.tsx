@@ -1,6 +1,6 @@
 import { ChangeEvent, useState } from 'react'
 import { useCodeMirrorTheme } from '../contexts/CodeMirrorThemeContext'
-import { usePreviewHeight } from '../contexts/PreviewHeightContext'
+import { usePreviewHeight } from '../hooks/usePreviewHeight'
 import { useTheme } from '../contexts/ThemeContext'
 import { Container, Card, Form, Row, Col, Nav, Tab, Button, Modal, Pagination, Stack } from 'react-bootstrap'
 import CodeEditor from '../components/shared/CodeEditor'

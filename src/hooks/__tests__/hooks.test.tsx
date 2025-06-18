@@ -9,6 +9,7 @@ import { TestProviders } from '../../test/setup'
 import { http, HttpResponse } from 'msw'
 import axios from 'axios'
 import { localStorageMock } from '../../test/setup'
+import { usePreviewHeight } from '../usePreviewHeight'
 
 interface Snippet {
   id: string;
@@ -785,6 +786,53 @@ describe('Hooks (with MSW)', () => {
         language: 'javascript',
         searchTitle: 'test',
       });
+    });
+  });
+
+  describe('usePreviewHeight', () => {
+    beforeEach(() => {
+      localStorage.clear();
+    });
+
+    it('should return default preview height when no value is stored', () => {
+      const { result } = renderHook(() => usePreviewHeight());
+      
+      expect(result.current.previewHeight).toBe(75);
+    });
+
+    it('should return stored preview height from localStorage', () => {
+      localStorage.setItem('previewHeight', '120');
+      
+      const { result } = renderHook(() => usePreviewHeight());
+      
+      expect(result.current.previewHeight).toBe(120);
+    });
+
+    it('should update preview height and save to localStorage', () => {
+      const { result } = renderHook(() => usePreviewHeight());
+      
+      act(() => {
+        result.current.setPreviewHeight(150);
+      });
+      
+      expect(result.current.previewHeight).toBe(150);
+      expect(localStorage.getItem('previewHeight')).toBe('150');
+    });
+
+    it('should handle storage events from other tabs', () => {
+      const { result } = renderHook(() => usePreviewHeight());
+      
+      // Simulate storage event from another tab
+      act(() => {
+        const storageEvent = new StorageEvent('storage', {
+          key: 'previewHeight',
+          newValue: '200',
+          oldValue: '75'
+        });
+        window.dispatchEvent(storageEvent);
+      });
+      
+      expect(result.current.previewHeight).toBe(200);
     });
   });
 }) 
