@@ -29,6 +29,12 @@ describe('README.md', () => {
     expect(readmeContent).toContain('[Getting Started](#-getting-started)')
   })
 
+  it('should have a live demo section with link', () => {
+    expect(readmeContent).toContain('## 🌐 Live Demo')
+    expect(readmeContent).toContain('https://snippets-frontend-ogbf.onrender.com/')
+    expect(readmeContent).toMatch(/\[View Live Website\]\(https:\/\/snippets-frontend-ogbf\.onrender\.com\/\)/)
+  })
+
   it('should list all supported languages', () => {
     const requiredLanguages = [
       'JavaScript',
@@ -55,6 +61,7 @@ describe('README.md', () => {
 
   it('should have all required sections', () => {
     const requiredSections = [
+      '## 🌐 Live Demo',
       '## ✨ Features',
       '## 🚀 Supported Languages',
       '## 🛠️ Tech Stack',

@@ -2,6 +2,10 @@
 
 A modern, responsive web application for managing and organizing code snippets across multiple programming languages. Built with React, TypeScript, and Vite, featuring a beautiful UI with customizable themes and comprehensive testing.
 
+## 🌐 Live Demo
+
+**[View Live Website](https://snippets-frontend-ogbf.onrender.com/)**
+
 ## 📋 Table of Contents
 
 - [Features](#-features)
