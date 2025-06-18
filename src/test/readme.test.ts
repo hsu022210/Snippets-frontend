@@ -15,11 +15,18 @@ describe('README.md', () => {
   })
 
   it('should have a title', () => {
-    expect(readmeContent).toMatch(/^# Code Snippets\n/)
+    expect(readmeContent).toMatch(/^# Code Snippets Frontend\n/)
   })
 
   it('should have a project description', () => {
-    expect(readmeContent).toContain('A modern web application for managing and organizing code snippets')
+    expect(readmeContent).toContain('A modern, responsive web application for managing and organizing code snippets')
+  })
+
+  it('should have a table of contents', () => {
+    expect(readmeContent).toContain('## 📋 Table of Contents')
+    expect(readmeContent).toContain('[Features](#-features)')
+    expect(readmeContent).toContain('[Tech Stack](#-tech-stack)')
+    expect(readmeContent).toContain('[Getting Started](#-getting-started)')
   })
 
   it('should list all supported languages', () => {
@@ -48,11 +55,13 @@ describe('README.md', () => {
 
   it('should have all required sections', () => {
     const requiredSections = [
-      '## Features',
-      '## Supported Languages',
-      '## Tech Stack',
-      '## Development',
-      '## Contributing'
+      '## ✨ Features',
+      '## 🚀 Supported Languages',
+      '## 🛠️ Tech Stack',
+      '## 🚀 Getting Started',
+      '## 💻 Development',
+      '## 🧪 Testing',
+      '## 📄 License'
     ]
 
     requiredSections.forEach(section => {
@@ -68,12 +77,12 @@ describe('README.md', () => {
 
   it('should list all major technologies', () => {
     const requiredTech = [
-      'React',
+      'React 19',
       'TypeScript',
       'Vite',
-      'CodeMirror',
+      'CodeMirror 6',
       'React Router',
-      'Bootstrap',
+      'Bootstrap 5',
       'Vitest',
       'ESLint'
     ]
@@ -94,16 +103,38 @@ describe('README.md', () => {
     expect(readmeContent).toContain('```')
   })
 
-  it('should have contributing guidelines', () => {
-    expect(readmeContent).toContain('## Contributing')
-    expect(readmeContent).toContain('Fork the repository')
-    expect(readmeContent).toContain('Create your feature branch')
-    expect(readmeContent).toContain('Open a Pull Request')
+  it('should have installation instructions', () => {
+    expect(readmeContent).toContain('### Prerequisites')
+    expect(readmeContent).toContain('### Installation')
+    expect(readmeContent).toContain('npm install')
+    expect(readmeContent).toContain('npm run dev')
+  })
+
+  it('should have project structure documentation', () => {
+    expect(readmeContent).toContain('### Project Structure')
+    expect(readmeContent).toContain('src/')
+    expect(readmeContent).toContain('components/')
+    expect(readmeContent).toContain('pages/')
+  })
+
+  it('should have copyright notice', () => {
+    expect(readmeContent).toContain('Copyright Notice')
+    expect(readmeContent).toContain('intellectual property of Alec Hsu')
+    expect(readmeContent).toContain('should not be copied, reproduced, distributed, or used')
+    expect(readmeContent).toContain('All rights are reserved')
   })
 
   it('should mention primary color customization', () => {
     expect(readmeContent.toLowerCase()).toMatch(/primary color/)
     expect(readmeContent).toMatch(/color picker modal/i)
     expect(readmeContent).toMatch(/live preview/i)
+  })
+
+  it('should have tech stack categories', () => {
+    expect(readmeContent).toContain('### Frontend Framework')
+    expect(readmeContent).toContain('### UI & Styling')
+    expect(readmeContent).toContain('### Code Editing')
+    expect(readmeContent).toContain('### Testing & Quality')
+    expect(readmeContent).toContain('### Development Tools')
   })
 }) 
