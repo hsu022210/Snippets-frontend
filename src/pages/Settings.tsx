@@ -13,23 +13,23 @@ const SettingsNav: React.FC = () => (
   <Nav variant="pills" className="flex-column d-flex settings-nav">
     <Nav.Item className="mb-3 w-100">
       <Nav.Link 
+        eventKey="general" 
+      >
+        <span>General Settings</span>
+      </Nav.Link>
+    </Nav.Item>
+    <Nav.Item className="mb-3 w-100">
+      <Nav.Link 
         eventKey="editor" 
       >
         <span>Editor Settings</span>
       </Nav.Link>
     </Nav.Item>
-    <Nav.Item className="mb-3 w-100">
+    <Nav.Item className="w-100">
       <Nav.Link 
         eventKey="display" 
       >
         <span>Display Settings</span>
-      </Nav.Link>
-    </Nav.Item>
-    <Nav.Item className="w-100">
-      <Nav.Link 
-        eventKey="general" 
-      >
-        <span>General Settings</span>
       </Nav.Link>
     </Nav.Item>
   </Nav>
@@ -339,6 +339,17 @@ const Settings: React.FC = () => {
             <Card className={`shadow-sm ${isDark ? 'bg-dark' : 'bg-light'}`}>
               <Card.Body>
                 <Tab.Content>
+                  <Tab.Pane eventKey="general">
+                    <GeneralSettings
+                      isDark={isDark}
+                      onThemeToggle={toggleTheme}
+                      primaryColor={primaryColor}
+                      onPrimaryColorChange={handlePrimaryColorChange}
+                      showColorModal={showColorModal}
+                      onShowColorModal={handleShowColorModal}
+                      onHideColorModal={handleHideColorModal}
+                    />
+                  </Tab.Pane>
                   <Tab.Pane eventKey="editor">
                     <EditorSettings
                       selectedTheme={selectedTheme}
@@ -355,18 +366,6 @@ const Settings: React.FC = () => {
                       pageSize={pageSize}
                       onPageSizeChange={handlePageSizeChange}
                       isDark={isDark}
-                    />
-                  </Tab.Pane>
-
-                  <Tab.Pane eventKey="general">
-                    <GeneralSettings
-                      isDark={isDark}
-                      onThemeToggle={toggleTheme}
-                      primaryColor={primaryColor}
-                      onPrimaryColorChange={handlePrimaryColorChange}
-                      showColorModal={showColorModal}
-                      onShowColorModal={handleShowColorModal}
-                      onHideColorModal={handleHideColorModal}
                     />
                   </Tab.Pane>
                 </Tab.Content>

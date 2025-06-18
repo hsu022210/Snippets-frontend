@@ -52,9 +52,9 @@ describe('Settings Page', () => {
       
       const navLinks = screen.getAllByRole('tab')
       expect(navLinks).toHaveLength(3)
-      expect(navLinks[0]).toHaveTextContent('Editor Settings')
-      expect(navLinks[1]).toHaveTextContent('Display Settings')
-      expect(navLinks[2]).toHaveTextContent('General Settings')
+      expect(navLinks[0]).toHaveTextContent('General Settings')
+      expect(navLinks[1]).toHaveTextContent('Editor Settings')
+      expect(navLinks[2]).toHaveTextContent('Display Settings')
     })
 
     it('shows editor settings by default', () => {
