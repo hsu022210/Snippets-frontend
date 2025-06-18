@@ -1,0 +1,18 @@
+@use "sass:map";
+@use "../variables" as *;
+@use "../mixins" as *;
+
+.settings-nav {
+  .nav-link {
+    width: fit-content;
+
+    &.active {
+      background-color: var(--bs-primary) !important;
+      color: white !important;
+    }
+    
+    &:not(.active) {
+      color: var(--bs-body-color) !important;
+    }
+  }
+} 

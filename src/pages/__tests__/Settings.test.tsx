@@ -35,45 +35,108 @@ describe('Settings Page', () => {
     )
   }
 
-  it('renders settings page with theme selector', () => {
-    renderSettings()
-    
-    expect(screen.getByText('Settings')).toBeInTheDocument()
-    expect(screen.getByText('Editor Settings')).toBeInTheDocument()
-    expect(screen.getByText('Code Editor Theme')).toBeInTheDocument()
-    expect(screen.getByTestId('theme-select')).toBeInTheDocument()
+  describe('Navigation', () => {
+    it('renders all navigation items', () => {
+      renderSettings()
+      
+      const navLinks = screen.getAllByRole('tab')
+      expect(navLinks).toHaveLength(3)
+      expect(navLinks[0]).toHaveTextContent('Editor Settings')
+      expect(navLinks[1]).toHaveTextContent('Display Settings')
+      expect(navLinks[2]).toHaveTextContent('General Settings')
+    })
+
+    it('shows editor settings by default', () => {
+      renderSettings()
+      
+      expect(screen.getByText('Code Editor Theme')).toBeInTheDocument()
+      expect(screen.getByText('Snippet Preview Height')).toBeInTheDocument()
+    })
   })
 
-  it('renders theme preview section', () => {
-    renderSettings()
-    
-    expect(screen.getByText('Theme Preview')).toBeInTheDocument()
-    const editor = screen.getByTestId('codemirror-mock')
-    expect(editor).toBeInTheDocument()
-    expect(editor).toHaveAttribute('data-editable', 'false')
-    expect(editor).toHaveAttribute('data-height', '75px')
+  describe('Editor Settings', () => {
+    it('renders theme selector and preview', () => {
+      renderSettings()
+      
+      expect(screen.getByText('Code Editor Theme')).toBeInTheDocument()
+      expect(screen.getByTestId('theme-select')).toBeInTheDocument()
+      expect(screen.getByText('Theme Preview')).toBeInTheDocument()
+    })
+
+    it('allows theme selection', async () => {
+      renderSettings()
+      
+      const themeSelect = screen.getByTestId('theme-select')
+      await user.selectOptions(themeSelect, 'copilot')
+      
+      expect(themeSelect).toHaveValue('copilot')
+    })
+
+    it('displays sample code in preview', () => {
+      renderSettings()
+      
+      const editor = screen.getByTestId('codemirror-mock')
+      expect(editor).toHaveTextContent('// Sample code to preview the theme')
+      expect(editor).toHaveTextContent('function calculateSum(numbers)')
+    })
+
+    it('shows theme selection help text', () => {
+      renderSettings()
+      
+      expect(screen.getByText('Choose your preferred theme for the code editor')).toBeInTheDocument()
+    })
   })
 
-  it('displays sample code in preview', () => {
-    renderSettings()
-    
-    const editor = screen.getByTestId('codemirror-mock')
-    expect(editor).toHaveTextContent('// Sample code to preview the theme')
-    expect(editor).toHaveTextContent('function calculateSum(numbers)')
+  describe('Display Settings', () => {
+    it('renders snippets per page selector', async () => {
+      renderSettings()
+      
+      // Navigate to Display Settings
+      const displaySettingsLink = screen.getAllByRole('tab')[1]
+      await user.click(displaySettingsLink)
+      
+      expect(screen.getByText('Snippets Per Page')).toBeInTheDocument()
+      expect(screen.getByText('Choose how many snippets to display per page in the snippet list')).toBeInTheDocument()
+    })
+
+    it('allows changing snippets per page', async () => {
+      renderSettings()
+      
+      // Navigate to Display Settings
+      const displaySettingsLink = screen.getAllByRole('tab')[1]
+      await user.click(displaySettingsLink)
+      
+      const pageSizeLabel = screen.getByText('Snippets Per Page')
+      const pageSizeSelect = pageSizeLabel.closest('div')?.querySelector('select')
+      expect(pageSizeSelect).toBeInTheDocument()
+      
+      if (pageSizeSelect) {
+        await user.selectOptions(pageSizeSelect, '12')
+        expect(pageSizeSelect).toHaveValue('12')
+      }
+    })
   })
 
-  it('allows theme selection', async () => {
-    renderSettings()
-    
-    const themeSelect = screen.getByTestId('theme-select')
-    await user.selectOptions(themeSelect, 'copilot')
-    
-    expect(themeSelect).toHaveValue('copilot')
-  })
+  describe('General Settings', () => {
+    it('renders theme toggle switch', async () => {
+      renderSettings()
+      
+      // Navigate to General Settings
+      const generalSettingsLink = screen.getAllByRole('tab')[2]
+      await user.click(generalSettingsLink)
+      
+      expect(screen.getByText('Application Theme')).toBeInTheDocument()
+      expect(screen.getByRole('checkbox')).toBeInTheDocument()
+    })
 
-  it('shows theme selection help text', () => {
-    renderSettings()
-    
-    expect(screen.getByText('Choose your preferred theme for the code editor')).toBeInTheDocument()
+    it('shows theme toggle help text', async () => {
+      renderSettings()
+      
+      // Navigate to General Settings
+      const generalSettingsLink = screen.getAllByRole('tab')[2]
+      await user.click(generalSettingsLink)
+      
+      expect(screen.getByText('Switch between light and dark mode')).toBeInTheDocument()
+    })
   })
 }) 

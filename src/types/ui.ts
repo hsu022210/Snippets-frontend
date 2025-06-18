@@ -110,4 +110,24 @@ export interface PaginationControlsProps {
   hasPreviousPage: boolean;
   hasNextPage: boolean;
   onPageChange: (page: number) => void;
+}
+
+export interface EditorSettingsProps {
+  selectedTheme: string;
+  themeOptions: { value: string; label: string; }[];
+  previewHeight: number;
+  isDark: boolean;
+  onThemeChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  onPreviewHeightChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+export interface DisplaySettingsProps {
+  pageSize: number;
+  onPageSizeChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  isDark: boolean;
+}
+
+export interface GeneralSettingsProps {
+  isDark: boolean;
+  onThemeToggle: () => void;
 } 
