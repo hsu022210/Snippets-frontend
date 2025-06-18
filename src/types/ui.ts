@@ -1,3 +1,5 @@
+import { ThemeOption } from "./context";
+
 export interface ButtonProps {
   children: React.ReactNode;
   variant?: string;
@@ -114,7 +116,7 @@ export interface PaginationControlsProps {
 
 export interface EditorSettingsProps {
   selectedTheme: string;
-  themeOptions: { value: string; label: string; }[];
+  themeOptions: ThemeOption[];
   previewHeight: number;
   isDark: boolean;
   onThemeChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
