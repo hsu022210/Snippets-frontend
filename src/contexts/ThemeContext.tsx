@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 import { ThemeContextType, ThemeProviderProps } from '../types'
 import { getPrimaryColor, setPrimaryColor as setPrimaryColorStorage } from '../utils/primaryColor'
+import hexRgb from 'hex-rgb'
 
 const ThemeContext = createContext<ThemeContextType | null>(null);
 
@@ -40,16 +41,13 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
     setPrimaryColorState(color);
   };
 
-  // Helper function to convert hex to RGB
   const hexToRgb = (hex: string): string => {
-    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    if (result) {
-      const r = parseInt(result[1], 16);
-      const g = parseInt(result[2], 16);
-      const b = parseInt(result[3], 16);
-      return `${r}, ${g}, ${b}`;
+    try {
+      const { red, green, blue } = hexRgb(hex);
+      return `${red}, ${green}, ${blue}`;
+    } catch {
+      return '0, 0, 0';
     }
-    return '0, 0, 0'; // fallback
   };
 
   return (
