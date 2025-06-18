@@ -9,29 +9,26 @@ import { TbSun, TbMoon } from 'react-icons/tb'
 import { EditorSettingsProps, DisplaySettingsProps, GeneralSettingsProps } from '../types/ui'
 
 const SettingsNav: React.FC = () => (
-  <Nav variant="pills" className="flex-column border-0 h-100 p-3 settings-nav">
-    <Nav.Item className="mb-2">
+  <Nav variant="pills" className="flex-column d-flex settings-nav">
+    <Nav.Item className="mb-3 w-100">
       <Nav.Link 
         eventKey="editor" 
-        className="rounded-pill"
       >
-        <span className="fw-normal">Editor Settings</span>
+        <span>Editor Settings</span>
       </Nav.Link>
     </Nav.Item>
-    <Nav.Item className="mb-2">
+    <Nav.Item className="mb-3 w-100">
       <Nav.Link 
         eventKey="display" 
-        className="rounded-pill"
       >
-        <span className="fw-normal">Display Settings</span>
+        <span>Display Settings</span>
       </Nav.Link>
     </Nav.Item>
-    <Nav.Item>
+    <Nav.Item className="w-100">
       <Nav.Link 
         eventKey="general" 
-        className="rounded-pill"
       >
-        <span className="fw-normal">General Settings</span>
+        <span>General Settings</span>
       </Nav.Link>
     </Nav.Item>
   </Nav>
@@ -204,16 +201,20 @@ const Settings: React.FC = () => {
         <h2 className="mb-0">Settings</h2>
       </div>
 
-      <Card className={`shadow-sm ${isDark ? 'bg-dark-subtle' : 'bg-light'}`}>
-        <Card.Body className="p-0">
-          <Tab.Container defaultActiveKey="editor">
-            <Row className="g-0">
-              <Col lg={3} className="border-end">
+      <Tab.Container defaultActiveKey="editor">
+        <Row className="g-4">
+          <Col lg={3}>
+            <Card className={`shadow-sm ${isDark ? 'bg-dark' : 'bg-light'}`}>
+              <Card.Body className="p-4">
                 <SettingsNav />
-              </Col>
-              
-              <Col lg={9}>
-                <Tab.Content className="p-4">
+              </Card.Body>
+            </Card>
+          </Col>
+          
+          <Col lg={9}>
+            <Card className={`shadow-sm ${isDark ? 'bg-dark' : 'bg-light'}`}>
+              <Card.Body className="p-4">
+                <Tab.Content>
                   <Tab.Pane eventKey="editor">
                     <EditorSettings
                       selectedTheme={selectedTheme}
@@ -240,11 +241,11 @@ const Settings: React.FC = () => {
                     />
                   </Tab.Pane>
                 </Tab.Content>
-              </Col>
-            </Row>
-          </Tab.Container>
-        </Card.Body>
-      </Card>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Tab.Container>
     </Container>
   );
 };

@@ -35,6 +35,17 @@ describe('Settings Page', () => {
     )
   }
 
+  describe('Layout', () => {
+    it('renders two separate cards for navigation and content', () => {
+      renderSettings()
+      
+      const cards = screen.getAllByRole('generic').filter(el => 
+        el.className.includes('card') && !el.className.includes('card-body')
+      )
+      expect(cards).toHaveLength(2)
+    })
+  })
+
   describe('Navigation', () => {
     it('renders all navigation items', () => {
       renderSettings()
