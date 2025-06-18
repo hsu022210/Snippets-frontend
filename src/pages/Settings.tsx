@@ -2,10 +2,11 @@ import { ChangeEvent, useState } from 'react'
 import { useCodeMirrorTheme } from '../contexts/CodeMirrorThemeContext'
 import { usePreviewHeight } from '../contexts/PreviewHeightContext'
 import { useTheme } from '../contexts/ThemeContext'
-import { Container, Card, Form, Row, Col, Nav, Tab } from 'react-bootstrap'
+import { Container, Card, Form, Row, Col, Nav, Tab, Button, Modal, Pagination, Stack } from 'react-bootstrap'
 import CodeEditor from '../components/shared/CodeEditor'
 import { getPageSize, setPageSize } from '../utils/pagination'
-import { TbSun, TbMoon } from 'react-icons/tb'
+import { getPrimaryColorLabel, PRIMARY_COLORS } from '../utils/primaryColor'
+import { TbSun, TbMoon, TbPalette } from 'react-icons/tb'
 import { EditorSettingsProps, DisplaySettingsProps, GeneralSettingsProps } from '../types/ui'
 
 const SettingsNav: React.FC = () => (
@@ -146,7 +147,12 @@ const DisplaySettings: React.FC<DisplaySettingsProps> = ({
 
 const GeneralSettings: React.FC<GeneralSettingsProps> = ({
   isDark,
-  onThemeToggle
+  onThemeToggle,
+  primaryColor,
+  onPrimaryColorChange,
+  showColorModal,
+  onShowColorModal,
+  onHideColorModal
 }) => (
   <>
     <h4 className={`mb-4 ${isDark ? 'text-light' : 'text-dark'}`}>General Settings</h4>
@@ -172,14 +178,120 @@ const GeneralSettings: React.FC<GeneralSettingsProps> = ({
         </Form.Text>
       </Form.Group>
     </div>
+
+    <div className="mb-4">
+      <Form.Group>
+        <Form.Label className="fw-bold">Primary Color</Form.Label>
+        <div className="d-flex align-items-center gap-3">
+          <Button 
+            variant="outline-primary" 
+            onClick={onShowColorModal}
+            className="d-flex align-items-center gap-2"
+          >
+            <TbPalette size={16} />
+            Choose Color
+          </Button>
+          <div
+            className="border rounded"
+            style={{
+              width: '40px',
+              height: '40px',
+              backgroundColor: primaryColor,
+              flexShrink: 0
+            }}
+            title={`Selected color: ${primaryColor}`}
+          />
+          <span className="text-muted">
+            {getPrimaryColorLabel(primaryColor)}
+          </span>
+        </div>
+        <Form.Text className="text-muted">
+          Choose the primary color for components throughout the site
+        </Form.Text>
+      </Form.Group>
+    </div>
+
+    {/* Color Selection Modal */}
+    <Modal show={showColorModal} onHide={onHideColorModal} centered size="lg">
+      <Modal.Header closeButton>
+        <Modal.Title>Choose Primary Color</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Row className="g-3">
+          {PRIMARY_COLORS.map((color) => (
+            <Col key={color.value} xs={6} md={4}>
+              <Card
+                className={`cursor-pointer ${primaryColor === color.value ? (isDark ? 'bg-dark' : 'bg-light') : ''}`}
+                onClick={() => onPrimaryColorChange({ target: { value: color.value } } as React.ChangeEvent<HTMLInputElement>)}
+                style={{ cursor: 'pointer' }}
+              >
+                <Card.Body className="p-2">
+                  <Stack direction="horizontal" gap={2} className="align-items-center">
+                    <Form.Check
+                      type="radio"
+                      id={`color-${color.value}`}
+                      name="primaryColor"
+                      value={color.value}
+                      checked={primaryColor === color.value}
+                      onChange={onPrimaryColorChange}
+                      className="mb-0"
+                    />
+                    <div
+                      className="border rounded"
+                      style={{
+                        width: '24px',
+                        height: '24px',
+                        backgroundColor: color.value,
+                        flexShrink: 0
+                      }}
+                    />
+                    <small>{color.label}</small>
+                  </Stack>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+        
+        {/* Preview Section */}
+        <Card className="mt-4">
+          <Card.Body>
+            <Card.Title as="h6">Preview</Card.Title>
+            <Stack direction="horizontal" gap={4} className="align-items-start">
+              {/* Button Previews */}
+              <Stack gap={2}>
+                <small className="text-muted">Buttons:</small>
+                <Stack direction="horizontal" gap={2}>
+                  <Button variant="primary" size="sm">Primary</Button>
+                  <Button variant="outline-primary" size="sm">Outline</Button>
+                </Stack>
+              </Stack>
+              
+              {/* Pagination Preview */}
+              <Stack gap={2}>
+                <small className="text-muted">Pagination:</small>
+                <Pagination size="sm">
+                  <Pagination.Prev />
+                  <Pagination.Item>1</Pagination.Item>
+                  <Pagination.Item active>2</Pagination.Item>
+                  <Pagination.Item>3</Pagination.Item>
+                  <Pagination.Next />
+                </Pagination>
+              </Stack>
+            </Stack>
+          </Card.Body>
+        </Card>
+      </Modal.Body>
+    </Modal>
   </>
 );
 
 const Settings: React.FC = () => {
   const { selectedTheme, setSelectedTheme, themeOptions } = useCodeMirrorTheme();
   const { previewHeight, setPreviewHeight } = usePreviewHeight();
-  const { isDark, toggleTheme } = useTheme();
+  const { isDark, toggleTheme, primaryColor, setPrimaryColor } = useTheme();
   const [pageSize, setLocalPageSize] = useState<number>(getPageSize);
+  const [showColorModal, setShowColorModal] = useState<boolean>(false);
 
   const handleThemeChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setSelectedTheme(e.target.value);
@@ -193,6 +305,18 @@ const Settings: React.FC = () => {
     const newSize = parseInt(e.target.value, 10);
     setLocalPageSize(newSize);
     setPageSize(newSize);
+  };
+
+  const handlePrimaryColorChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setPrimaryColor(e.target.value);
+  };
+
+  const handleShowColorModal = () => {
+    setShowColorModal(true);
+  };
+
+  const handleHideColorModal = () => {
+    setShowColorModal(false);
   };
 
   return (
@@ -238,6 +362,11 @@ const Settings: React.FC = () => {
                     <GeneralSettings
                       isDark={isDark}
                       onThemeToggle={toggleTheme}
+                      primaryColor={primaryColor}
+                      onPrimaryColorChange={handlePrimaryColorChange}
+                      showColorModal={showColorModal}
+                      onShowColorModal={handleShowColorModal}
+                      onHideColorModal={handleHideColorModal}
                     />
                   </Tab.Pane>
                 </Tab.Content>

@@ -1,56 +1,61 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { ThemeProvider, useTheme } from '../ThemeContext'
 import { localStorageMock } from '../../test/setup'
+import { PRIMARY_COLORS } from '../../utils/primaryColor'
 
-Object.defineProperty(window, 'localStorage', { value: localStorageMock });
-
-// Mock matchMedia
-Object.defineProperty(window, 'matchMedia', {
+// Mock document.documentElement with working setAttribute/getAttribute
+const attributeStore: Record<string, string> = {};
+Object.defineProperty(document, 'documentElement', {
+  value: {
+    setAttribute: (key: string, value: string) => {
+      attributeStore[key] = value;
+    },
+    getAttribute: (key: string) => attributeStore[key],
+    removeAttribute: (key: string) => {
+      delete attributeStore[key];
+    },
+    style: {
+      setProperty: vi.fn(),
+    },
+  },
   writable: true,
-  value: vi.fn().mockImplementation((query: string) => ({
-    matches: false,
-    media: query,
-    onchange: null,
-    addListener: vi.fn(),
-    removeListener: vi.fn(),
-    addEventListener: vi.fn(),
-    removeEventListener: vi.fn(),
-    dispatchEvent: vi.fn(),
-  })),
 });
 
 // Test component that uses the theme context
 const TestComponent: React.FC = () => {
-  const { isDark, toggleTheme } = useTheme();
+  const { isDark, toggleTheme, primaryColor, setPrimaryColor } = useTheme();
   return (
     <div>
-      <div data-testid="theme">{isDark ? 'dark' : 'light'}</div>
-      <button onClick={toggleTheme}>Toggle Theme</button>
+      <div data-testid="is-dark">{isDark.toString()}</div>
+      <div data-testid="primary-color">{primaryColor}</div>
+      <button onClick={toggleTheme} data-testid="toggle-theme">Toggle Theme</button>
+      <button onClick={() => setPrimaryColor('#FF6B6B')} data-testid="set-color">Set Color</button>
     </div>
   );
 };
 
 describe('ThemeContext', () => {
   beforeEach(() => {
-    localStorage.clear();
+    localStorageMock.clear();
     document.documentElement.removeAttribute('data-bs-theme');
   });
 
-  it('initializes with light theme when no saved preference', () => {
+  it('provides theme context with default values', () => {
     render(
       <ThemeProvider>
         <TestComponent />
       </ThemeProvider>
     );
 
-    expect(screen.getByTestId('theme')).toHaveTextContent('light');
+    expect(screen.getByTestId('is-dark')).toHaveTextContent('false');
+    expect(screen.getByTestId('primary-color')).toHaveTextContent(PRIMARY_COLORS[0].value);
     expect(document.documentElement.getAttribute('data-bs-theme')).toBe('light');
   });
 
   it('initializes with dark theme when saved in localStorage', () => {
-    localStorage.setItem('theme', 'dark');
+    localStorageMock.setItem('theme', 'dark');
     
     render(
       <ThemeProvider>
@@ -58,12 +63,14 @@ describe('ThemeContext', () => {
       </ThemeProvider>
     );
 
-    expect(screen.getByTestId('theme')).toHaveTextContent('dark');
+    expect(screen.getByTestId('is-dark')).toHaveTextContent('true');
+    expect(screen.getByTestId('primary-color')).toHaveTextContent(PRIMARY_COLORS[0].value);
     expect(document.documentElement.getAttribute('data-bs-theme')).toBe('dark');
   });
 
   it('toggles theme when toggleTheme is called', async () => {
     const user = userEvent.setup();
+    
     render(
       <ThemeProvider>
         <TestComponent />
@@ -71,34 +78,64 @@ describe('ThemeContext', () => {
     );
 
     // Initial state
-    expect(screen.getByTestId('theme')).toHaveTextContent('light');
+    expect(screen.getByTestId('is-dark')).toHaveTextContent('false');
+    expect(screen.getByTestId('primary-color')).toHaveTextContent(PRIMARY_COLORS[0].value);
     expect(document.documentElement.getAttribute('data-bs-theme')).toBe('light');
 
     // Toggle to dark
-    await user.click(screen.getByText('Toggle Theme'));
-    expect(screen.getByTestId('theme')).toHaveTextContent('dark');
-    expect(document.documentElement.getAttribute('data-bs-theme')).toBe('dark');
-    expect(localStorage.setItem).toHaveBeenCalledWith('theme', 'dark');
+    await user.click(screen.getByTestId('toggle-theme'));
+    expect(screen.getByTestId('is-dark')).toHaveTextContent('true');
+    expect(screen.getByTestId('primary-color')).toHaveTextContent(PRIMARY_COLORS[0].value);
+    expect(localStorageMock.setItem).toHaveBeenCalledWith('theme', 'dark');
 
     // Toggle back to light
-    await user.click(screen.getByText('Toggle Theme'));
-    expect(screen.getByTestId('theme')).toHaveTextContent('light');
-    expect(document.documentElement.getAttribute('data-bs-theme')).toBe('light');
-    expect(localStorage.setItem).toHaveBeenCalledWith('theme', 'light');
+    await user.click(screen.getByTestId('toggle-theme'));
+    expect(screen.getByTestId('is-dark')).toHaveTextContent('false');
+    expect(screen.getByTestId('primary-color')).toHaveTextContent(PRIMARY_COLORS[0].value);
+    expect(localStorageMock.setItem).toHaveBeenCalledWith('theme', 'light');
   });
 
-  it('initializes with system preference when no saved theme', () => {
-    // Mock system preference to dark
-    window.matchMedia = vi.fn().mockImplementation((query: string) => ({
-      matches: query === '(prefers-color-scheme: dark)',
-      media: query,
-      onchange: null,
-      addListener: vi.fn(),
-      removeListener: vi.fn(),
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-      dispatchEvent: vi.fn(),
-    }));
+  it('sets primary color when setPrimaryColor is called', async () => {
+    const user = userEvent.setup();
+    
+    render(
+      <ThemeProvider>
+        <TestComponent />
+      </ThemeProvider>
+    );
+
+    const setColorButton = screen.getByTestId('set-color');
+    await user.click(setColorButton);
+
+    expect(screen.getByTestId('primary-color')).toHaveTextContent('#FF6B6B');
+  });
+
+  it('loads primary color from localStorage', () => {
+    localStorageMock.setItem('snippets-primary-color', '#345995');
+    
+    render(
+      <ThemeProvider>
+        <TestComponent />
+      </ThemeProvider>
+    );
+
+    expect(screen.getByTestId('primary-color')).toHaveTextContent('#345995');
+  });
+
+  it('initializes with dark theme when system prefers dark', () => {
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: vi.fn().mockImplementation(query => ({
+        matches: query === '(prefers-color-scheme: dark)',
+        media: query,
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      })),
+    });
 
     render(
       <ThemeProvider>
@@ -106,7 +143,8 @@ describe('ThemeContext', () => {
       </ThemeProvider>
     );
 
-    expect(screen.getByTestId('theme')).toHaveTextContent('dark');
+    expect(screen.getByTestId('is-dark')).toHaveTextContent('true');
+    expect(screen.getByTestId('primary-color')).toHaveTextContent(PRIMARY_COLORS[0].value);
     expect(document.documentElement.getAttribute('data-bs-theme')).toBe('dark');
   });
 }); 

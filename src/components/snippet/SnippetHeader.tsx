@@ -32,7 +32,7 @@ const SnippetHeader: React.FC<SnippetHeaderProps> = ({
           />
           <div className="d-flex gap-2">
             <Button
-              variant="success"
+              variant="primary"
               onClick={handleSave}
               disabled={saving}
               className="d-flex align-items-center flex-grow-1 flex-md-grow-0"

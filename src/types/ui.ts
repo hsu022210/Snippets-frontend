@@ -132,4 +132,9 @@ export interface DisplaySettingsProps {
 export interface GeneralSettingsProps {
   isDark: boolean;
   onThemeToggle: () => void;
+  primaryColor: string;
+  onPrimaryColorChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  showColorModal: boolean;
+  onShowColorModal: () => void;
+  onHideColorModal: () => void;
 } 
