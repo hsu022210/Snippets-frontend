@@ -67,9 +67,10 @@ describe('Settings Page', () => {
       renderSettings()
       
       const themeSelect = screen.getByTestId('theme-select')
-      await user.selectOptions(themeSelect, 'copilot')
-      
       expect(themeSelect).toHaveValue('copilot')
+
+      await user.selectOptions(themeSelect, 'sublime')
+      expect(themeSelect).toHaveValue('sublime')
     })
 
     it('displays sample code in preview', () => {
