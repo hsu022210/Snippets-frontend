@@ -6,7 +6,6 @@ import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap'
 import Button from './shared/Button'
 import LogoutLoadingSpinner from './LogoutLoadingSpinner'
 import { 
-  TbCode,
   TbSun,
   TbMoon,
   TbUser,
@@ -80,7 +79,7 @@ const Navigation: React.FC = () => {
       >
         <Container fluid>
           <Navbar.Brand as={Link} to="/" onClick={() => setExpanded(false)}>
-            <TbCode className="me-2" size={20} />
+            <img src="/code-icon.svg" alt="Code Icon" className="me-2" style={{ width: 20, height: 20 }} />
             Code Snippets
           </Navbar.Brand>
           <Nav.Item className="d-flex align-items-center me-2">
