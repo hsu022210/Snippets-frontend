@@ -1,8 +1,6 @@
 import CodeMirror from '@uiw/react-codemirror'
 import { getLanguageExtension } from '../../utils/languageUtils'
-import { useCodeMirrorTheme } from '../../contexts/CodeMirrorThemeContext'
-import * as themes from '@uiw/codemirror-themes-all'
-import { Extension } from '@codemirror/state'
+import { getSelectedTheme, getThemeExtension } from '../../utils/codeMirrorThemeUtils'
 import { CodeEditorProps } from '../../types'
 
 const CodeEditor: React.FC<CodeEditorProps> = ({
@@ -12,10 +10,10 @@ const CodeEditor: React.FC<CodeEditorProps> = ({
   height = '330px',
   editable = true,
   className = '',
+  theme: customTheme,
 }) => {
-  const { selectedTheme } = useCodeMirrorTheme();
-  // Type assertion to handle theme access
-  const theme = (themes as unknown as Record<string, Extension>)[selectedTheme];
+  const selectedTheme = customTheme || getSelectedTheme();
+  const theme = getThemeExtension(selectedTheme);
 
   return (
     <div className={className} style={{ border: '1px solid #dee2e6', borderRadius: '4px', overflow: 'hidden' }}>

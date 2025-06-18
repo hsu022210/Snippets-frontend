@@ -14,16 +14,6 @@ export interface ThemeOption {
   label: string;
 }
 
-export interface CodeMirrorThemeContextType {
-  selectedTheme: string;
-  setSelectedTheme: (theme: string) => void;
-  themeOptions: ThemeOption[];
-}
-
-export interface CodeMirrorThemeProviderProps {
-  children: React.ReactNode;
-}
-
 export type ToastType = 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'light' | 'dark';
 
 export interface ToastContextType {

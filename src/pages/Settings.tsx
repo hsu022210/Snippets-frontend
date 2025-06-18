@@ -1,5 +1,5 @@
 import { ChangeEvent, useState } from 'react'
-import { useCodeMirrorTheme } from '../contexts/CodeMirrorThemeContext'
+import { useCodeMirrorTheme } from '../hooks/useCodeMirrorTheme'
 import { usePreviewHeight } from '../hooks/usePreviewHeight'
 import { useTheme } from '../contexts/ThemeContext'
 import { Container, Card, Form, Row, Col, Nav, Tab, Button, Modal, Pagination, Stack } from 'react-bootstrap'
@@ -109,6 +109,7 @@ console.log('Sum:', result);`;
             language="javascript"
             height={`${previewHeight}px`}
             editable={false}
+            theme={selectedTheme}
           />
         </div>
       </div>

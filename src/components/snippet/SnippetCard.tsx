@@ -4,21 +4,20 @@ import Card, { Body, Title, Subtitle } from '../shared/Card'
 import Button from '../shared/Button'
 import CodeMirror from '@uiw/react-codemirror'
 import { getLanguageExtension, getLanguageDisplayName } from '../../utils/languageUtils'
-import { useCodeMirrorTheme } from '../../contexts/CodeMirrorThemeContext'
+import { getSelectedTheme, getThemeExtension } from '../../utils/codeMirrorThemeUtils'
 import { usePreviewHeight } from '../../hooks/usePreviewHeight'
 import { useShareSnippet } from '../../hooks/useShareSnippet'
 import { useTheme } from '../../contexts/ThemeContext'
-import * as themes from '@uiw/codemirror-themes-all'
 import { SnippetCardProps } from '../../types'
 import { TbLink, TbClock } from 'react-icons/tb'
 import { formatDistanceToNow } from 'date-fns'
 
 export const SnippetCard = ({ snippet }: SnippetCardProps) => {
-  const { selectedTheme } = useCodeMirrorTheme();
+  const selectedTheme = getSelectedTheme();
   const { previewHeight } = usePreviewHeight();
   const { shareSnippetTooltip, handleShare } = useShareSnippet();
   const { isDark } = useTheme();
-  const theme = (themes as Record<string, any>)[selectedTheme];
+  const theme = getThemeExtension(selectedTheme);
 
   const formatCreatedTime = () => {
     try {

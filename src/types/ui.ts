@@ -92,6 +92,7 @@ export interface CodeEditorProps {
   height?: string;
   editable?: boolean;
   className?: string;
+  theme?: string;
 }
 
 export interface DeleteConfirmationModalProps {
