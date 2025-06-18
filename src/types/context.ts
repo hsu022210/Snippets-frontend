@@ -1,6 +1,8 @@
 export interface ThemeContextType {
   isDark: boolean;
   toggleTheme: () => void;
+  primaryColor: string;
+  setPrimaryColor: (color: string) => void;
 }
 
 export interface ThemeProviderProps {
