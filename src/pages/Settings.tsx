@@ -196,7 +196,7 @@ const Settings: React.FC = () => {
   };
 
   return (
-    <Container className="py-4">
+    <Container>
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="mb-0">Settings</h2>
       </div>
@@ -205,7 +205,7 @@ const Settings: React.FC = () => {
         <Row className="g-4">
           <Col lg={3}>
             <Card className={`shadow-sm ${isDark ? 'bg-dark' : 'bg-light'}`}>
-              <Card.Body className="p-4">
+              <Card.Body>
                 <SettingsNav />
               </Card.Body>
             </Card>
@@ -213,7 +213,7 @@ const Settings: React.FC = () => {
           
           <Col lg={9}>
             <Card className={`shadow-sm ${isDark ? 'bg-dark' : 'bg-light'}`}>
-              <Card.Body className="p-4">
+              <Card.Body>
                 <Tab.Content>
                   <Tab.Pane eventKey="editor">
                     <EditorSettings
