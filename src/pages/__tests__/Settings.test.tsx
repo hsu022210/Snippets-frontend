@@ -152,7 +152,7 @@ describe('Settings Page', () => {
       // Navigate to General Settings
       const generalSettingsLink = screen.getAllByRole('tab')[2]
       await user.click(generalSettingsLink)
-      const colorButton = screen.getByRole('button', { name: /choose color/i })
+      const colorButton = screen.getByRole('button', { name: /choose/i })
       expect(colorButton).toHaveClass('btn-outline-primary')
       // The label should match getPrimaryColorLabel
       expect(screen.getByText(/Bootstrap Blue|Light Blue|Navy Blue|Ocean Blue|Sky Blue|Dark Blue|Blue Gray|Steel Blue|Mint Green|Sage Green|Forest Green|Teal|Dark Teal|Light Gray|Gray|Charcoal|Purple|Dark Purple|Mauve|Coral Red|Peach|Orange|Red Orange|Pink|Yellow/)).toBeInTheDocument()
@@ -163,7 +163,7 @@ describe('Settings Page', () => {
       // Navigate to General Settings
       const generalSettingsLink = screen.getAllByRole('tab')[2]
       await user.click(generalSettingsLink)
-      const colorButton = screen.getByRole('button', { name: /choose color/i })
+      const colorButton = screen.getByRole('button', { name: /choose/i })
       await user.click(colorButton)
       // Modal should show
       expect(screen.getByText('Choose Primary Color')).toBeInTheDocument()
@@ -181,7 +181,7 @@ describe('Settings Page', () => {
       // Navigate to General Settings
       const generalSettingsLink = screen.getAllByRole('tab')[2]
       await user.click(generalSettingsLink)
-      const colorButton = screen.getByRole('button', { name: /choose color/i })
+      const colorButton = screen.getByRole('button', { name: /choose/i })
       await user.click(colorButton)
       // Click a different color (find the card with the text 'Yellow' and click it)
       const yellowCards = screen.getAllByText('Yellow')
@@ -200,7 +200,7 @@ describe('Settings Page', () => {
       // Navigate to General Settings
       const generalSettingsLink = screen.getAllByRole('tab')[2]
       await user.click(generalSettingsLink)
-      const colorButton = screen.getByRole('button', { name: /choose color/i })
+      const colorButton = screen.getByRole('button', { name: /choose/i })
       await user.click(colorButton)
       // Preview section
       expect(screen.getByText('Preview')).toBeInTheDocument()

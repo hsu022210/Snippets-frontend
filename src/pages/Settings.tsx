@@ -189,7 +189,7 @@ const GeneralSettings: React.FC<GeneralSettingsProps> = ({
             className="d-flex align-items-center gap-2"
           >
             <TbPalette size={16} />
-            Choose Color
+            Choose
           </Button>
           <div
             className="border rounded"
