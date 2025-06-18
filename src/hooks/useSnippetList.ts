@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { useApiRequest } from './useApiRequest'
 import { Snippet, SnippetListResponse, FilterOptions } from '../types'
+import { getPageSize } from '../utils/pagination'
 
 export const useSnippetList = (filters?: FilterOptions, page: number = 1) => {
   const [snippets, setSnippets] = useState<Snippet[]>([]);
@@ -33,7 +34,7 @@ export const useSnippetList = (filters?: FilterOptions, page: number = 1) => {
       }
       // Add pagination parameters
       params.append('page', page.toString());
-      params.append('page_size', '6'); // Request 6 snippets per page
+      params.append('page_size', getPageSize().toString());
 
       const response = await makeRequest<SnippetListResponse>(
         () => api.get(`/snippets/?${params.toString()}`)

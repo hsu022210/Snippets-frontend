@@ -41,7 +41,7 @@ describe('Settings Page', () => {
     expect(screen.getByText('Settings')).toBeInTheDocument()
     expect(screen.getByText('Editor Settings')).toBeInTheDocument()
     expect(screen.getByText('Code Editor Theme')).toBeInTheDocument()
-    expect(screen.getByRole('combobox')).toBeInTheDocument()
+    expect(screen.getByTestId('theme-select')).toBeInTheDocument()
   })
 
   it('renders theme preview section', () => {
@@ -65,7 +65,7 @@ describe('Settings Page', () => {
   it('allows theme selection', async () => {
     renderSettings()
     
-    const themeSelect = screen.getByRole('combobox')
+    const themeSelect = screen.getByTestId('theme-select')
     await user.selectOptions(themeSelect, 'copilot')
     
     expect(themeSelect).toHaveValue('copilot')

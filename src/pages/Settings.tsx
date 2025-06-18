@@ -1,13 +1,15 @@
-import { ChangeEvent } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { useCodeMirrorTheme } from '../contexts/CodeMirrorThemeContext'
 import { usePreviewHeight } from '../contexts/PreviewHeightContext'
 import { Container, Card, Form, Row, Col } from 'react-bootstrap'
 import CodeEditor from '../components/shared/CodeEditor'
+import { getPageSize, setPageSize } from '../utils/pagination'
 // import { BsCodeSquare, BsPalette, BsBell } from 'react-icons/bs'
 
 const Settings: React.FC = () => {
   const { selectedTheme, setSelectedTheme, themeOptions } = useCodeMirrorTheme();
   const { previewHeight, setPreviewHeight } = usePreviewHeight();
+  const [pageSize, setLocalPageSize] = useState<number>(getPageSize);
 
   const handleThemeChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setSelectedTheme(e.target.value);
@@ -15,6 +17,12 @@ const Settings: React.FC = () => {
 
   const handlePreviewHeightChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPreviewHeight(parseInt(e.target.value, 10));
+  };
+
+  const handlePageSizeChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const newSize = parseInt(e.target.value, 10);
+    setLocalPageSize(newSize);
+    setPageSize(newSize);
   };
 
   const sampleCode = `// Sample code to preview the theme
@@ -72,6 +80,7 @@ console.log('Sum:', result);`;
                       value={selectedTheme}
                       onChange={handleThemeChange}
                       className="mb-2"
+                      data-testid="theme-select"
                     >
                       {themeOptions.map((theme) => (
                         <option key={theme.value} value={theme.value}>
@@ -100,6 +109,25 @@ console.log('Sum:', result);`;
                     />
                     <Form.Text className="text-muted">
                       Adjust the height of code previews in snippet cards
+                    </Form.Text>
+                  </Form.Group>
+                </div>
+
+                <div className="mb-4">
+                  <Form.Group>
+                    <Form.Label className="fw-bold">Snippets Per Page</Form.Label>
+                    <Form.Select
+                      value={pageSize}
+                      onChange={handlePageSizeChange}
+                      className="mb-2"
+                    >
+                      <option value="6">6 snippets</option>
+                      <option value="12">12 snippets</option>
+                      <option value="24">24 snippets</option>
+                      <option value="48">48 snippets</option>
+                    </Form.Select>
+                    <Form.Text className="text-muted">
+                      Choose how many snippets to display per page in the snippet list
                     </Form.Text>
                   </Form.Group>
                 </div>

@@ -6,6 +6,7 @@ import SnippetCard from '../components/snippet/SnippetCard'
 import EmptySnippetList from '../components/snippet/EmptySnippetList'
 import SnippetFilterSection from '../components/snippet/SnippetFilterSection'
 import SnippetSearch from '../components/snippet/SnippetSearch'
+import { getPageSize } from '../utils/pagination'
 import { 
   SnippetFilterValues, 
   PaginationItemsProps,
@@ -118,7 +119,7 @@ const SnippetList: React.FC = () => {
   };
 
   const hasActiveFilters = Object.values(filters).some(value => value !== '');
-  const totalPages = Math.ceil(totalCount / 6);
+  const totalPages = Math.ceil(totalCount / getPageSize());
 
   if (loading) {
     return (
