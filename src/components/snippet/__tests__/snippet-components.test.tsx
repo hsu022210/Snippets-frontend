@@ -8,10 +8,11 @@ import DeleteConfirmationModal from '../DeleteConfirmationModal'
 import SnippetLanguageSelector from '../SnippetLanguageSelector'
 import SnippetHeader from '../SnippetHeader'
 import SnippetSearch from '../SnippetSearch'
-import { Snippet } from '@/types/interfaces.ts'
+import { Snippet } from '@/types'
 import { useTheme } from '../../../contexts/ThemeContext'
 import SnippetFilter from '../SnippetFilter'
 import SnippetFilterSection from '../SnippetFilterSection'
+import { getLanguageDisplayName } from '../../../utils/languageUtils'
 
 // Mock data
 const mockSnippet: Snippet = {
@@ -40,7 +41,7 @@ describe('Snippet Components', () => {
       )
       
       expect(screen.getByText(mockSnippet.title)).toBeInTheDocument()
-      expect(screen.getByText(`Language: ${mockSnippet.language}`)).toBeInTheDocument()
+      expect(screen.getByText(`Language: ${getLanguageDisplayName(mockSnippet.language)}`)).toBeInTheDocument()
       expect(screen.getByRole('link')).toHaveAttribute('href', `/snippets/${mockSnippet.id}`)
     })
 
@@ -465,7 +466,7 @@ describe('Snippet Components', () => {
         render(<SnippetLanguageSelector {...viewProps} />);
         
         expect(screen.getByText('Language:')).toBeInTheDocument();
-        expect(screen.getByText('python')).toBeInTheDocument();
+        expect(screen.getByText('Python')).toBeInTheDocument();
       });
 
       it('displays "None" when language is empty in view mode', () => {

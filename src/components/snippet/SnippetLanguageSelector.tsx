@@ -1,18 +1,8 @@
 import { Form } from 'react-bootstrap'
-import { LANGUAGE_OPTIONS } from '../../utils/languageUtils'
+import { getLanguageDisplayName, LanguageOptions } from '../../utils/languageUtils'
 import { SnippetLanguageSelectorProps, SnippetLanguageFilterProps } from '../../types'
 
 type Props = SnippetLanguageSelectorProps | SnippetLanguageFilterProps;
-
-const LanguageOptions = () => (
-  <>
-    {LANGUAGE_OPTIONS.map((lang) => (
-      <option key={lang} value={lang}>
-        {lang.charAt(0).toUpperCase() + lang.slice(1)}
-      </option>
-    ))}
-  </>
-);
 
 const FilterLanguageSelector: React.FC<SnippetLanguageFilterProps> = ({ language, onLanguageChange }) => (
   <Form.Group>
@@ -52,7 +42,7 @@ const EditLanguageSelector: React.FC<SnippetLanguageSelectorProps> = ({
         </Form.Select>
       </Form.Group>
     ) : (
-      <><strong>Language:</strong> {language || 'None'}</>
+      <><strong>Language:</strong> {getLanguageDisplayName(language)}</>
     )}
   </div>
 );

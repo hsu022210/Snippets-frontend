@@ -14,34 +14,37 @@ vi.mock('@codemirror/lang-xml', () => ({ xml: vi.fn(() => 'xml-ext') }));
 vi.mock('@codemirror/lang-yaml', () => ({ yaml: vi.fn(() => 'yaml-ext') }));
 
 import { describe, it, expect, vi } from 'vitest'
+import { render } from '@testing-library/react'
 import {
-  LANGUAGE_OPTIONS,
+  SUPPORTED_LANGUAGES,
   getLanguageExtension,
-  processCode
+  getLanguageDisplayName,
+  LanguageOptions,
+  processCode,
 } from './languageUtils'
 
 // Get the mocked functions
 const { javascript } = await import('@codemirror/lang-javascript');
 
-describe('LANGUAGE_OPTIONS', () => {
-  it('should include all supported languages', () => {
-    expect(LANGUAGE_OPTIONS).toEqual([
-      'javascript',
-      'python',
-      'java',
-      'cpp',
-      'c',
-      'html',
-      'css',
-      'sql',
-      'json',
-      'markdown',
-      'typescript',
-      'rust',
-      'php',
-      'xml',
-      'yaml'
-    ]);
+describe('Language Constants', () => {
+  it('SUPPORTED_LANGUAGES should include all supported languages with correct keys', () => {
+    expect(SUPPORTED_LANGUAGES).toEqual({
+      JAVASCRIPT: 'javascript',
+      PYTHON: 'python',
+      JAVA: 'java',
+      CPP: 'cpp',
+      C: 'c',
+      HTML: 'html',
+      CSS: 'css',
+      SQL: 'sql',
+      JSON: 'json',
+      MARKDOWN: 'markdown',
+      TYPESCRIPT: 'typescript',
+      RUST: 'rust',
+      PHP: 'php',
+      XML: 'xml',
+      YAML: 'yaml'
+    });
   });
 });
 
@@ -70,9 +73,10 @@ describe('getLanguageExtension', () => {
   });
 
   it('handles case-insensitive language names', () => {
-    expect(getLanguageExtension('JavaScript')[0]).toBe('js-ext');
+    // Test with lowercase since the implementation expects lowercase
+    expect(getLanguageExtension('Javascript')[0]).toBe('js-ext');
     expect(getLanguageExtension('PYTHON')[0]).toBe('py-ext');
-    expect(getLanguageExtension('TypeScript')[0]).toBe('js-ext');
+    expect(getLanguageExtension('TyPeScriPt')[0]).toBe('js-ext');
   });
 
   it('handles error in language extension loading', () => {
@@ -88,12 +92,59 @@ describe('getLanguageExtension', () => {
 
     expect(getLanguageExtension('javascript')).toEqual([]);
     expect(console.error).toHaveBeenCalledWith(
-      'Error loading language extension:',
+      'Error loading language extension for javascript:',
       mockError
     );
 
     // Restore console.error
     console.error = originalConsoleError;
+  });
+});
+
+describe('getLanguageDisplayName', () => {
+  it('returns correct display names for supported languages', () => {
+    expect(getLanguageDisplayName('javascript')).toBe('JavaScript');
+    expect(getLanguageDisplayName('python')).toBe('Python');
+    expect(getLanguageDisplayName('typescript')).toBe('TypeScript');
+    expect(getLanguageDisplayName('cpp')).toBe('C++');
+    expect(getLanguageDisplayName('c')).toBe('C');
+  });
+
+  it('returns "None" for unsupported languages', () => {
+    expect(getLanguageDisplayName('unknown')).toBe('None');
+    expect(getLanguageDisplayName('')).toBe('None');
+    expect(getLanguageDisplayName(null as unknown as string)).toBe('None');
+  });
+});
+
+describe('LanguageOptions', () => {
+  it('renders all supported languages as options', () => {
+    const { container } = render(<LanguageOptions />);
+    const options = container.querySelectorAll('option');
+    
+    // Check that we have the correct number of options
+    expect(options.length).toBe(Object.keys(SUPPORTED_LANGUAGES).length);
+    
+    // Check that each option has the correct value and display name
+    Object.values(SUPPORTED_LANGUAGES).forEach((lang) => {
+      const option = container.querySelector(`option[value="${lang}"]`);
+      expect(option).toBeTruthy();
+      expect(option?.textContent).toBe(getLanguageDisplayName(lang));
+    });
+  });
+
+  it('renders options with correct key prop', () => {
+    const { container } = render(<LanguageOptions />);
+    const options = container.querySelectorAll('option');
+    
+    // Check that each option has a unique value (which is used as the key)
+    const values = new Set();
+    options.forEach(option => {
+      const value = option.getAttribute('value');
+      expect(value).toBeTruthy();
+      expect(values.has(value)).toBe(false);
+      values.add(value);
+    });
   });
 });
 

@@ -4,7 +4,7 @@ import Button from '../components/shared/Button'
 import Container from '../components/shared/Container'
 import CodeEditor from '../components/shared/CodeEditor'
 import { useCreateSnippet } from '../hooks/useSnippet'
-import { LANGUAGE_OPTIONS } from '../utils/languageUtils'
+import { LanguageOptions } from '../utils/languageUtils'
 import { SnippetData } from '../types'
 
 const CreateSnippet: React.FC = () => {
@@ -43,11 +43,7 @@ const CreateSnippet: React.FC = () => {
             required
           >
             <option value="">Select language</option>
-            {LANGUAGE_OPTIONS.map((lang) => (
-              <option key={lang} value={lang}>
-                {lang.charAt(0).toUpperCase() + lang.slice(1)}
-              </option>
-            ))}
+            <LanguageOptions />
           </Form.Select>
         </Form.Group>
 

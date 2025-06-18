@@ -3,7 +3,7 @@ import { Stack, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import Card, { Body, Title, Subtitle } from '../shared/Card'
 import Button from '../shared/Button'
 import CodeMirror from '@uiw/react-codemirror'
-import { getLanguageExtension } from '../../utils/languageUtils'
+import { getLanguageExtension, getLanguageDisplayName } from '../../utils/languageUtils'
 import { useCodeMirrorTheme } from '../../contexts/CodeMirrorThemeContext'
 import { usePreviewHeight } from '../../contexts/PreviewHeightContext'
 import { useShareSnippet } from '../../hooks/useShareSnippet'
@@ -63,7 +63,7 @@ export const SnippetCard = ({ snippet }: SnippetCardProps) => {
               </div>
               <div className="d-flex flex-column gap-1 text-muted">
                 <Subtitle className="mb-0">
-                  Language: {snippet.language || 'None'}
+                  Language: {getLanguageDisplayName(snippet.language)}
                 </Subtitle>
                 <div className="d-flex align-items-center gap-1">
                   <TbClock size={14} />
