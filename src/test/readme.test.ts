@@ -24,18 +24,21 @@ describe('README.md', () => {
 
   it('should list all supported languages', () => {
     const requiredLanguages = [
-      'JavaScript/TypeScript',
+      'JavaScript',
+      'TypeScript',
       'Python',
       'Java',
       'C++',
-      'HTML/CSS',
+      'C',
+      'HTML',
+      'CSS',
       'SQL',
-      'PHP',
-      'Rust',
-      'YAML',
       'JSON',
+      'Markdown',
+      'Rust',
+      'PHP',
       'XML',
-      'Markdown'
+      'YAML'
     ]
 
     requiredLanguages.forEach(lang => {

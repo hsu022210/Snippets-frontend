@@ -14,18 +14,21 @@ A modern web application for managing and organizing code snippets across multip
 
 ## Supported Languages
 
-- JavaScript/TypeScript
+- JavaScript
+- TypeScript
 - Python
 - Java
 - C++
-- HTML/CSS
+- C
+- HTML
+- CSS
 - SQL
-- PHP
-- Rust
-- YAML
 - JSON
-- XML
 - Markdown
+- Rust
+- PHP
+- XML
+- YAML
 
 ## Tech Stack
 
