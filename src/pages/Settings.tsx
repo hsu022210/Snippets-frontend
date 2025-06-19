@@ -2,12 +2,13 @@ import { ChangeEvent, useState } from 'react'
 import { useCodeMirrorTheme } from '../hooks/useCodeMirrorTheme'
 import { usePreviewHeight } from '../hooks/usePreviewHeight'
 import { useTheme } from '../contexts/ThemeContext'
-import { Container, Card, Form, Row, Col, Nav, Tab, Button, Modal, Pagination, Stack } from 'react-bootstrap'
+import { Container, Card, Form, Row, Col, Nav, Tab, Modal, Pagination, Stack } from 'react-bootstrap'
 import CodeEditor from '../components/shared/CodeEditor'
 import { getPageSize, setPageSize } from '../utils/pagination'
 import { getPrimaryColorLabel, PRIMARY_COLORS } from '../utils/primaryColor'
 import { TbSun, TbMoon, TbPalette } from 'react-icons/tb'
 import { EditorSettingsProps, DisplaySettingsProps, GeneralSettingsProps } from '../types/ui'
+import Button from '../components/shared/Button'
 
 const SettingsNav: React.FC = () => (
   <Nav variant="pills" className="flex-column d-flex settings-nav">
@@ -190,21 +191,22 @@ const GeneralSettings: React.FC<GeneralSettingsProps> = ({
             className="d-flex align-items-center gap-2"
           >
             <TbPalette size={16} />
-            Choose
+            {getPrimaryColorLabel(primaryColor)}
           </Button>
-          <div
-            className="border rounded"
+          <Card
+            onClick={onShowColorModal}
+            className="border rounded p-0 d-flex align-items-center justify-content-center"
             style={{
               width: '40px',
               height: '40px',
               backgroundColor: primaryColor,
+              cursor: 'pointer',
               flexShrink: 0
             }}
             title={`Selected color: ${primaryColor}`}
+            role="button"
+            tabIndex={0}
           />
-          <span className="text-muted">
-            {getPrimaryColorLabel(primaryColor)}
-          </span>
         </div>
         <Form.Text className="text-muted">
           Choose the primary color for components throughout the site
@@ -218,6 +220,36 @@ const GeneralSettings: React.FC<GeneralSettingsProps> = ({
         <Modal.Title>Choose Primary Color</Modal.Title>
       </Modal.Header>
       <Modal.Body>
+        {/* Preview Section */}
+        <Card className="mb-4">
+          <Card.Body>
+            <Card.Title as="h6">Preview</Card.Title>
+            <Stack direction="horizontal" gap={4} className="align-items-start">
+              {/* Button Previews */}
+              <Stack gap={2}>
+                <small className="text-muted">Buttons:</small>
+                <Stack direction="horizontal" gap={2}>
+                  <Button variant="primary" size="sm">Primary</Button>
+                  <Button variant="outline-primary" size="sm">Outline</Button>
+                </Stack>
+              </Stack>
+              
+              {/* Pagination Preview */}
+              <Stack gap={2}>
+                <small className="text-muted">Pagination:</small>
+                <Pagination size="sm">
+                  <Pagination.Prev />
+                  <Pagination.Item>1</Pagination.Item>
+                  <Pagination.Item active>2</Pagination.Item>
+                  <Pagination.Item>3</Pagination.Item>
+                  <Pagination.Next />
+                </Pagination>
+              </Stack>
+            </Stack>
+          </Card.Body>
+        </Card>
+
+        {/* Color Options */}
         <Row className="g-3">
           {PRIMARY_COLORS.map((color) => (
             <Col key={color.value} xs={6} md={4}>
@@ -253,35 +285,6 @@ const GeneralSettings: React.FC<GeneralSettingsProps> = ({
             </Col>
           ))}
         </Row>
-        
-        {/* Preview Section */}
-        <Card className="mt-4">
-          <Card.Body>
-            <Card.Title as="h6">Preview</Card.Title>
-            <Stack direction="horizontal" gap={4} className="align-items-start">
-              {/* Button Previews */}
-              <Stack gap={2}>
-                <small className="text-muted">Buttons:</small>
-                <Stack direction="horizontal" gap={2}>
-                  <Button variant="primary" size="sm">Primary</Button>
-                  <Button variant="outline-primary" size="sm">Outline</Button>
-                </Stack>
-              </Stack>
-              
-              {/* Pagination Preview */}
-              <Stack gap={2}>
-                <small className="text-muted">Pagination:</small>
-                <Pagination size="sm">
-                  <Pagination.Prev />
-                  <Pagination.Item>1</Pagination.Item>
-                  <Pagination.Item active>2</Pagination.Item>
-                  <Pagination.Item>3</Pagination.Item>
-                  <Pagination.Next />
-                </Pagination>
-              </Stack>
-            </Stack>
-          </Card.Body>
-        </Card>
       </Modal.Body>
     </Modal>
   </>
