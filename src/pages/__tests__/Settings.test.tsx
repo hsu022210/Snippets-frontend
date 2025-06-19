@@ -157,6 +157,43 @@ describe('Settings Page', () => {
       expect(colorButton).toHaveClass('btn-outline-primary')
     })
 
+    it('shows hex code tooltip when hovering over a color swatch', async () => {
+      renderSettings()
+      // Navigate to General Settings
+      const generalSettingsLink = screen.getAllByRole('tab')[2]
+      await user.click(generalSettingsLink)
+      // Open the color modal by clicking the color preview Card
+      const colorCard = screen.getByRole('button', { name: /selected color/i })
+      await user.click(colorCard)
+      // Find all color labels (e.g., 'Bootstrap Blue', 'Sky Blue', etc.)
+      const colorLabels = screen.getAllByText(/blue|green|gray|purple|red|orange|yellow|mint|sage|teal|charcoal|mauve|pink|fandango|tangelo|peach|vermilion|coral|navy|ocean|sky|dark|steel/i)
+      expect(colorLabels.length).toBeGreaterThan(0)
+      const colorLabel = colorLabels[0]
+      const card = colorLabel.closest('.card')
+      expect(card).toBeTruthy()
+      if (card) {
+        await user.hover(card)
+        // Wait for the tooltip to appear by its hex code text
+        const hexMatch = /^#([A-Fa-f0-9]{6})$/
+        await screen.findByText(hexMatch)
+      }
+    })
+
+    it('shows the custom color picker and preview square in the modal', async () => {
+      renderSettings()
+      // Navigate to General Settings
+      const generalSettingsLink = screen.getAllByRole('tab')[2]
+      await user.click(generalSettingsLink)
+      // Open the color modal by clicking the color preview Card
+      const colorCard = screen.getByRole('button', { name: /selected color/i })
+      await user.click(colorCard)
+      // Custom color picker (Colorful) should be present
+      expect(screen.getByText(/pick a custom color/i)).toBeInTheDocument()
+      // Preview square: look for a div with a style containing backgroundColor
+      const previewSquare = screen.getAllByTitle(/selected color/i)
+      expect(previewSquare.length).toBeGreaterThan(0)
+    })
+
     it('opens the color select modal when clicking the color preview Card', async () => {
       renderSettings()
       // Navigate to General Settings
