@@ -52,7 +52,7 @@ const PrimaryColorModal: React.FC<PrimaryColorModalProps> = ({
             {PRIMARY_COLORS.map((color) => (
               <Col key={color.value} xs={6} sm={4} md={6} lg={4}>
                 <OverlayTrigger
-                  placement="right"
+                  placement="top"
                   overlay={<Tooltip id={`tooltip-${color.value}`}>{color.value}</Tooltip>}
                 >
                   <Card
