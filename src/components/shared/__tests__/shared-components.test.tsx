@@ -1,14 +1,16 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import Card from '../Card'
 import Container from '../Container'
 import Button from '../Button'
 import CodeEditor from '../CodeEditor'
 import { TestProviders } from '../../../test/setup'
+import PrimaryColorModal from '../../PrimaryColorModal'
+import { PRIMARY_COLORS } from '../../../utils/primaryColor'
 
 // Mock CodeMirror component
 vi.mock('@uiw/react-codemirror', () => ({
-  default: ({ value, onChange, height, editable }) => (
+  default: ({ value, onChange, height, editable }: { value: string, onChange?: (val: string) => void, height?: string, editable?: boolean }) => (
     <div 
       data-testid="codemirror-mock"
       data-value={value}
@@ -155,5 +157,57 @@ describe('Shared Components', () => {
         overflow: 'hidden'
       })
     })
+  })
+
+  describe('PrimaryColorModal', () => {
+    const onHide = vi.fn();
+    const onPrimaryColorChange = vi.fn();
+    const defaultProps = {
+      show: true,
+      onHide,
+      primaryColor: PRIMARY_COLORS[0].value,
+      onPrimaryColorChange,
+      isDark: false,
+    };
+
+    beforeEach(() => {
+      onHide.mockClear();
+      onPrimaryColorChange.mockClear();
+    });
+
+    it('renders the modal and preview section', () => {
+      render(<PrimaryColorModal {...defaultProps} />);
+      expect(screen.getByText('Choose Primary Color')).toBeInTheDocument();
+      expect(screen.getByText('Preview')).toBeInTheDocument();
+      expect(screen.getByText('Buttons:')).toBeInTheDocument();
+      expect(screen.getByText('Pagination:')).toBeInTheDocument();
+    });
+
+    it('renders preset color options', () => {
+      render(<PrimaryColorModal {...defaultProps} />);
+      PRIMARY_COLORS.forEach(color => {
+        expect(screen.getByLabelText(color.label)).toBeInTheDocument();
+      });
+    });
+
+    it('calls onPrimaryColorChange when a preset color is clicked', () => {
+      render(<PrimaryColorModal {...defaultProps} />);
+      const radio = screen.getByLabelText(PRIMARY_COLORS[1].label);
+      fireEvent.click(radio);
+      expect(defaultProps.onPrimaryColorChange).toHaveBeenCalled();
+    });
+
+    it('calls onHide when the close button is clicked', () => {
+      render(<PrimaryColorModal {...defaultProps} />);
+      const closeButton = screen.getByRole('button', { name: /close/i });
+      fireEvent.click(closeButton);
+      expect(defaultProps.onHide).toHaveBeenCalled();
+    });
+
+    it('renders the custom color picker', () => {
+      render(<PrimaryColorModal {...defaultProps} />);
+      expect(screen.getByText('Or pick a custom color:')).toBeInTheDocument();
+      expect(screen.getByText(defaultProps.primaryColor)).toBeInTheDocument();
+    });
   })
 }) 

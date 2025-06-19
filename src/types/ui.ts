@@ -138,4 +138,12 @@ export interface GeneralSettingsProps {
   showColorModal: boolean;
   onShowColorModal: () => void;
   onHideColorModal: () => void;
+}
+
+export interface PrimaryColorModalProps {
+  show: boolean;
+  onHide: () => void;
+  primaryColor: string;
+  onPrimaryColorChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  isDark: boolean;
 } 
