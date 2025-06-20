@@ -24,8 +24,8 @@ const PrimaryColorModal: React.FC<PrimaryColorModalProps> = ({
             <Stack gap={2}>
               <small className="text-muted">Buttons:</small>
               <Stack direction="horizontal" gap={2}>
-                <Button variant="primary" size="sm">Primary</Button>
-                <Button variant="outline-primary" size="sm">Outline</Button>
+                <Button variant="primary" size="sm">Button</Button>
+                <Button variant="outline-primary" size="sm">Button</Button>
               </Stack>
             </Stack>
             {/* Pagination Preview */}
