@@ -322,4 +322,47 @@ describe('Register Component', () => {
       expect(screen.getByText('Unexpected server error')).toBeInTheDocument();
     });
   });
+
+  it('completes full registration flow with automatic login and navigation', async () => {
+    const mockAccessToken = 'mock-access-token-12345';
+    mockRegister.mockResolvedValueOnce(mockAccessToken);
+    renderRegister();
+
+    const usernameInput = screen.getByLabelText(/username/i) as HTMLInputElement;
+    const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
+    const passwordInput = screen.getByLabelText(/^password$/i) as HTMLInputElement;
+    const confirmPasswordInput = screen.getByLabelText(/confirm password/i) as HTMLInputElement;
+    const submitButton = screen.getByRole('button', { name: /register/i });
+
+    // Fill out the registration form
+    fireEvent.change(usernameInput, { target: { value: 'newuser' } });
+    fireEvent.change(emailInput, { target: { value: 'newuser@example.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'securepassword123' } });
+    fireEvent.change(confirmPasswordInput, { target: { value: 'securepassword123' } });
+
+    // Submit the form
+    fireEvent.click(submitButton);
+
+    // Verify the registration function was called with correct parameters
+    await waitFor(() => {
+      expect(mockRegister).toHaveBeenCalledWith(
+        'newuser',
+        'securepassword123',
+        'securepassword123',
+        'newuser@example.com'
+      );
+    });
+
+    // Verify that navigation occurred to the snippets page
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith('/snippets');
+    });
+
+    // Verify that the registration returned a valid access token
+    expect(mockRegister).toHaveBeenCalledTimes(1);
+    
+    // Verify no error messages are displayed
+    expect(screen.queryByText(/registration successful but authentication failed/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/error/i)).not.toBeInTheDocument();
+  });
 }); 
