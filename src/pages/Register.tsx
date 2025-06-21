@@ -1,7 +1,8 @@
 import { useState, ChangeEvent, FormEvent } from 'react'
-import { Form, Alert } from 'react-bootstrap'
+import { Form } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import { useToast } from '../contexts/ToastContext'
 import PasswordInput from '../components/auth/PasswordInput'
 import AuthForm from '../components/auth/AuthForm'
 import FormField from '../components/auth/FormField'
@@ -17,10 +18,10 @@ const Register = () => {
     password: '',
     confirmPassword: ''
   });
-  const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const { register } = useAuth();
+  const { showToast } = useToast();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -68,18 +69,18 @@ const Register = () => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      return setError('Passwords do not match');
+      showToast('Passwords do not match', 'danger');
+      return;
     }
 
     try {
-      setError('');
       setLoading(true);
       
       await register(formData.username, formData.password, formData.confirmPassword, formData.email);
       navigate('/snippets');
     } catch (error) {
       const errorMessage = getErrorMessage(error as ApiError);
-      setError(errorMessage);
+      showToast(errorMessage, 'danger');
       console.error('Registration error:', error);
     } finally {
       setLoading(false);
@@ -88,7 +89,6 @@ const Register = () => {
 
   return (
     <AuthForm title="Register">
-      {error && <Alert variant="danger" className="mb-3">{error}</Alert>}
       <Form onSubmit={handleSubmit}>
         <FormField
           label="Username"

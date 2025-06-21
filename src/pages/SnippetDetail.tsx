@@ -1,9 +1,10 @@
 import { useState, useMemo } from 'react'
-import { Alert, Breadcrumb } from 'react-bootstrap'
+import { Breadcrumb } from 'react-bootstrap'
 import { useParams, Link } from 'react-router-dom'
 import ErrorBoundary from '../components/ErrorBoundary'
 import InlineLoadingSpinner from '../components/InlineLoadingSpinner'
 import { useSnippet } from '../hooks/useSnippet'
+import { useToast } from '../contexts/ToastContext'
 import { processCode } from '../utils/languageUtils'
 import SnippetHeader from '../components/snippet/SnippetHeader'
 import SnippetLanguageSelector from '../components/snippet/SnippetLanguageSelector'
@@ -19,12 +20,11 @@ const SnippetDetail: React.FC = () => {
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [codeError, setCodeError] = useState<boolean>(false);
   const { token } = useAuth();
+  const { showToast } = useToast();
   const {
     snippet,
     loading,
-    error,
     saving,
-    saveError,
     isEditing,
     editedCode,
     editedTitle,
@@ -53,6 +53,7 @@ const SnippetDetail: React.FC = () => {
       };
     } catch (error) {
       console.error('Error formatting date:', error);
+      showToast('Error formatting date', 'warning');
       return {
         relative: 'Unknown time',
         absolute: 'Unknown time'
@@ -67,9 +68,10 @@ const SnippetDetail: React.FC = () => {
     } catch (error) {
       console.error('Error processing code:', error);
       setCodeError(true);
+      showToast('Error processing code content', 'warning');
       return '// Error: Could not process code content';
     }
-  }, [isEditing, editedCode, snippet?.code]);
+  }, [isEditing, editedCode, snippet?.code, showToast]);
 
   if (loading) {
     return (
@@ -81,21 +83,14 @@ const SnippetDetail: React.FC = () => {
     );
   }
 
-  if (error) {
-    return (
-      <Container>
-        <div className="center-content">
-          <Alert variant="danger">{error}</Alert>
-        </div>
-      </Container>
-    );
-  }
-
   if (!snippet) {
     return (
       <Container>
         <div className="center-content">
-          <Alert variant="warning">Snippet not found</Alert>
+          <div className="text-center">
+            <h4 className="text-muted">Snippet not found</h4>
+            <p className="text-muted">The snippet you're looking for doesn't exist or has been deleted.</p>
+          </div>
         </div>
       </Container>
     );
@@ -147,16 +142,10 @@ const SnippetDetail: React.FC = () => {
           </div>
         </div>
 
-        {saveError && (
-          <Alert variant="danger" className="mb-3">
-            {saveError}
-          </Alert>
-        )}
-
         {codeError && (
-          <Alert variant="warning" className="mb-3">
+          <div className="alert alert-warning mb-3">
             There was an issue processing the code content. The display might be affected.
-          </Alert>
+          </div>
         )}
 
         <CodeEditor

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useApiRequest } from './useApiRequest'
+import { useToast } from '../contexts/ToastContext'
 import { ApiError } from '../services'
 import { Snippet, SnippetData } from '../types'
 import { snippetService } from '../services'
@@ -8,15 +9,14 @@ import { snippetService } from '../services'
 export const useSnippet = (snippetId: number) => {
   const [snippet, setSnippet] = useState<Snippet | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>('');
   const [saving, setSaving] = useState<boolean>(false);
-  const [saveError, setSaveError] = useState<string>('');
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editedCode, setEditedCode] = useState<string>('');
   const [editedTitle, setEditedTitle] = useState<string>('');
   const [editedLanguage, setEditedLanguage] = useState<string>('');
   const navigate = useNavigate();
   const { makeRequest } = useApiRequest();
+  const { showToast } = useToast();
 
   const fetchSnippet = useCallback(async () => {
     try {
@@ -27,20 +27,14 @@ export const useSnippet = (snippetId: number) => {
       setEditedCode(snippetData.code);
       setEditedTitle(snippetData.title);
       setEditedLanguage(snippetData.language);
-      setError('');
     } catch (error) {
       const apiError = error as ApiError;
-      if (apiError.status === 401) {
-        setError('Your session has expired. Please log in again.');
-        navigate('/login');
-      } else {
-        setError(apiError.message || 'Failed to fetch snippet');
-      }
+      showToast(apiError.message || 'Failed to fetch snippet', 'danger');
       console.error('Error fetching snippet:', error);
     } finally {
       setLoading(false);
     }
-  }, [snippetId, navigate, makeRequest]);
+  }, [snippetId, makeRequest, showToast]);
 
   useEffect(() => {
     fetchSnippet();
@@ -48,7 +42,6 @@ export const useSnippet = (snippetId: number) => {
 
   const handleSave = async () => {
     setSaving(true);
-    setSaveError('');
     
     try {
       const updatedSnippet = await makeRequest(
@@ -60,15 +53,10 @@ export const useSnippet = (snippetId: number) => {
       );
       setSnippet(updatedSnippet);
       setIsEditing(false);
-      setSaveError('');
+      showToast('Snippet saved successfully!', 'primary', 3);
     } catch (error) {
       const apiError = error as ApiError;
-      if (apiError.status === 401) {
-        setSaveError('Your session has expired. Please log in again.');
-        navigate('/login');
-      } else {
-        setSaveError(apiError.message || 'Failed to save');
-      }
+      showToast(apiError.message || 'Failed to save', 'danger');
       console.error('Error saving snippet:', error);
     } finally {
       setSaving(false);
@@ -80,15 +68,11 @@ export const useSnippet = (snippetId: number) => {
       await makeRequest(
         () => snippetService.deleteSnippet(snippetId)
       );
+      showToast('Snippet deleted successfully!', 'primary', 3);
       navigate('/snippets');
     } catch (error) {
       const apiError = error as ApiError;
-      if (apiError.status === 401) {
-        setError('Your session has expired. Please log in again.');
-        navigate('/login');
-      } else {
-        setError(apiError.message || 'Failed to delete snippet');
-      }
+      showToast(apiError.message || 'Failed to delete snippet', 'danger');
       console.error('Error deleting snippet:', error);
     }
   };
@@ -99,16 +83,13 @@ export const useSnippet = (snippetId: number) => {
       setEditedCode(snippet.code);
       setEditedTitle(snippet.title);
       setEditedLanguage(snippet.language);
-      setSaveError('');
     }
   };
 
   return {
     snippet,
     loading,
-    error,
     saving,
-    saveError,
     isEditing,
     editedCode,
     editedTitle,
@@ -125,28 +106,23 @@ export const useSnippet = (snippetId: number) => {
 
 export const useCreateSnippet = () => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
   const navigate = useNavigate();
   const { makeRequest } = useApiRequest();
+  const { showToast } = useToast();
 
   const createSnippet = async (snippetData: SnippetData) => {
-    setError('');
     setLoading(true);
 
     try {
       const newSnippet = await makeRequest(
         () => snippetService.createSnippet(snippetData)
       );
+      showToast('Snippet created successfully!', 'primary', 3);
       navigate(`/snippets/${newSnippet.id}`);
       return newSnippet;
     } catch (error) {
       const apiError = error as ApiError;
-      if (apiError.status === 401) {
-        setError('Your session has expired. Please log in again.');
-        navigate('/login');
-      } else {
-        setError(apiError.message || 'Failed to create snippet');
-      }
+      showToast(apiError.message || 'Failed to create snippet', 'danger');
       console.error('Error creating snippet:', error);
       throw error;
     } finally {
@@ -156,7 +132,6 @@ export const useCreateSnippet = () => {
 
   return {
     createSnippet,
-    loading,
-    error
+    loading
   };
 }; 

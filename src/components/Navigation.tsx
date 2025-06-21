@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { useTheme } from '../contexts/ThemeContext'
+import { useToast } from '../contexts/ToastContext'
 import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap'
 import Button from './shared/Button'
 import LogoutLoadingSpinner from './LogoutLoadingSpinner'
@@ -21,6 +22,7 @@ const Navigation: React.FC = () => {
   const [isLoggingOut, setIsLoggingOut] = useState<boolean>(false);
   const { user, logout } = useAuth();
   const { isDark, toggleTheme } = useTheme();
+  const { showToast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -59,6 +61,7 @@ const Navigation: React.FC = () => {
       }
     } catch (error) {
       console.error('Logout failed:', error);
+      showToast('Logout failed. Please try again.', 'danger');
     } finally {
       setIsLoggingOut(false);
     }

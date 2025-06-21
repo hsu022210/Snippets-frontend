@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useApiRequest } from './useApiRequest'
+import { useToast } from '../contexts/ToastContext'
 import { Snippet, SnippetListResponse, FilterOptions } from '../types'
 import { getPageSize } from '../utils/pagination'
 import { snippetService } from '../services'
@@ -8,10 +9,10 @@ export const useSnippetList = (filters?: FilterOptions, page: number = 1) => {
   const [snippets, setSnippets] = useState<Snippet[]>([]);
   const [totalCount, setTotalCount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>('');
   const [hasNextPage, setHasNextPage] = useState<boolean>(false);
   const [hasPreviousPage, setHasPreviousPage] = useState<boolean>(false);
   const { makeRequest } = useApiRequest();
+  const { showToast } = useToast();
 
   const fetchSnippets = useCallback(async () => {
     try {
@@ -28,14 +29,13 @@ export const useSnippetList = (filters?: FilterOptions, page: number = 1) => {
       setTotalCount(response.count);
       setHasNextPage(!!response.next);
       setHasPreviousPage(!!response.previous);
-      setError('');
     } catch (error) {
-      setError('Failed to fetch snippets');
+      showToast('Failed to fetch snippets', 'danger');
       console.error('Error fetching snippets:', error);
     } finally {
       setLoading(false);
     }
-  }, [makeRequest, filters, page]);
+  }, [makeRequest, filters, page, showToast]);
 
   useEffect(() => {
     fetchSnippets();
@@ -45,7 +45,6 @@ export const useSnippetList = (filters?: FilterOptions, page: number = 1) => {
     snippets,
     totalCount,
     loading,
-    error,
     hasNextPage,
     hasPreviousPage
   };

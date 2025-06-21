@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from '../../contexts/AuthContext'
+import { ToastProvider } from '../../contexts/ToastContext'
 import Login from '../Login'
 
 // Mock the useNavigate hook
@@ -23,12 +24,23 @@ vi.mock('../../contexts/AuthContext', () => ({
   AuthProvider: ({ children }: { children: React.ReactNode }) => children,
 }));
 
+// Mock the toast context
+const mockShowToast = vi.fn();
+vi.mock('../../contexts/ToastContext', () => ({
+  useToast: () => ({
+    showToast: mockShowToast,
+  }),
+  ToastProvider: ({ children }: { children: React.ReactNode }) => children,
+}));
+
 const renderLogin = () => {
   return render(
     <BrowserRouter>
-      <AuthProvider>
-        <Login />
-      </AuthProvider>
+      <ToastProvider>
+        <AuthProvider>
+          <Login />
+        </AuthProvider>
+      </ToastProvider>
     </BrowserRouter>
   );
 };
@@ -93,7 +105,7 @@ describe('Login Component', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText('Failed to login. Please check your credentials.')).toBeInTheDocument();
+      expect(mockShowToast).toHaveBeenCalledWith('Failed to login. Please check your credentials.', 'danger');
     });
   });
 
@@ -110,7 +122,7 @@ describe('Login Component', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText('Failed to login. Please try again.')).toBeInTheDocument();
+      expect(mockShowToast).toHaveBeenCalledWith('Failed to login. Please try again.', 'danger');
     });
   });
 }); 
