@@ -53,26 +53,6 @@ export class SnippetService {
   async deleteSnippet(id: number): Promise<void> {
     return apiClient.delete(`/snippets/${id}/`);
   }
-
-  // Get snippets by user (if needed for future features)
-  async getUserSnippets(userId: number, filters?: SnippetFilters): Promise<SnippetListResponse> {
-    const params = new URLSearchParams();
-    
-    if (filters?.language) {
-      params.append('language', filters.language);
-    }
-    if (filters?.page) {
-      params.append('page', filters.page.toString());
-    }
-    if (filters?.page_size) {
-      params.append('page_size', filters.page_size.toString());
-    }
-
-    const queryString = params.toString();
-    const url = queryString ? `/users/${userId}/snippets/?${queryString}` : `/users/${userId}/snippets/`;
-    
-    return apiClient.get<SnippetListResponse>(url);
-  }
 }
 
 // Export singleton instance
