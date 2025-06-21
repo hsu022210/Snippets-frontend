@@ -11,7 +11,7 @@ export interface AuthContextType {
   token: string | null;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => Promise<boolean>;
-  register: (username: string, password: string, password2: string, email: string) => Promise<boolean>;
+  register: (username: string, password: string, password2: string, email: string) => Promise<string>;
 }
 
 export interface AuthProviderProps {
@@ -49,8 +49,12 @@ export interface LoginResponse {
 }
 
 export interface RegisterResponse {
-  access: string;
-  refresh: string;
+  message?: string;
+  user?: {
+    id: number;
+    username: string;
+    email: string;
+  };
 }
 
 export interface PasswordResetRequest {

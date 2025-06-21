@@ -109,7 +109,7 @@ export class ApiClient {
               throw new Error('No refresh token available');
             }
 
-            const response = await axios.post(`${BASE_URL}/auth/login/refresh/`, {
+            const response = await axios.post(`${BASE_URL}/auth/token/refresh/`, {
               refresh: refreshToken
             });
 

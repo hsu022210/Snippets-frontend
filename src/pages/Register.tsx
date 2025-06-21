@@ -76,8 +76,14 @@ const Register = () => {
     try {
       setLoading(true);
       
-      await register(formData.username, formData.password, formData.confirmPassword, formData.email);
-      navigate('/snippets');
+      const token = await register(formData.username, formData.password, formData.confirmPassword, formData.email);
+      
+      // Ensure we have a valid token before navigating
+      if (token) {
+        navigate('/snippets');
+      } else {
+        setError('Registration successful but authentication failed. Please try logging in.');
+      }
     } catch (error) {
       const errorMessage = getErrorMessage(error as ApiError);
       showToast(errorMessage, 'danger');

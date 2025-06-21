@@ -70,18 +70,22 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   // Auth operations
-  const register = async (username: string, password: string, password2: string, email: string): Promise<boolean> => {
+  const register = async (username: string, password: string, password2: string, email: string): Promise<string> => {
     try {
-      const response = await makeRequest(
+      // First, register the user
+      await makeRequest(
         () => authService.register(username, password, password2, email)
       );
-      updateAuthState(response.access, response.refresh);
       
-      const userData = await makeRequest(
-        () => authService.getCurrentUser()
+      // Then automatically log in the user to get tokens
+      const loginResponse = await makeRequest(
+        () => authService.login(email, password)
       );
-      setUser(userData);
-      return true;
+      
+      // Update auth state with the login tokens
+      updateAuthState(loginResponse.access, loginResponse.refresh);
+      
+      return loginResponse.access;
     } catch (error) {
       console.error('Registration error:', error);
       throw error;
