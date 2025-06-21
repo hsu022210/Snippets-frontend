@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from 'react'
-import { useAuth } from '../contexts/AuthContext'
 import { useApiRequest } from './useApiRequest'
 import { Snippet, SnippetListResponse, FilterOptions } from '../types'
 import { getPageSize } from '../utils/pagination'
+import { snippetService } from '../services'
 
 export const useSnippetList = (filters?: FilterOptions, page: number = 1) => {
   const [snippets, setSnippets] = useState<Snippet[]>([]);
@@ -11,38 +11,23 @@ export const useSnippetList = (filters?: FilterOptions, page: number = 1) => {
   const [error, setError] = useState<string>('');
   const [hasNextPage, setHasNextPage] = useState<boolean>(false);
   const [hasPreviousPage, setHasPreviousPage] = useState<boolean>(false);
-  const { api } = useAuth();
   const { makeRequest } = useApiRequest();
 
   const fetchSnippets = useCallback(async () => {
     try {
-      const params = new URLSearchParams();
-      if (filters?.language) {
-        params.append('language', filters.language);
-      }
-      if (filters?.createdAfter) {
-        params.append('created_after', filters.createdAfter);
-      }
-      if (filters?.createdBefore) {
-        params.append('created_before', filters.createdBefore);
-      }
-      if (filters?.searchTitle) {
-        params.append('search_title', filters.searchTitle);
-      }
-      if (filters?.searchCode) {
-        params.append('search_code', filters.searchCode);
-      }
-      // Add pagination parameters
-      params.append('page', page.toString());
-      params.append('page_size', getPageSize().toString());
+      const snippetFilters = {
+        ...filters,
+        page,
+        page_size: getPageSize()
+      };
 
       const response = await makeRequest<SnippetListResponse>(
-        () => api.get(`/snippets/?${params.toString()}`)
+        () => snippetService.getSnippets(snippetFilters)
       );
-      setSnippets(response.data.results);
-      setTotalCount(response.data.count);
-      setHasNextPage(!!response.data.next);
-      setHasPreviousPage(!!response.data.previous);
+      setSnippets(response.results);
+      setTotalCount(response.count);
+      setHasNextPage(!!response.next);
+      setHasPreviousPage(!!response.previous);
       setError('');
     } catch (error) {
       setError('Failed to fetch snippets');
@@ -50,7 +35,7 @@ export const useSnippetList = (filters?: FilterOptions, page: number = 1) => {
     } finally {
       setLoading(false);
     }
-  }, [api, makeRequest, filters, page]);
+  }, [makeRequest, filters, page]);
 
   useEffect(() => {
     fetchSnippets();

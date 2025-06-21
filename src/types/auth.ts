@@ -1,9 +1,9 @@
-import { AxiosInstance } from 'axios';
-
 export interface User {
   id: number;
   username: string;
   email: string;
+  first_name: string;
+  last_name: string;
 }
 
 export interface AuthContextType {
@@ -12,7 +12,6 @@ export interface AuthContextType {
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => Promise<boolean>;
   register: (username: string, password: string, password2: string, email: string) => Promise<boolean>;
-  api: AxiosInstance;
 }
 
 export interface AuthProviderProps {
@@ -42,4 +41,27 @@ export interface UserProfile {
   email: string;
   first_name: string;
   last_name: string;
+}
+
+export interface LoginResponse {
+  access: string;
+  refresh: string;
+}
+
+export interface RegisterResponse {
+  access: string;
+  refresh: string;
+}
+
+export interface PasswordResetRequest {
+  email: string;
+}
+
+export interface PasswordResetConfirm {
+  token: string;
+  password: string;
+}
+
+export interface PasswordResetResponse {
+  message: string;
 } 

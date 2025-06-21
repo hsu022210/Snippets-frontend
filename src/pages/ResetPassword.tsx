@@ -5,10 +5,9 @@ import AuthForm from '../components/auth/AuthForm'
 import PasswordInput from '../components/auth/PasswordInput'
 import SubmitButton from '../components/auth/SubmitButton'
 import PasswordRules from '../components/auth/PasswordRules'
-import { BASE_URL } from '../contexts/AuthContext'
 import { useApiRequest } from '../hooks/useApiRequest'
-import axios, { AxiosError } from 'axios'
-import { PasswordFormData, ApiErrorResponse } from '../types'
+import { PasswordFormData } from '../types'
+import { authService, ApiError } from '../services'
 
 const ResetPassword = () => {
   const navigate = useNavigate();
@@ -49,25 +48,19 @@ const ResetPassword = () => {
       setError('');
       setLoading(true);
       
-      const response = await makeRequest(
-        () => axios.post(`${BASE_URL}/auth/password-reset/confirm/`, {
-          token,
-          password: formData.password,
-        }),
+      await makeRequest(
+        () => authService.confirmPasswordReset(token, formData.password),
         'Resetting your password...'
       );
 
-      if (response.status === 200) {
-        navigate('/login', { 
-          state: { 
-            message: 'Password has been reset successfully. Please login with your new password.' 
-          }
-        });
-      }
+      navigate('/login', { 
+        state: { 
+          message: 'Password has been reset successfully. Please login with your new password.' 
+        }
+      });
     } catch (error) {
-      const axiosError = error as AxiosError<ApiErrorResponse>;
-      const errorMessage = axiosError.response?.data?.message || 'An error occurred. Please try again.';
-      setError(errorMessage);
+      const apiError = error as ApiError;
+      setError(apiError.message || 'An error occurred. Please try again.');
       console.error('Password reset error:', error);
     } finally {
       setLoading(false);

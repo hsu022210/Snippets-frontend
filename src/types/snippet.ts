@@ -101,3 +101,20 @@ export interface SnippetListHeaderProps {
 export interface SnippetGridProps {
   snippets: Snippet[];
 } 
+
+export interface SnippetFilters extends FilterOptions {
+  page?: number;
+  page_size?: number;
+}
+
+export interface CreateSnippetRequest {
+  title: string;
+  code: string;
+  language: string;
+}
+
+export interface UpdateSnippetRequest {
+  title?: string;
+  code?: string;
+  language?: string;
+} 

@@ -417,9 +417,10 @@ describe('Hooks (with MSW)', () => {
       
       await waitFor(() => {
         expect(result.current.loading).toBe(false)
+        expect(result.current.error).toMatch(/Request failed with status code 500/)
       })
       
-      expect(result.current.error).toMatch(/Failed to fetch/)
+      expect(result.current.error).toMatch(/Request failed with status code 500/)
       expect(result.current.snippet).toBeNull()
     })
 
@@ -540,7 +541,7 @@ describe('Hooks (with MSW)', () => {
 
       await waitFor(() => {
         expect(result.current.loading).toBe(false)
-        expect(result.current.error).toMatch(/Failed to create/)
+        expect(result.current.error).toMatch(/Request failed with status code 500/)
       })
     })
 
@@ -572,7 +573,7 @@ describe('Hooks (with MSW)', () => {
 
       await waitFor(() => {
         expect(result.current.loading).toBe(false)
-        expect(result.current.error).toMatch(/Failed to create snippet/)
+        expect(result.current.error).toMatch(/No refresh token available/)
       })
     })
   })

@@ -4,15 +4,7 @@ import { TestProviders } from '../../test/setup'
 import Register from '../Register'
 import { useAuth } from '../../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
-
-interface ApiErrorResponse {
-  response: {
-    data: {
-      detail: string;
-    };
-    status: number;
-  };
-}
+import { ApiError } from '../../services'
 
 // Mock the hooks
 vi.mock('../../contexts/AuthContext', () => ({
@@ -92,16 +84,10 @@ describe('Register Component', () => {
     });
   });
 
-  it('handles registration error', async () => {
+  it('handles general registration error', async () => {
     const errorMessage = 'Email already exists';
-    mockRegister.mockRejectedValueOnce({
-      response: {
-        data: {
-          detail: errorMessage
-        },
-        status: 400
-      }
-    } as ApiErrorResponse);
+    const apiError = new ApiError(errorMessage, 400, { detail: errorMessage });
+    mockRegister.mockRejectedValueOnce(apiError);
 
     renderRegister();
 
@@ -118,7 +104,175 @@ describe('Register Component', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText('An unexpected error occurred. Please try again later.')).toBeInTheDocument();
+      expect(screen.getByText(errorMessage)).toBeInTheDocument();
+    });
+  });
+
+  it('handles email validation error', async () => {
+    const emailError = 'A user with this email already exists.';
+    const apiError = new ApiError('Validation error', 400, {
+      detail: {
+        email: emailError
+      }
+    });
+    mockRegister.mockRejectedValueOnce(apiError);
+
+    renderRegister();
+
+    const usernameInput = screen.getByLabelText(/username/i) as HTMLInputElement;
+    const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
+    const passwordInput = screen.getByLabelText(/^password$/i) as HTMLInputElement;
+    const confirmPasswordInput = screen.getByLabelText(/confirm password/i) as HTMLInputElement;
+    const submitButton = screen.getByRole('button', { name: /register/i });
+
+    fireEvent.change(usernameInput, { target: { value: 'testuser' } });
+    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'password123' } });
+    fireEvent.change(confirmPasswordInput, { target: { value: 'password123' } });
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(screen.getByText(emailError)).toBeInTheDocument();
+    });
+  });
+
+  it('handles username validation error', async () => {
+    const usernameError = 'A user with this username already exists.';
+    const apiError = new ApiError('Validation error', 400, {
+      detail: {
+        username: usernameError
+      }
+    });
+    mockRegister.mockRejectedValueOnce(apiError);
+
+    renderRegister();
+
+    const usernameInput = screen.getByLabelText(/username/i) as HTMLInputElement;
+    const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
+    const passwordInput = screen.getByLabelText(/^password$/i) as HTMLInputElement;
+    const confirmPasswordInput = screen.getByLabelText(/confirm password/i) as HTMLInputElement;
+    const submitButton = screen.getByRole('button', { name: /register/i });
+
+    fireEvent.change(usernameInput, { target: { value: 'testuser' } });
+    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'password123' } });
+    fireEvent.change(confirmPasswordInput, { target: { value: 'password123' } });
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(screen.getByText(usernameError)).toBeInTheDocument();
+    });
+  });
+
+  it('handles password validation error', async () => {
+    const passwordError = 'This password is too common.';
+    const apiError = new ApiError('Validation error', 400, {
+      detail: {
+        password: passwordError
+      }
+    });
+    mockRegister.mockRejectedValueOnce(apiError);
+
+    renderRegister();
+
+    const usernameInput = screen.getByLabelText(/username/i) as HTMLInputElement;
+    const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
+    const passwordInput = screen.getByLabelText(/^password$/i) as HTMLInputElement;
+    const confirmPasswordInput = screen.getByLabelText(/confirm password/i) as HTMLInputElement;
+    const submitButton = screen.getByRole('button', { name: /register/i });
+
+    fireEvent.change(usernameInput, { target: { value: 'testuser' } });
+    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'password123' } });
+    fireEvent.change(confirmPasswordInput, { target: { value: 'password123' } });
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(screen.getByText(passwordError)).toBeInTheDocument();
+    });
+  });
+
+  it('handles password2 validation error', async () => {
+    const password2Error = 'This field must match the password field.';
+    const apiError = new ApiError('Validation error', 400, {
+      detail: {
+        password2: password2Error
+      }
+    });
+    mockRegister.mockRejectedValueOnce(apiError);
+
+    renderRegister();
+
+    const usernameInput = screen.getByLabelText(/username/i) as HTMLInputElement;
+    const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
+    const passwordInput = screen.getByLabelText(/^password$/i) as HTMLInputElement;
+    const confirmPasswordInput = screen.getByLabelText(/confirm password/i) as HTMLInputElement;
+    const submitButton = screen.getByRole('button', { name: /register/i });
+
+    fireEvent.change(usernameInput, { target: { value: 'testuser' } });
+    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'password123' } });
+    fireEvent.change(confirmPasswordInput, { target: { value: 'password123' } });
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(screen.getByText(password2Error)).toBeInTheDocument();
+    });
+  });
+
+  it('handles array validation errors', async () => {
+    const emailErrors = ['This field is required.', 'Enter a valid email address.'];
+    const apiError = new ApiError('Validation error', 400, {
+      detail: {
+        email: emailErrors
+      }
+    });
+    mockRegister.mockRejectedValueOnce(apiError);
+
+    renderRegister();
+
+    const usernameInput = screen.getByLabelText(/username/i) as HTMLInputElement;
+    const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
+    const passwordInput = screen.getByLabelText(/^password$/i) as HTMLInputElement;
+    const confirmPasswordInput = screen.getByLabelText(/confirm password/i) as HTMLInputElement;
+    const submitButton = screen.getByRole('button', { name: /register/i });
+
+    fireEvent.change(usernameInput, { target: { value: 'testuser' } });
+    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'password123' } });
+    fireEvent.change(confirmPasswordInput, { target: { value: 'password123' } });
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(screen.getByText(emailErrors.join(', '))).toBeInTheDocument();
+    });
+  });
+
+  it('handles network error', async () => {
+    const networkError = new ApiError(
+      'Unable to connect to the server. Please check your internet connection.',
+      0,
+      null,
+      true
+    );
+    mockRegister.mockRejectedValueOnce(networkError);
+
+    renderRegister();
+
+    const usernameInput = screen.getByLabelText(/username/i) as HTMLInputElement;
+    const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
+    const passwordInput = screen.getByLabelText(/^password$/i) as HTMLInputElement;
+    const confirmPasswordInput = screen.getByLabelText(/confirm password/i) as HTMLInputElement;
+    const submitButton = screen.getByRole('button', { name: /register/i });
+
+    fireEvent.change(usernameInput, { target: { value: 'testuser' } });
+    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'password123' } });
+    fireEvent.change(confirmPasswordInput, { target: { value: 'password123' } });
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(screen.getByText('Unable to connect to the server. Please check your internet connection.')).toBeInTheDocument();
     });
   });
 
@@ -146,8 +300,9 @@ describe('Register Component', () => {
     expect(screen.getByText(/registering/i)).toBeInTheDocument();
   });
 
-  it('handles unexpected registration error', async () => {
-    mockRegister.mockRejectedValueOnce(new Error('Network Error'));
+  it('handles unexpected error without proper structure', async () => {
+    const unexpectedError = new ApiError('Unexpected server error', 500, null);
+    mockRegister.mockRejectedValueOnce(unexpectedError);
 
     renderRegister();
 
@@ -164,7 +319,7 @@ describe('Register Component', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText('Unable to connect to the server. Please check your internet connection.')).toBeInTheDocument();
+      expect(screen.getByText('Unexpected server error')).toBeInTheDocument();
     });
   });
 }); 

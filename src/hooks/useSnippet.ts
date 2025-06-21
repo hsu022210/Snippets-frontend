@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../contexts/AuthContext'
 import { useApiRequest } from './useApiRequest'
-import { AxiosError } from 'axios'
-import { Snippet, ApiErrorResponse, SnippetData } from '../types'
+import { ApiError } from '../services'
+import { Snippet, SnippetData } from '../types'
+import { snippetService } from '../services'
 
 export const useSnippet = (snippetId: number) => {
   const [snippet, setSnippet] = useState<Snippet | null>(null);
@@ -16,32 +16,31 @@ export const useSnippet = (snippetId: number) => {
   const [editedTitle, setEditedTitle] = useState<string>('');
   const [editedLanguage, setEditedLanguage] = useState<string>('');
   const navigate = useNavigate();
-  const { api } = useAuth();
   const { makeRequest } = useApiRequest();
 
   const fetchSnippet = useCallback(async () => {
     try {
-      const response = await makeRequest(
-        () => api.get(`/snippets/${snippetId}/`)
+      const snippetData = await makeRequest(
+        () => snippetService.getSnippet(snippetId)
       );
-      setSnippet(response.data);
-      setEditedCode(response.data.code);
-      setEditedTitle(response.data.title);
-      setEditedLanguage(response.data.language);
+      setSnippet(snippetData);
+      setEditedCode(snippetData.code);
+      setEditedTitle(snippetData.title);
+      setEditedLanguage(snippetData.language);
       setError('');
     } catch (error) {
-      const axiosError = error as AxiosError<ApiErrorResponse>;
-      if (axiosError.response?.status === 401) {
+      const apiError = error as ApiError;
+      if (apiError.status === 401) {
         setError('Your session has expired. Please log in again.');
         navigate('/login');
       } else {
-        setError(axiosError.response?.data?.detail || 'Failed to fetch snippet');
+        setError(apiError.message || 'Failed to fetch snippet');
       }
       console.error('Error fetching snippet:', error);
     } finally {
       setLoading(false);
     }
-  }, [api, snippetId, navigate, makeRequest]);
+  }, [snippetId, navigate, makeRequest]);
 
   useEffect(() => {
     fetchSnippet();
@@ -52,23 +51,23 @@ export const useSnippet = (snippetId: number) => {
     setSaveError('');
     
     try {
-      const response = await makeRequest(
-        () => api.patch(`/snippets/${snippetId}/`, {
+      const updatedSnippet = await makeRequest(
+        () => snippetService.updateSnippet(snippetId, {
           code: editedCode,
           title: editedTitle,
           language: editedLanguage
         })
       );
-      setSnippet(response.data);
+      setSnippet(updatedSnippet);
       setIsEditing(false);
       setSaveError('');
     } catch (error) {
-      const axiosError = error as AxiosError<ApiErrorResponse>;
-      if (axiosError.response?.status === 401) {
+      const apiError = error as ApiError;
+      if (apiError.status === 401) {
         setSaveError('Your session has expired. Please log in again.');
         navigate('/login');
       } else {
-        setSaveError(axiosError.response?.data?.detail || 'Failed to save');
+        setSaveError(apiError.message || 'Failed to save');
       }
       console.error('Error saving snippet:', error);
     } finally {
@@ -79,16 +78,16 @@ export const useSnippet = (snippetId: number) => {
   const handleDelete = async () => {
     try {
       await makeRequest(
-        () => api.delete(`/snippets/${snippetId}/`)
+        () => snippetService.deleteSnippet(snippetId)
       );
       navigate('/snippets');
     } catch (error) {
-      const axiosError = error as AxiosError<ApiErrorResponse>;
-      if (axiosError.response?.status === 401) {
+      const apiError = error as ApiError;
+      if (apiError.status === 401) {
         setError('Your session has expired. Please log in again.');
         navigate('/login');
       } else {
-        setError(axiosError.response?.data?.detail || 'Failed to delete snippet');
+        setError(apiError.message || 'Failed to delete snippet');
       }
       console.error('Error deleting snippet:', error);
     }
@@ -128,7 +127,6 @@ export const useCreateSnippet = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
   const navigate = useNavigate();
-  const { api } = useAuth();
   const { makeRequest } = useApiRequest();
 
   const createSnippet = async (snippetData: SnippetData) => {
@@ -136,18 +134,18 @@ export const useCreateSnippet = () => {
     setLoading(true);
 
     try {
-      const response = await makeRequest(
-        () => api.post('/snippets/', snippetData)
+      const newSnippet = await makeRequest(
+        () => snippetService.createSnippet(snippetData)
       );
-      navigate(`/snippets/${response.data.id}`);
-      return response.data;
+      navigate(`/snippets/${newSnippet.id}`);
+      return newSnippet;
     } catch (error) {
-      const axiosError = error as AxiosError<ApiErrorResponse>;
-      if (axiosError.response?.status === 401) {
+      const apiError = error as ApiError;
+      if (apiError.status === 401) {
         setError('Your session has expired. Please log in again.');
         navigate('/login');
       } else {
-        setError(axiosError.response?.data?.detail || 'Failed to create snippet');
+        setError(apiError.message || 'Failed to create snippet');
       }
       console.error('Error creating snippet:', error);
       throw error;

@@ -4,10 +4,9 @@ import { Link } from 'react-router-dom'
 import AuthForm from '../components/auth/AuthForm'
 import FormField from '../components/auth/FormField'
 import SubmitButton from '../components/auth/SubmitButton'
-import { BASE_URL } from '../contexts/AuthContext'
 import { useApiRequest } from '../hooks/useApiRequest'
-import axios, { AxiosError } from 'axios'
-import { ApiErrorResponse } from '../types'
+import { ApiError } from '../services'
+import { authService } from '../services'
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState<string>('');
@@ -23,20 +22,16 @@ const ForgotPassword = () => {
       setSuccess('');
       setLoading(true);
       
-      const response = await makeRequest(
-        () => axios.post(`${BASE_URL}/auth/password-reset/`, { email }),
+      await makeRequest(
+        () => authService.requestPasswordReset(email),
         'Sending password reset instructions...'
       );
 
-      if (response.status === 200) {
-        setSuccess('Password reset instructions have been sent to your email.');
-        setEmail('');
-      } else {
-        setError(response.data.message || 'Failed to send reset instructions. Please try again.');
-      }
+      setSuccess('Password reset instructions have been sent to your email.');
+      setEmail('');
     } catch (error) {
-      const axiosError = error as AxiosError<ApiErrorResponse>;
-      setError(axiosError.response?.data?.message || 'An error occurred. Please try again.');
+      const apiError = error as ApiError;
+      setError(apiError.message || 'An error occurred. Please try again.');
       console.error('Password reset error:', error);
     } finally {
       setLoading(false);

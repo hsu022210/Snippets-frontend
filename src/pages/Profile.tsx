@@ -1,17 +1,14 @@
 import { useState, useEffect, FormEvent, ChangeEvent } from 'react'
 import { Form, Alert, Card } from 'react-bootstrap'
-import { useAuth } from '../contexts/AuthContext'
 import { useApiRequest } from '../hooks/useApiRequest'
 import Container from '../components/shared/Container'
 import InlineLoadingSpinner from '../components/InlineLoadingSpinner'
-import { BASE_URL } from '../contexts/AuthContext'
-import axios, { AxiosError } from 'axios'
 import { TbKey } from 'react-icons/tb'
-import { UserProfile, ApiErrorResponse } from '../types'
+import { UserProfile } from '../types'
 import Button from '../components/shared/Button'
+import { authService, ApiError } from '../services'
 
 const Profile: React.FC = () => {
-  const { api } = useAuth();
   const { makeRequest } = useApiRequest();
   const [loading, setLoading] = useState<boolean>(true);
   const [saving, setSaving] = useState<boolean>(false);
@@ -27,14 +24,14 @@ const Profile: React.FC = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await makeRequest(
-          () => api.get('/auth/user/')
+        const userData = await makeRequest(
+          () => authService.getCurrentUser()
         );
-        setUserProfile(response.data);
+        setUserProfile(userData);
         setError('');
       } catch (error) {
-        const axiosError = error as AxiosError<ApiErrorResponse>;
-        setError(axiosError.response?.data?.detail || 'Failed to fetch profile');
+        const apiError = error as ApiError;
+        setError(apiError.message || 'Failed to fetch profile');
         console.error('Error fetching profile:', error);
       } finally {
         setLoading(false);
@@ -42,7 +39,7 @@ const Profile: React.FC = () => {
     };
 
     fetchProfile();
-  }, [api, makeRequest]);
+  }, [makeRequest]);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -59,14 +56,14 @@ const Profile: React.FC = () => {
     setSuccess('');
 
     try {
-      const response = await makeRequest(
-        () => api.patch('/auth/user/', userProfile)
+      const updatedProfile = await makeRequest(
+        () => authService.updateProfile(userProfile)
       );
-      setUserProfile(response.data);
+      setUserProfile(updatedProfile);
       setSuccess('Profile updated successfully!');
     } catch (error) {
-      const axiosError = error as AxiosError<ApiErrorResponse>;
-      setError(axiosError.response?.data?.detail || 'Failed to update profile');
+      const apiError = error as ApiError;
+      setError(apiError.message || 'Failed to update profile');
       console.error('Error updating profile:', error);
     } finally {
       setSaving(false);
@@ -78,17 +75,15 @@ const Profile: React.FC = () => {
       setError('');
       setSuccess('');
       
-      const response = await makeRequest(
-        () => axios.post(`${BASE_URL}/auth/password-reset/`, { email: userProfile.email }),
+      await makeRequest(
+        () => authService.requestPasswordReset(userProfile.email),
         'Sending password reset instructions...'
       );
 
-      if (response.status === 200) {
-        setSuccess('Password reset instructions have been sent to your email.');
-      }
+      setSuccess('Password reset instructions have been sent to your email.');
     } catch (error) {
-      const axiosError = error as AxiosError<ApiErrorResponse>;
-      setError(axiosError.response?.data?.message || 'An error occurred. Please try again.');
+      const apiError = error as ApiError;
+      setError(apiError.message || 'An error occurred. Please try again.');
       console.error('Password reset error:', error);
     }
   };

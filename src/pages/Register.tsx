@@ -7,8 +7,8 @@ import AuthForm from '../components/auth/AuthForm'
 import FormField from '../components/auth/FormField'
 import SubmitButton from '../components/auth/SubmitButton'
 import PasswordRules from '../components/auth/PasswordRules'
-import { AxiosError } from 'axios'
 import { RegisterFormData, ApiRegisterErrorResponse } from '../types'
+import { ApiError } from '../services'
 
 const Register = () => {
   const [formData, setFormData] = useState<RegisterFormData>({
@@ -30,10 +30,10 @@ const Register = () => {
     }));
   };
 
-  const getErrorMessage = (error: AxiosError<ApiRegisterErrorResponse>): string => {
+  const getErrorMessage = (error: ApiError): string => {
     // Handle validation errors from the API
-    if (error.response?.data) {
-      const data = error.response.data.detail;
+    if (error.data && typeof error.data === 'object' && 'detail' in error.data) {
+      const data = error.data.detail as ApiRegisterErrorResponse['detail'];
       
       // Handle field-specific errors
       if (data.email) {
@@ -56,12 +56,12 @@ const Register = () => {
     }
     
     // Handle network errors
-    if (error.message === 'Network Error') {
+    if (error.isNetworkError) {
       return 'Unable to connect to the server. Please check your internet connection.';
     }
     
-    // Handle unexpected errors
-    return 'An unexpected error occurred. Please try again later.';
+    // Use the error message from ApiError
+    return error.message || 'An unexpected error occurred. Please try again later.';
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -78,7 +78,7 @@ const Register = () => {
       await register(formData.username, formData.password, formData.confirmPassword, formData.email);
       navigate('/snippets');
     } catch (error) {
-      const errorMessage = getErrorMessage(error as AxiosError<ApiRegisterErrorResponse>);
+      const errorMessage = getErrorMessage(error as ApiError);
       setError(errorMessage);
       console.error('Registration error:', error);
     } finally {
