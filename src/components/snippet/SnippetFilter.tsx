@@ -8,6 +8,9 @@ const SnippetFilter: React.FC<SnippetFilterProps> = ({
   createdBefore,
   onFilterChange,
 }) => {
+  // Get today's date in YYYY-MM-DD format for max attribute
+  const today = new Date().toISOString().split('T')[0];
+
   const handleLanguageChange = (newLanguage: string) => {
     onFilterChange({
       language: newLanguage,
@@ -45,6 +48,7 @@ const SnippetFilter: React.FC<SnippetFilterProps> = ({
               type="date"
               value={createdAfter}
               onChange={(e) => handleDateChange('createdAfter', e.target.value)}
+              max={today}
               className="mb-2"
             />
             <Form.Text className="text-muted">
@@ -58,6 +62,7 @@ const SnippetFilter: React.FC<SnippetFilterProps> = ({
               type="date"
               value={createdBefore}
               onChange={(e) => handleDateChange('createdBefore', e.target.value)}
+              max={today}
               className="mb-2"
             />
             <Form.Text className="text-muted">

@@ -398,6 +398,20 @@ describe('Snippet Components', () => {
       expect(screen.getByText('Show snippets created after this date')).toBeInTheDocument();
       expect(screen.getByText('Show snippets created before this date')).toBeInTheDocument();
     });
+
+    it('prevents selecting dates later than today', () => {
+      render(<SnippetFilter {...defaultProps} />);
+      
+      const createdAfterInput = screen.getByLabelText('Created After');
+      const createdBeforeInput = screen.getByLabelText('Created Before');
+      
+      // Get today's date in YYYY-MM-DD format
+      const today = new Date().toISOString().split('T')[0];
+      
+      // Check that both date inputs have max attribute set to today
+      expect(createdAfterInput).toHaveAttribute('max', today);
+      expect(createdBeforeInput).toHaveAttribute('max', today);
+    });
   });
 
   describe('SnippetLanguageSelector', () => {
