@@ -58,7 +58,7 @@ describe('Register Component', () => {
   });
 
   it('handles successful registration', async () => {
-    mockRegister.mockResolvedValueOnce(undefined);
+    mockRegister.mockResolvedValueOnce('mock-access-token');
     renderRegister();
 
     const usernameInput = screen.getByLabelText(/username/i) as HTMLInputElement;
