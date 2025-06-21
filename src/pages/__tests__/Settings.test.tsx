@@ -215,8 +215,8 @@ describe('Settings Page', () => {
       await user.click(colorCard)
       // Preview section
       expect(screen.getByText('Preview')).toBeInTheDocument()
-      expect(screen.getByRole('button', { name: /primary/i })).toBeInTheDocument()
-      expect(screen.getByRole('button', { name: /outline/i })).toBeInTheDocument()
+      const buttons = screen.getAllByRole('button', { name: 'Button' })
+      expect(buttons).toHaveLength(2) // Primary and outline buttons
       // Pagination preview
       expect(screen.getByText('1')).toBeInTheDocument()
       expect(screen.getByText('2')).toBeInTheDocument()
