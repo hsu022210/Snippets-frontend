@@ -4,6 +4,7 @@ import { TestProviders } from '../../test/setup'
 import Register from '../Register'
 import { useAuth } from '../../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
+import { useToast } from '../../contexts/ToastContext'
 import { ApiError } from '../../services'
 
 // Mock the hooks
@@ -15,14 +16,20 @@ vi.mock('react-router-dom', () => ({
   useNavigate: vi.fn()
 }));
 
+vi.mock('../../contexts/ToastContext', () => ({
+  useToast: vi.fn()
+}));
+
 describe('Register Component', () => {
   const mockRegister = vi.fn();
   const mockNavigate = vi.fn();
+  const mockShowToast = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
     (useAuth as ReturnType<typeof vi.fn>).mockReturnValue({ register: mockRegister });
     (useNavigate as ReturnType<typeof vi.fn>).mockReturnValue(mockNavigate);
+    (useToast as ReturnType<typeof vi.fn>).mockReturnValue({ showToast: mockShowToast });
   });
 
   const renderRegister = () => {
@@ -54,7 +61,8 @@ describe('Register Component', () => {
     fireEvent.change(confirmPasswordInput, { target: { value: 'password456' } });
     fireEvent.click(submitButton);
 
-    expect(await screen.findByText(/passwords do not match/i)).toBeInTheDocument();
+    // Check for the form validation error message in the DOM
+    expect(screen.getByText('Passwords do not match')).toBeInTheDocument();
   });
 
   it('handles successful registration', async () => {
@@ -104,7 +112,7 @@ describe('Register Component', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText(errorMessage)).toBeInTheDocument();
+      expect(mockShowToast).toHaveBeenCalledWith(errorMessage, 'danger');
     });
   });
 
@@ -132,7 +140,7 @@ describe('Register Component', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText(emailError)).toBeInTheDocument();
+      expect(mockShowToast).toHaveBeenCalledWith(emailError, 'danger');
     });
   });
 
@@ -160,7 +168,7 @@ describe('Register Component', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText(usernameError)).toBeInTheDocument();
+      expect(mockShowToast).toHaveBeenCalledWith(usernameError, 'danger');
     });
   });
 
@@ -188,7 +196,7 @@ describe('Register Component', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText(passwordError)).toBeInTheDocument();
+      expect(mockShowToast).toHaveBeenCalledWith(passwordError, 'danger');
     });
   });
 
@@ -216,7 +224,7 @@ describe('Register Component', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText(password2Error)).toBeInTheDocument();
+      expect(mockShowToast).toHaveBeenCalledWith(password2Error, 'danger');
     });
   });
 
@@ -244,7 +252,7 @@ describe('Register Component', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText(emailErrors.join(', '))).toBeInTheDocument();
+      expect(mockShowToast).toHaveBeenCalledWith(emailErrors.join(', '), 'danger');
     });
   });
 
@@ -272,7 +280,7 @@ describe('Register Component', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText('Unable to connect to the server. Please check your internet connection.')).toBeInTheDocument();
+      expect(mockShowToast).toHaveBeenCalledWith('Unable to connect to the server. Please check your internet connection.', 'danger');
     });
   });
 
@@ -319,7 +327,7 @@ describe('Register Component', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText('Unexpected server error')).toBeInTheDocument();
+      expect(mockShowToast).toHaveBeenCalledWith('Unexpected server error', 'danger');
     });
   });
 

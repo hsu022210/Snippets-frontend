@@ -27,7 +27,7 @@ const SnippetForm = () => {
       }
       
       const data = await response.json()
-      setStatus({ type: 'success', message: `Created snippet: ${data.title}` })
+      setStatus({ type: 'primary', message: `Created snippet: ${data.title}` })
     } catch {
       setStatus({ type: 'error', message: 'Error creating snippet' })
     }

@@ -1,7 +1,8 @@
 import { useState, ChangeEvent, FormEvent } from 'react'
-import { Form, Alert } from 'react-bootstrap'
+import { Form } from 'react-bootstrap'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import { useToast } from '../contexts/ToastContext'
 import PasswordInput from '../components/auth/PasswordInput'
 import AuthForm from '../components/auth/AuthForm'
 import FormField from '../components/auth/FormField'
@@ -13,10 +14,10 @@ const Login = () => {
     email: '',
     password: ''
   });
-  const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const { login } = useAuth();
+  const { showToast } = useToast();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -29,17 +30,16 @@ const Login = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      setError('');
       setLoading(true);
       const success = await login(formData.email, formData.password);
       if (success) {
         await new Promise(resolve => setTimeout(resolve, 500));
         navigate('/snippets');
       } else {
-        setError('Failed to login. Please check your credentials.');
+        showToast('Failed to login. Please check your credentials.', 'danger');
       }
     } catch (error) {
-      setError('Failed to login. Please try again.');
+      showToast('Failed to login. Please try again.', 'danger');
       console.error('Login error:', error);
     } finally {
       setLoading(false);
@@ -48,7 +48,6 @@ const Login = () => {
 
   return (
     <AuthForm title="Login" className='my-5'>
-      {error && <Alert variant="danger">{error}</Alert>}
       <Form onSubmit={handleSubmit} autoComplete="on">
         <FormField
           label="Email"

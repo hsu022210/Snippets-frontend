@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 import { useApiRequest } from '../hooks/useApiRequest'
+import { useToast } from './ToastContext'
 import { User, AuthContextType, AuthProviderProps } from '../types'
 import { authService, apiClient } from '../services'
 
@@ -20,6 +21,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(authService.getAccessToken());
   const { makeRequest } = useApiRequest();
+  const { showToast } = useToast();
 
   // Set up API client callbacks
   useEffect(() => {
@@ -46,13 +48,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           setUser(userData);
         } catch (error) {
           console.error('Error initializing user:', error);
+          showToast('Failed to initialize user session', 'danger');
           handleLogout();
         }
       }
     };
 
     initializeUser();
-  }, [token, makeRequest]);
+  }, [token, makeRequest, showToast]);
 
   // Auth state management
   const handleLogout = () => {
@@ -117,6 +120,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       return true;
     } catch (error) {
       console.error('Logout error:', error);
+      showToast('Logout failed, but you have been logged out locally', 'warning');
       handleLogout(); // Still logout locally even if API call fails
       return false;
     }

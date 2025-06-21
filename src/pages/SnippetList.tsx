@@ -1,4 +1,4 @@
-import { Row, Col, Stack, Alert, Badge, Pagination } from 'react-bootstrap'
+import { Row, Col, Stack, Badge, Pagination } from 'react-bootstrap'
 import Container from '../components/shared/Container'
 import InlineLoadingSpinner from '../components/InlineLoadingSpinner'
 import { useSnippetList } from '../hooks/useSnippetList'
@@ -90,7 +90,7 @@ const PaginationControls: React.FC<PaginationControlsProps> = ({
 const SnippetList: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const { filters, updateFilters, resetFilters } = useFilterState(initialFilters);
-  const { snippets, totalCount, loading, error, hasNextPage, hasPreviousPage } = useSnippetList(filters, currentPage);
+  const { snippets, totalCount, loading, hasNextPage, hasPreviousPage } = useSnippetList(filters, currentPage);
 
   const handleFilterChange = (newFilters: SnippetFilterValues) => {
     updateFilters({
@@ -127,14 +127,6 @@ const SnippetList: React.FC = () => {
         <Stack gap={2} className="text-center">
           <InlineLoadingSpinner message="Loading snippets..." />
         </Stack>
-      </Container>
-    );
-  }
-
-  if (error) {
-    return (
-      <Container fluid className="d-flex align-items-center justify-content-center">
-        <Alert variant="danger">{error}</Alert>
       </Container>
     );
   }

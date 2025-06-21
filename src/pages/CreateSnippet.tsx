@@ -1,5 +1,5 @@
 import { useState, FormEvent, ChangeEvent } from 'react'
-import { Form, Alert } from 'react-bootstrap'
+import { Form } from 'react-bootstrap'
 import Button from '../components/shared/Button'
 import Container from '../components/shared/Container'
 import CodeEditor from '../components/shared/CodeEditor'
@@ -11,7 +11,7 @@ const CreateSnippet: React.FC = () => {
   const [title, setTitle] = useState<string>('');
   const [code, setCode] = useState<string>('');
   const [language, setLanguage] = useState<string>('');
-  const { createSnippet, loading, error } = useCreateSnippet();
+  const { createSnippet, loading } = useCreateSnippet();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -22,7 +22,6 @@ const CreateSnippet: React.FC = () => {
   return (
     <Container>
       <h2 className="mb-4">Create Snippet</h2>
-      {error && <Alert variant="danger">{error}</Alert>}
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
           <Form.Label>Title</Form.Label>

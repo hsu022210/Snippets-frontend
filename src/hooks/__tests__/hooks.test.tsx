@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
+import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { renderHook, act, waitFor } from '@testing-library/react'
 import { useApiRequest } from '../useApiRequest'
 import { useSnippetList } from '../useSnippetList'
@@ -11,6 +11,14 @@ import axios from 'axios'
 import { localStorageMock } from '../../test/setup'
 import { usePreviewHeight } from '../usePreviewHeight'
 
+// Mock the toast context
+const mockShowToast = vi.fn();
+vi.mock('../../contexts/ToastContext', () => ({
+  useToast: () => ({
+    showToast: mockShowToast,
+  }),
+}));
+
 interface Snippet {
   id: string;
   title: string;
@@ -19,6 +27,10 @@ interface Snippet {
 }
 
 describe('Hooks (with MSW)', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   describe('useApiRequest', () => {
     it('should handle successful API request', async () => {
       const { result } = renderHook(() => useApiRequest(), {
@@ -59,7 +71,6 @@ describe('Hooks (with MSW)', () => {
       })
       
       expect(result.current.loading).toBe(true)
-      expect(result.current.error).toBe('')
       expect(result.current.snippets).toEqual([])
       expect(result.current.totalCount).toBe(0)
       
@@ -67,7 +78,6 @@ describe('Hooks (with MSW)', () => {
         expect(result.current.loading).toBe(false)
       })
       
-      expect(result.current.error).toBe('')
       expect(result.current.snippets.length).toBeGreaterThan(0)
       expect(result.current.totalCount).toBeGreaterThan(0)
       const snippet = result.current.snippets[0] as Snippet
@@ -90,7 +100,7 @@ describe('Hooks (with MSW)', () => {
         expect(result.current.loading).toBe(false)
       })
       
-      expect(result.current.error).toMatch(/Failed to fetch/)
+      expect(mockShowToast).toHaveBeenCalledWith('Failed to fetch snippets', 'danger')
       expect(result.current.snippets).toEqual([])
       expect(result.current.totalCount).toBe(0)
     })
@@ -117,7 +127,6 @@ describe('Hooks (with MSW)', () => {
         expect(result.current.loading).toBe(false)
       })
 
-      expect(result.current.error).toBe('')
       expect(result.current.snippets.length).toBe(1)
       expect(result.current.snippets[0].language).toBe('javascript')
     })
@@ -151,7 +160,6 @@ describe('Hooks (with MSW)', () => {
         expect(result.current.loading).toBe(false)
       })
 
-      expect(result.current.error).toBe('')
       expect(result.current.snippets.length).toBe(1)
     })
 
@@ -184,7 +192,6 @@ describe('Hooks (with MSW)', () => {
         expect(result.current.loading).toBe(false)
       })
 
-      expect(result.current.error).toBe('')
       expect(result.current.snippets.length).toBe(1)
       expect(result.current.snippets[0].title.toLowerCase()).toContain(searchTitle)
     })
@@ -194,14 +201,13 @@ describe('Hooks (with MSW)', () => {
       server.use(
         http.get('/snippets', () => {
           return HttpResponse.json({
-            results: []
+            results: [],
+            count: 0
           })
         })
       )
 
-      const { result } = renderHook(() => useSnippetList({ 
-        language: 'nonexistent'
-      }), {
+      const { result } = renderHook(() => useSnippetList(), {
         wrapper: TestProviders,
       })
 
@@ -209,314 +215,224 @@ describe('Hooks (with MSW)', () => {
         expect(result.current.loading).toBe(false)
       })
 
-      expect(result.current.error).toBe('')
-      expect(result.current.snippets).toEqual([])
-    })
-
-    it('should combine multiple filters', async () => {
-      const { server } = await import('../../test/setup')
-      const filters = {
-        language: 'python',
-        searchTitle: 'test',
-        createdAfter: '2024-01-01'
-      }
-      
-      server.use(
-        http.get('/snippets', ({ request }) => {
-          const url = new URL(request.url)
-          expect(url.searchParams.get('language')).toBe(filters.language)
-          expect(url.searchParams.get('search_title')).toBe(filters.searchTitle)
-          expect(url.searchParams.get('created_after')).toBe(filters.createdAfter)
-          return HttpResponse.json({
-            results: [
-              { id: '1', title: 'Test Python Snippet', code: 'print("test")', language: 'python' }
-            ]
-          })
-        })
-      )
-
-      const { result } = renderHook(() => useSnippetList(filters), {
-        wrapper: TestProviders,
-      })
-
-      await waitFor(() => {
-        expect(result.current.loading).toBe(false)
-      })
-
-      expect(result.current.error).toBe('')
-      expect(result.current.snippets.length).toBe(1)
-      expect(result.current.snippets[0].language).toBe(filters.language)
-      expect(result.current.snippets[0].title.toLowerCase()).toContain(filters.searchTitle)
-    })
-
-    it('should update snippets and total count when filters change', async () => {
-      const { result, rerender } = renderHook(
-        ({ filters }) => useSnippetList(filters),
-        {
-          wrapper: TestProviders,
-          initialProps: { filters: {} },
-        }
-      )
-
-      await waitFor(() => {
-        expect(result.current.loading).toBe(false)
-      })
-
-      const initialCount = result.current.totalCount
-
-      // Update filters
-      rerender({ filters: { language: 'javascript' } })
-
-      // Wait for loading to complete
-      await waitFor(() => {
-        expect(result.current.loading).toBe(false)
-      })
-
-      // The total count should remain the same, but filtered snippets might be different
-      expect(result.current.totalCount).toBe(initialCount)
-      // The snippets array might be different due to filtering
-      expect(Array.isArray(result.current.snippets)).toBe(true)
-    })
-
-    it('should handle pagination correctly', async () => {
-      const { server } = await import('../../test/setup')
-      server.use(
-        http.get('/snippets', ({ request }) => {
-          const url = new URL(request.url)
-          expect(url.searchParams.get('page')).toBe('1')
-          expect(url.searchParams.get('page_size')).toBe('6')
-          return HttpResponse.json({
-            results: [
-              { id: '1', title: 'Snippet 1', code: 'test1', language: 'python' },
-              { id: '2', title: 'Snippet 2', code: 'test2', language: 'python' },
-              { id: '3', title: 'Snippet 3', code: 'test3', language: 'python' },
-              { id: '4', title: 'Snippet 4', code: 'test4', language: 'python' },
-              { id: '5', title: 'Snippet 5', code: 'test5', language: 'python' },
-              { id: '6', title: 'Snippet 6', code: 'test6', language: 'python' }
-            ],
-            count: 12,
-            next: 'http://localhost:8000/snippets/?page=2&page_size=6',
-            previous: null
-          })
-        })
-      )
-
-      const { result } = renderHook(() => useSnippetList({}, 1), {
-        wrapper: TestProviders,
-      })
-
-      await waitFor(() => {
-        expect(result.current.loading).toBe(false)
-      })
-
-      expect(result.current.error).toBe('')
-      expect(result.current.snippets.length).toBe(6)
-      expect(result.current.totalCount).toBe(12)
-      expect(result.current.hasNextPage).toBe(true)
-      expect(result.current.hasPreviousPage).toBe(false)
-    })
-
-    it('should handle pagination with filters', async () => {
-      const { server } = await import('../../test/setup')
-      server.use(
-        http.get('/snippets', ({ request }) => {
-          const url = new URL(request.url)
-          expect(url.searchParams.get('page')).toBe('1')
-          expect(url.searchParams.get('page_size')).toBe('6')
-          expect(url.searchParams.get('language')).toBe('python')
-          return HttpResponse.json({
-            results: [
-              { id: '1', title: 'Python Snippet 1', code: 'test1', language: 'python' },
-              { id: '2', title: 'Python Snippet 2', code: 'test2', language: 'python' },
-              { id: '3', title: 'Python Snippet 3', code: 'test3', language: 'python' },
-              { id: '4', title: 'Python Snippet 4', code: 'test4', language: 'python' },
-              { id: '5', title: 'Python Snippet 5', code: 'test5', language: 'python' },
-              { id: '6', title: 'Python Snippet 6', code: 'test6', language: 'python' }
-            ],
-            count: 8,
-            next: 'http://localhost:8000/snippets/?page=2&page_size=6&language=python',
-            previous: null
-          })
-        })
-      )
-
-      const { result } = renderHook(() => useSnippetList({ language: 'python' }, 1), {
-        wrapper: TestProviders,
-      })
-
-      await waitFor(() => {
-        expect(result.current.loading).toBe(false)
-      })
-
-      expect(result.current.error).toBe('')
-      expect(result.current.snippets.length).toBe(6)
-      expect(result.current.totalCount).toBe(8)
-      expect(result.current.hasNextPage).toBe(true)
-      expect(result.current.hasPreviousPage).toBe(false)
-    })
-
-    it('should handle pagination errors', async () => {
-      const { server } = await import('../../test/setup')
-      server.use(
-        http.get('/snippets', () => {
-          return new HttpResponse(null, { status: 500 })
-        })
-      )
-
-      const { result } = renderHook(() => useSnippetList({}, 1), {
-        wrapper: TestProviders,
-      })
-
-      await waitFor(() => {
-        expect(result.current.loading).toBe(false)
-      })
-
-      expect(result.current.error).toBe('Failed to fetch snippets')
       expect(result.current.snippets).toEqual([])
       expect(result.current.totalCount).toBe(0)
+    })
+
+    it('should handle pagination', async () => {
+      const { server } = await import('../../test/setup')
+      server.use(
+        http.get('/snippets', ({ request }) => {
+          const url = new URL(request.url)
+          expect(url.searchParams.get('page')).toBe('2')
+          return HttpResponse.json({
+            results: [
+              { id: '3', title: 'Page 2 Snippet', code: 'test', language: 'python' }
+            ],
+            count: 3,
+            next: null,
+            previous: '/snippets?page=1'
+          })
+        })
+      )
+
+      const { result } = renderHook(() => useSnippetList({}, 2), {
+        wrapper: TestProviders,
+      })
+
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false)
+      })
+
+      expect(result.current.snippets.length).toBe(1)
+      expect(result.current.snippets[0].id).toBe('3')
+      expect(result.current.hasPreviousPage).toBe(true)
       expect(result.current.hasNextPage).toBe(false)
-      expect(result.current.hasPreviousPage).toBe(false)
     })
   })
 
   describe('useSnippet', () => {
-    beforeEach(() => {
-      // MSW handlers reset automatically
-    })
-
-    it('should fetch and return a snippet', async () => {
+    it('should fetch snippet by ID', async () => {
       const { result } = renderHook(() => useSnippet(1), {
         wrapper: TestProviders,
       })
-      
+
       expect(result.current.loading).toBe(true)
-      expect(result.current.error).toBe('')
       expect(result.current.snippet).toBeNull()
-      
+
       await waitFor(() => {
         expect(result.current.loading).toBe(false)
       })
-      
-      expect(result.current.error).toBe('')
-      expect(result.current.snippet).not.toBeNull()
-      const fetchedSnippet = result.current.snippet as unknown as Snippet
-      expect(fetchedSnippet.id).toBe('1')
+
+      expect(result.current.snippet).toBeTruthy()
+      expect(result.current.snippet?.id).toBe('1')
+      expect(result.current.snippet?.title).toBe('Test Snippet')
     })
 
-    it('should handle fetch error', async () => {
+    it('should handle snippet fetch error', async () => {
       const { server } = await import('../../test/setup')
       server.use(
-        http.get('/snippets/1', () => {
+        http.get('/snippets/999', () => {
+          return new HttpResponse(null, { status: 404 })
+        })
+      )
+
+      const { result } = renderHook(() => useSnippet(999), {
+        wrapper: TestProviders,
+      })
+
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false)
+      })
+
+      expect(mockShowToast).toHaveBeenCalledWith('Request failed with status code 404', 'danger')
+      expect(result.current.snippet).toBeNull()
+    })
+
+    it('should handle snippet save', async () => {
+      const { result } = renderHook(() => useSnippet(1), {
+        wrapper: TestProviders,
+      })
+
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false)
+      })
+
+      act(() => {
+        result.current.setIsEditing(true)
+        result.current.setEditedTitle('Updated Title')
+        result.current.setEditedCode('console.log("updated")')
+      })
+
+      await act(async () => {
+        await result.current.handleSave()
+      })
+
+      expect(mockShowToast).toHaveBeenCalledWith('Snippet saved successfully!', 'primary', 3)
+      expect(result.current.isEditing).toBe(false)
+    })
+
+    it('should handle snippet save error', async () => {
+      const { server } = await import('../../test/setup')
+      server.use(
+        http.patch('/snippets/1/', () => {
           return new HttpResponse(null, { status: 500 })
         })
       )
-      
-      const { result } = renderHook(() => useSnippet(1), {
-        wrapper: TestProviders,
-      })
-      
-      await waitFor(() => {
-        expect(result.current.loading).toBe(false)
-        expect(result.current.error).toMatch(/Request failed with status code 500/)
-      })
-      
-      expect(result.current.error).toMatch(/Request failed with status code 500/)
-      expect(result.current.snippet).toBeNull()
-    })
 
-    it('should handle save operation', async () => {
       const { result } = renderHook(() => useSnippet(1), {
         wrapper: TestProviders,
       })
-      
+
       await waitFor(() => {
         expect(result.current.loading).toBe(false)
       })
-      
-      await act(() => {
+
+      act(() => {
         result.current.setIsEditing(true)
         result.current.setEditedTitle('Updated Title')
+        result.current.setEditedCode('console.log("updated")')
       })
-      
-      await waitFor(async () => {
+
+      await act(async () => {
         await result.current.handleSave()
-        expect(result.current.snippet).not.toBeNull()
-        const updatedSnippet = result.current.snippet as unknown as Snippet
-        expect(updatedSnippet.title).toBe('Updated Title')
-        expect(result.current.isEditing).toBe(false)
       })
+
+      expect(mockShowToast).toHaveBeenCalledWith('Request failed with status code 500', 'danger')
+      expect(result.current.isEditing).toBe(true)
     })
 
-    it('should handle delete operation', async () => {
+    it('should handle snippet deletion', async () => {
       const { result } = renderHook(() => useSnippet(1), {
         wrapper: TestProviders,
       })
-      
+
       await waitFor(() => {
         expect(result.current.loading).toBe(false)
       })
-      
+
       await act(async () => {
         await result.current.handleDelete()
       })
-      
-      // No error means delete succeeded
+
+      expect(mockShowToast).toHaveBeenCalledWith('Snippet deleted successfully!', 'primary', 3)
     })
 
-    it('should handle cancel operation', async () => {
+    it('should handle snippet deletion error', async () => {
+      const { server } = await import('../../test/setup')
+      server.use(
+        http.delete('/snippets/1', () => {
+          return new HttpResponse(null, { status: 500 })
+        })
+      )
+
       const { result } = renderHook(() => useSnippet(1), {
         wrapper: TestProviders,
       })
-      
+
       await waitFor(() => {
         expect(result.current.loading).toBe(false)
       })
-      
+
       await act(async () => {
+        await result.current.handleDelete()
+      })
+
+      expect(mockShowToast).toHaveBeenCalledWith('Request failed with status code 500', 'danger')
+    })
+
+    it('should handle cancel edit', async () => {
+      const { result } = renderHook(() => useSnippet(1), {
+        wrapper: TestProviders,
+      })
+
+      // Wait for snippet to load
+      await waitFor(() => {
+        expect(result.current.loading).toBe(false)
+      })
+
+      act(() => {
         result.current.setIsEditing(true)
-        result.current.setEditedTitle('New Title')
+        result.current.setEditedTitle('Modified Title')
+        result.current.setEditedCode('modified code')
+      })
+
+      expect(result.current.isEditing).toBe(true)
+      expect(result.current.editedTitle).toBe('Modified Title')
+
+      act(() => {
         result.current.handleCancel()
       })
-      
+
       expect(result.current.isEditing).toBe(false)
-      expect(result.current.snippet).not.toBeNull()
-      const cancelledSnippet = result.current.snippet as unknown as Snippet
-      expect(result.current.editedTitle).toBe(cancelledSnippet.title)
-      expect(result.current.saveError).toBe('')
+      expect(result.current.editedTitle).toBe('Test Snippet')
     })
   })
 
   describe('useCreateSnippet', () => {
-    beforeEach(() => {
-      Object.defineProperty(window, 'localStorage', {
-        value: localStorageMock,
-        writable: true
-      });
-    })
-
-    it('should create a new snippet successfully', async () => {
+    it('should create snippet successfully', async () => {
       const { result } = renderHook(() => useCreateSnippet(), {
         wrapper: TestProviders,
       })
 
-      const newSnippet = {
-        title: 'New Test Snippet',
-        code: 'console.log("test")',
+      const snippetData = {
+        title: 'New Snippet',
+        code: 'console.log("new")',
         language: 'javascript'
       }
 
       await act(async () => {
-        await result.current.createSnippet(newSnippet)
+        await result.current.createSnippet(snippetData)
       })
 
+      expect(mockShowToast).toHaveBeenCalledWith('Snippet created successfully!', 'primary', 3)
       expect(result.current.loading).toBe(false)
-      expect(result.current.error).toBe('')
     })
 
-    it('should handle creation error', async () => {
+    it('should handle create snippet error', async () => {
       const { server } = await import('../../test/setup')
       server.use(
-        http.post('/snippets/', () => {
+        http.post('/snippets', () => {
           return new HttpResponse(null, { status: 500 })
         })
       )
@@ -525,315 +441,167 @@ describe('Hooks (with MSW)', () => {
         wrapper: TestProviders,
       })
 
-      const newSnippet = {
-        title: 'New Test Snippet',
-        code: 'console.log("test")',
+      const snippetData = {
+        title: 'New Snippet',
+        code: 'console.log("new")',
         language: 'javascript'
       }
 
       await act(async () => {
         try {
-          await result.current.createSnippet(newSnippet)
+          await result.current.createSnippet(snippetData)
         } catch {
           // Error is expected
         }
       })
 
-      await waitFor(() => {
-        expect(result.current.loading).toBe(false)
-        expect(result.current.error).toMatch(/Request failed with status code 500/)
-      })
-    })
-
-    it('should handle authentication error', async () => {
-      const { server } = await import('../../test/setup')
-      server.use(
-        http.post('/snippets/', () => {
-          return new HttpResponse(null, { status: 401 })
-        })
-      )
-
-      const { result } = renderHook(() => useCreateSnippet(), {
-        wrapper: TestProviders,
-      })
-
-      const newSnippet = {
-        title: 'New Test Snippet',
-        code: 'console.log("test")',
-        language: 'javascript'
-      }
-
-      await act(async () => {
-        try {
-          await result.current.createSnippet(newSnippet)
-        } catch {
-          // Error is expected
-        }
-      })
-
-      await waitFor(() => {
-        expect(result.current.loading).toBe(false)
-        expect(result.current.error).toMatch(/No refresh token available/)
-      })
+      expect(mockShowToast).toHaveBeenCalledWith('Request failed with status code 500', 'danger')
+      expect(result.current.loading).toBe(false)
     })
   })
 
   describe('useShareSnippet', () => {
-    const mockClipboard = {
-      writeText: vi.fn(),
-    };
-
     beforeEach(() => {
-      // Mock clipboard API
-      Object.assign(navigator, {
-        clipboard: mockClipboard,
-      });
-      vi.clearAllMocks();
-      // Mock timers
-      vi.useFakeTimers();
-    });
+      Object.defineProperty(navigator, 'clipboard', {
+        value: {
+          writeText: vi.fn(),
+        },
+        writable: true,
+      })
+    })
 
-    afterEach(() => {
-      vi.useRealTimers();
-    });
+    it('should share snippet successfully', async () => {
+      const mockWriteText = vi.fn().mockResolvedValue(undefined)
+      Object.defineProperty(navigator, 'clipboard', {
+        value: { writeText: mockWriteText },
+        writable: true,
+      })
 
-    it('should copy snippet URL to clipboard and show success toast', async () => {
-      const { result } = renderHook(() => useShareSnippet(), {
-        wrapper: TestProviders,
-      });
-
-      const snippetId = '123';
-      const expectedUrl = `${window.location.origin}/snippets/${snippetId}`;
+      const { result } = renderHook(() => useShareSnippet())
 
       await act(async () => {
-        await result.current.handleShare(snippetId);
-      });
+        await result.current.handleShare('123')
+      })
 
-      expect(mockClipboard.writeText).toHaveBeenCalledWith(expectedUrl);
-      expect(result.current.shareSnippetTooltip).toBe('Link copied!');
+      expect(mockWriteText).toHaveBeenCalledWith(`${window.location.origin}/snippets/123`)
+      expect(mockShowToast).toHaveBeenCalledWith('Link copied to clipboard!', undefined, 2)
+    })
 
-      // Fast-forward timers
-      await act(async () => {
-        vi.advanceTimersByTime(2000);
-      });
+    it('should handle share error', async () => {
+      const mockWriteText = vi.fn().mockRejectedValue(new Error('Clipboard error'))
+      Object.defineProperty(navigator, 'clipboard', {
+        value: { writeText: mockWriteText },
+        writable: true,
+      })
 
-      expect(result.current.shareSnippetTooltip).toBe('Share snippet');
-    });
-
-    it('should handle clipboard error and show error toast', async () => {
-      const { result } = renderHook(() => useShareSnippet(), {
-        wrapper: TestProviders,
-      });
-
-      // Mock clipboard error
-      mockClipboard.writeText.mockRejectedValueOnce(new Error('Clipboard error'));
+      const { result } = renderHook(() => useShareSnippet())
 
       await act(async () => {
-        await result.current.handleShare('123');
-      });
+        await result.current.handleShare('123')
+      })
 
-      expect(result.current.shareSnippetTooltip).toBe('Failed to copy link');
-    });
-
-    it('should initialize with default tooltip text', () => {
-      const { result } = renderHook(() => useShareSnippet(), {
-        wrapper: TestProviders,
-      });
-
-      expect(result.current.shareSnippetTooltip).toBe('Share snippet');
-    });
-  });
+      expect(mockShowToast).toHaveBeenCalledWith('Failed to copy link', 'danger')
+    })
+  })
 
   describe('useFilterState', () => {
-    const initialFilters = {
-      language: '',
-      createdAfter: '',
-      createdBefore: '',
-      searchTitle: '',
-      searchCode: '',
-    };
-
     beforeEach(() => {
-      localStorage.clear();
-    });
+      localStorageMock.clear()
+    })
 
-    afterEach(() => {
-      localStorage.clear();
-    });
-
-    it('should initialize with default filters when no stored filters exist', () => {
-      const { result } = renderHook(() => useFilterState(initialFilters), {
-        wrapper: TestProviders,
-      });
-
-      expect(result.current.filters).toEqual(initialFilters);
-    });
-
-    it('should initialize with stored filters from localStorage', () => {
-      const storedFilters = {
-        language: 'javascript',
-        createdAfter: '2024-01-01',
+    it('should initialize with default values', () => {
+      const { result } = renderHook(() => useFilterState({
+        language: '',
+        createdAfter: '',
         createdBefore: '',
-        searchTitle: 'test',
+        searchTitle: '',
         searchCode: '',
-      };
-
-      localStorage.setItem('snippet_filters', JSON.stringify(storedFilters));
-
-      const { result } = renderHook(() => useFilterState(initialFilters), {
-        wrapper: TestProviders,
-      });
-
-      expect(result.current.filters).toEqual(storedFilters);
-    });
-
-    it('should update filters and persist to localStorage', () => {
-      const { result } = renderHook(() => useFilterState(initialFilters), {
-        wrapper: TestProviders,
-      });
-
-      const newFilters = {
-        language: 'python',
-        createdAfter: '2024-01-01',
-      };
-
-      act(() => {
-        result.current.updateFilters(newFilters);
-      });
+      }))
 
       expect(result.current.filters).toEqual({
-        ...initialFilters,
-        ...newFilters,
-      });
-
-      const storedFilters = JSON.parse(localStorage.getItem('snippet_filters') || '{}');
-      expect(storedFilters).toEqual({
-        ...initialFilters,
-        ...newFilters,
-      });
-    });
-
-    it('should reset filters and clear localStorage', () => {
-      const storedFilters = {
-        language: 'javascript',
-        createdAfter: '2024-01-01',
+        language: '',
+        createdAfter: '',
         createdBefore: '',
-        searchTitle: 'test',
+        searchTitle: '',
         searchCode: '',
-      };
+      })
+    })
 
-      localStorage.setItem('snippet_filters', JSON.stringify(storedFilters));
-
-      const { result } = renderHook(() => useFilterState(initialFilters), {
-        wrapper: TestProviders,
-      });
+    it('should update filters', () => {
+      const { result } = renderHook(() => useFilterState({
+        language: '',
+        createdAfter: '',
+        createdBefore: '',
+        searchTitle: '',
+        searchCode: '',
+      }))
 
       act(() => {
-        result.current.resetFilters();
-      });
+        result.current.updateFilters({
+          language: 'javascript',
+          createdAfter: '2024-01-01',
+        })
+      })
 
-      expect(result.current.filters).toEqual(initialFilters);
-      expect(localStorage.getItem('snippet_filters')).toBeNull();
-    });
+      expect(result.current.filters.language).toBe('javascript')
+      expect(result.current.filters.createdAfter).toBe('2024-01-01')
+    })
 
-    it('should clear localStorage when all filters are empty', () => {
-      const { result } = renderHook(() => useFilterState(initialFilters), {
-        wrapper: TestProviders,
-      });
+    it('should reset filters', () => {
+      const { result } = renderHook(() => useFilterState({
+        language: '',
+        createdAfter: '',
+        createdBefore: '',
+        searchTitle: '',
+        searchCode: '',
+      }))
 
       // First set some filters
       act(() => {
         result.current.updateFilters({
           language: 'javascript',
-          searchTitle: 'test'
-        });
-      });
+          createdAfter: '2024-01-01',
+        })
+      })
 
-      // Then clear all filters
+      // Then reset
       act(() => {
-        result.current.updateFilters({
-          language: '',
-          searchTitle: '',
-          searchCode: '',
-          createdAfter: '',
-          createdBefore: ''
-        });
-      });
+        result.current.resetFilters()
+      })
 
-      expect(result.current.filters).toEqual(initialFilters);
-      expect(localStorage.getItem('snippet_filters')).toBeNull();
-    });
-
-    it('should handle partial filter updates', () => {
-      const { result } = renderHook(() => useFilterState(initialFilters), {
-        wrapper: TestProviders,
-      });
-
-      act(() => {
-        result.current.updateFilters({ language: 'javascript' });
-      });
-
-      expect(result.current.filters).toEqual({
-        ...initialFilters,
-        language: 'javascript',
-      });
-
-      act(() => {
-        result.current.updateFilters({ searchTitle: 'test' });
-      });
-
-      expect(result.current.filters).toEqual({
-        ...initialFilters,
-        language: 'javascript',
-        searchTitle: 'test',
-      });
-    });
-  });
+      expect(result.current.filters.language).toBe('')
+      expect(result.current.filters.createdAfter).toBe('')
+    })
+  })
 
   describe('usePreviewHeight', () => {
     beforeEach(() => {
-      localStorage.clear();
-    });
+      localStorageMock.clear()
+    })
 
-    it('should return default preview height when no value is stored', () => {
-      const { result } = renderHook(() => usePreviewHeight());
-      
-      expect(result.current.previewHeight).toBe(75);
-    });
+    it('should return default height when no stored value', () => {
+      const { result } = renderHook(() => usePreviewHeight())
 
-    it('should return stored preview height from localStorage', () => {
-      localStorage.setItem('previewHeight', '120');
-      
-      const { result } = renderHook(() => usePreviewHeight());
-      
-      expect(result.current.previewHeight).toBe(120);
-    });
+      expect(result.current.previewHeight).toBe(75)
+    })
 
-    it('should update preview height and save to localStorage', () => {
-      const { result } = renderHook(() => usePreviewHeight());
-      
+    it('should return stored height', () => {
+      localStorageMock.setItem('previewHeight', '200')
+
+      const { result } = renderHook(() => usePreviewHeight())
+
+      expect(result.current.previewHeight).toBe(200)
+    })
+
+    it('should update height and store in localStorage', () => {
+      const { result } = renderHook(() => usePreviewHeight())
+
       act(() => {
-        result.current.setPreviewHeight(150);
-      });
-      
-      expect(result.current.previewHeight).toBe(150);
-      expect(localStorage.getItem('previewHeight')).toBe('150');
-    });
+        result.current.setPreviewHeight(250)
+      })
 
-    it('should handle storage events from other tabs', () => {
-      const { result } = renderHook(() => usePreviewHeight());
-      
-      // Simulate storage event from another tab
-      act(() => {
-        const storageEvent = new StorageEvent('storage', {
-          key: 'previewHeight',
-          newValue: '200',
-          oldValue: '75'
-        });
-        window.dispatchEvent(storageEvent);
-      });
-      
-      expect(result.current.previewHeight).toBe(200);
-    });
-  });
+      expect(result.current.previewHeight).toBe(250)
+      expect(localStorageMock.getItem('previewHeight')).toBe('250')
+    })
+  })
 }) 

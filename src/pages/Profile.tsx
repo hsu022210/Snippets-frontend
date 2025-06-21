@@ -1,6 +1,7 @@
 import { useState, useEffect, FormEvent, ChangeEvent } from 'react'
-import { Form, Alert, Card } from 'react-bootstrap'
+import { Form, Card } from 'react-bootstrap'
 import { useApiRequest } from '../hooks/useApiRequest'
+import { useToast } from '../contexts/ToastContext'
 import Container from '../components/shared/Container'
 import InlineLoadingSpinner from '../components/InlineLoadingSpinner'
 import { TbKey } from 'react-icons/tb'
@@ -10,10 +11,9 @@ import { authService, ApiError } from '../services'
 
 const Profile: React.FC = () => {
   const { makeRequest } = useApiRequest();
+  const { showToast } = useToast();
   const [loading, setLoading] = useState<boolean>(true);
   const [saving, setSaving] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
-  const [success, setSuccess] = useState<string>('');
   const [userProfile, setUserProfile] = useState<UserProfile>({
     username: '',
     email: '',
@@ -28,10 +28,9 @@ const Profile: React.FC = () => {
           () => authService.getCurrentUser()
         );
         setUserProfile(userData);
-        setError('');
       } catch (error) {
         const apiError = error as ApiError;
-        setError(apiError.message || 'Failed to fetch profile');
+        showToast(apiError.message || 'Failed to fetch profile', 'danger');
         console.error('Error fetching profile:', error);
       } finally {
         setLoading(false);
@@ -39,7 +38,7 @@ const Profile: React.FC = () => {
     };
 
     fetchProfile();
-  }, [makeRequest]);
+  }, [makeRequest, showToast]);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -52,18 +51,16 @@ const Profile: React.FC = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSaving(true);
-    setError('');
-    setSuccess('');
 
     try {
       const updatedProfile = await makeRequest(
         () => authService.updateProfile(userProfile)
       );
       setUserProfile(updatedProfile);
-      setSuccess('Profile updated successfully!');
+      showToast('Profile updated successfully!', 'primary', 3);
     } catch (error) {
       const apiError = error as ApiError;
-      setError(apiError.message || 'Failed to update profile');
+      showToast(apiError.message || 'Failed to update profile', 'danger');
       console.error('Error updating profile:', error);
     } finally {
       setSaving(false);
@@ -72,18 +69,15 @@ const Profile: React.FC = () => {
 
   const handleResetPassword = async () => {
     try {
-      setError('');
-      setSuccess('');
-      
       await makeRequest(
         () => authService.requestPasswordReset(userProfile.email),
         'Sending password reset instructions...'
       );
 
-      setSuccess('Password reset instructions have been sent to your email.');
+      showToast('Password reset instructions have been sent to your email.', 'primary', 3);
     } catch (error) {
       const apiError = error as ApiError;
-      setError(apiError.message || 'An error occurred. Please try again.');
+      showToast(apiError.message || 'An error occurred. Please try again.', 'danger');
       console.error('Password reset error:', error);
     }
   };
@@ -101,8 +95,6 @@ const Profile: React.FC = () => {
   return (
     <Container>
       <h2 className="mb-4">Profile</h2>
-      {error && <Alert variant="danger">{error}</Alert>}
-      {success && <Alert variant="success">{success}</Alert>}
       
       <div className="row g-4">
         {/* Profile Information Section */}

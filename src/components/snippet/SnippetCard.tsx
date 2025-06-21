@@ -8,6 +8,7 @@ import { getSelectedTheme, getThemeExtension } from '../../utils/codeMirrorTheme
 import { usePreviewHeight } from '../../hooks/usePreviewHeight'
 import { useShareSnippet } from '../../hooks/useShareSnippet'
 import { useTheme } from '../../contexts/ThemeContext'
+import { useToast } from '../../contexts/ToastContext'
 import { SnippetCardProps } from '../../types'
 import { TbLink, TbClock } from 'react-icons/tb'
 import { formatDistanceToNow } from 'date-fns'
@@ -17,6 +18,7 @@ export const SnippetCard = ({ snippet }: SnippetCardProps) => {
   const { previewHeight } = usePreviewHeight();
   const { shareSnippetTooltip, handleShare } = useShareSnippet();
   const { isDark } = useTheme();
+  const { showToast } = useToast();
   const theme = getThemeExtension(selectedTheme);
 
   const formatCreatedTime = () => {
@@ -25,6 +27,7 @@ export const SnippetCard = ({ snippet }: SnippetCardProps) => {
       return formatDistanceToNow(new Date(snippet.created), { addSuffix: true });
     } catch (error) {
       console.error('Error formatting date:', error);
+      showToast('Error formatting date', 'warning');
       return 'Unknown time';
     }
   };
