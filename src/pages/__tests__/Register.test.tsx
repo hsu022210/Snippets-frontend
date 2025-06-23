@@ -373,4 +373,73 @@ describe('Register Component', () => {
     expect(screen.queryByText(/registration successful but authentication failed/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/error/i)).not.toBeInTheDocument();
   });
+
+  it('shows password rules and updates as user types', () => {
+    renderRegister();
+    // Password rules should be visible
+    expect(screen.getByText(/password must/i)).toBeInTheDocument();
+    const passwordInput = screen.getByLabelText(/^password$/i) as HTMLInputElement;
+    // Type a password and check if rules update (example: at least 8 chars)
+    fireEvent.change(passwordInput, { target: { value: 'short' } });
+    const ruleElement = screen.getByText(/at least 8 characters/i);
+    expect(ruleElement).toBeInTheDocument();
+    expect(ruleElement).toHaveClass('text-muted');
+    fireEvent.change(passwordInput, { target: { value: 'longenoughpassword' } });
+    const ruleElementAfter = screen.getByText(/at least 8 characters/i);
+    expect(ruleElementAfter).toBeInTheDocument();
+    expect(ruleElementAfter).toHaveClass('text-success');
+  });
+
+  it('does not submit the form with empty required fields', async () => {
+    renderRegister();
+    const submitButton = screen.getByRole('button', { name: /register/i });
+    fireEvent.click(submitButton);
+    // Should not call register
+    await waitFor(() => {
+      expect(mockRegister).not.toHaveBeenCalled();
+    });
+  });
+
+  it('shows loading state on submit', async () => {
+    mockRegister.mockImplementation(() => new Promise(resolve => setTimeout(() => resolve('token'), 100)));
+    renderRegister();
+    const usernameInput = screen.getByLabelText(/username/i) as HTMLInputElement;
+    const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
+    const passwordInput = screen.getByLabelText(/^password$/i) as HTMLInputElement;
+    const confirmPasswordInput = screen.getByLabelText(/confirm password/i) as HTMLInputElement;
+    const submitButton = screen.getByRole('button', { name: /register/i });
+    fireEvent.change(usernameInput, { target: { value: 'testuser' } });
+    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'password123' } });
+    fireEvent.change(confirmPasswordInput, { target: { value: 'password123' } });
+    fireEvent.click(submitButton);
+    expect(submitButton).toBeDisabled();
+    expect(screen.getByText(/registering/i)).toBeInTheDocument();
+  });
+
+  it('shows toast if registration returns no token', async () => {
+    mockRegister.mockResolvedValueOnce(null);
+    renderRegister();
+    const usernameInput = screen.getByLabelText(/username/i) as HTMLInputElement;
+    const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
+    const passwordInput = screen.getByLabelText(/^password$/i) as HTMLInputElement;
+    const confirmPasswordInput = screen.getByLabelText(/confirm password/i) as HTMLInputElement;
+    const submitButton = screen.getByRole('button', { name: /register/i });
+    fireEvent.change(usernameInput, { target: { value: 'testuser' } });
+    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'password123' } });
+    fireEvent.change(confirmPasswordInput, { target: { value: 'password123' } });
+    fireEvent.click(submitButton);
+    await waitFor(() => {
+      expect(mockShowToast).toHaveBeenCalledWith('Registration successful but authentication failed. Please try logging in.', 'danger');
+    });
+  });
+
+  it('has correct autoComplete attributes on fields', () => {
+    renderRegister();
+    expect(screen.getByLabelText(/username/i)).toHaveAttribute('autocomplete', 'username');
+    expect(screen.getByLabelText(/email/i)).toHaveAttribute('autocomplete', 'email');
+    expect(screen.getByLabelText(/^password$/i)).toHaveAttribute('autocomplete', 'new-password');
+    expect(screen.getByLabelText(/confirm password/i)).toHaveAttribute('autocomplete', 'new-password');
+  });
 }); 

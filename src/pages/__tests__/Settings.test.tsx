@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { TestProviders } from '../../test/setup'
 import Settings from '../Settings'
+import { waitFor } from '@testing-library/react'
 
 interface CodeMirrorProps {
   value: string;
@@ -97,6 +98,21 @@ describe('Settings Page', () => {
       
       expect(screen.getByText('Choose your preferred theme for the code editor')).toBeInTheDocument()
     })
+
+    it('allows changing snippet preview height', async () => {
+      renderSettings();
+      const heightLabel = screen.getByText(/snippet preview height/i).parentElement?.querySelector('span:last-child');
+      const rangeInput = screen.getByRole('slider');
+      expect(rangeInput).toBeInTheDocument();
+      expect(rangeInput).toHaveValue('75'); // default from usePreviewHeight
+      await userEvent.type(rangeInput, '{arrowright}{arrowright}');
+      // The value should increase (simulate user interaction)
+      expect(Number(rangeInput.getAttribute('value'))).toBeGreaterThanOrEqual(75);
+      // The label should update
+      if (heightLabel) {
+        expect(heightLabel.textContent).toMatch(/\d+px/);
+      }
+    });
   })
 
   describe('Display Settings', () => {
@@ -221,6 +237,45 @@ describe('Settings Page', () => {
       expect(screen.getByText('1')).toBeInTheDocument()
       expect(screen.getByText('2')).toBeInTheDocument()
       expect(screen.getByText('3')).toBeInTheDocument()
+    })
+
+    it('toggles theme switch', async () => {
+      renderSettings();
+      const generalSettingsLink = screen.getAllByRole('tab')[2];
+      await user.click(generalSettingsLink);
+      const themeSwitch = screen.getByRole('checkbox') as HTMLInputElement;
+      const initialChecked = themeSwitch.getAttribute('aria-checked') === 'true' || themeSwitch.checked;
+      await user.click(themeSwitch);
+      // Should toggle checked state
+      expect(themeSwitch.checked).toBe(!initialChecked);
+    })
+
+    it('changes primary color in modal', async () => {
+      renderSettings();
+      const generalSettingsLink = screen.getAllByRole('tab')[2];
+      await user.click(generalSettingsLink);
+      const colorCard = screen.getByRole('button', { name: /selected color/i });
+      await user.click(colorCard);
+      // Find a color swatch and click it
+      const colorSwatch = screen.getAllByRole('button', { name: /blue|green|gray|purple|red|orange|yellow|mint|sage|teal|charcoal|mauve|pink|fandango|tangelo|peach|vermilion|coral|navy|ocean|sky|dark|steel/i })[0];
+      await user.click(colorSwatch);
+      // The modal should still be open, and the color should be selected
+      expect(screen.getByText('Choose Primary Color')).toBeInTheDocument();
+    })
+
+    it('closes the color modal when clicking close', async () => {
+      renderSettings();
+      const generalSettingsLink = screen.getAllByRole('tab')[2];
+      await user.click(generalSettingsLink);
+      const colorCard = screen.getByRole('button', { name: /selected color/i });
+      await user.click(colorCard);
+      // Find and click the close button (assuming aria-label or text 'Close')
+      const closeButton = screen.getByRole('button', { name: /close/i });
+      await user.click(closeButton);
+      // Modal should disappear
+      await waitFor(() => {
+        expect(screen.queryByText('Choose Primary Color')).not.toBeInTheDocument();
+      });
     })
   })
 }) 

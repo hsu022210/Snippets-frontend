@@ -125,4 +125,83 @@ describe('Login Component', () => {
       expect(mockShowToast).toHaveBeenCalledWith('Failed to login. Please try again.', 'danger');
     });
   });
+
+  it('does not submit the form with empty required fields', async () => {
+    renderLogin();
+    const submitButton = screen.getByRole('button', { name: /login/i });
+    fireEvent.click(submitButton);
+    await waitFor(() => {
+      expect(mockLogin).not.toHaveBeenCalled();
+    });
+  });
+
+  it('shows loading state and disables button on submit', async () => {
+    mockLogin.mockImplementation(() => new Promise(resolve => setTimeout(() => resolve(true), 100)));
+    renderLogin();
+    const emailInput = screen.getByLabelText(/email/i);
+    const passwordInput = screen.getByLabelText(/^password$/i);
+    const submitButton = screen.getByRole('button', { name: /login/i });
+    fireEvent.change(emailInput, { target: { name: 'email', value: 'test@example.com' } });
+    fireEvent.change(passwordInput, { target: { name: 'password', value: 'testpass' } });
+    fireEvent.click(submitButton);
+    expect(submitButton).toBeDisabled();
+    expect(screen.getByText(/logging in/i)).toBeInTheDocument();
+    await waitFor(() => expect(mockLogin).toHaveBeenCalled());
+  });
+
+  it('has correct autoComplete attributes on fields', () => {
+    renderLogin();
+    expect(screen.getByLabelText(/email/i)).toHaveAttribute('autocomplete', 'email');
+    expect(screen.getByLabelText(/^password$/i)).toHaveAttribute('autocomplete', 'current-password');
+  });
+
+  it('toggles password visibility when button is clicked', () => {
+    renderLogin();
+    const passwordInput = screen.getByLabelText(/^password$/i);
+    const toggleButton = screen.getByRole('button', { name: /show password/i });
+    // Initially password should be hidden
+    expect(passwordInput).toHaveAttribute('type', 'password');
+    fireEvent.click(toggleButton);
+    expect(passwordInput).toHaveAttribute('type', 'text');
+    expect(toggleButton).toHaveAttribute('aria-label', 'Hide password');
+    fireEvent.click(toggleButton);
+    expect(passwordInput).toHaveAttribute('type', 'password');
+    expect(toggleButton).toHaveAttribute('aria-label', 'Show password');
+  });
+
+  it('renders forgot password link', () => {
+    renderLogin();
+    const forgotLink = screen.getByRole('link', { name: /forgot password/i });
+    expect(forgotLink).toBeInTheDocument();
+    expect(forgotLink).toHaveAttribute('href', '/forgot-password');
+  });
+
+  it('disables inputs during loading', async () => {
+    mockLogin.mockImplementation(() => new Promise(resolve => setTimeout(() => resolve(true), 100)));
+    renderLogin();
+    const emailInput = screen.getByLabelText(/email/i);
+    const passwordInput = screen.getByLabelText(/^password$/i);
+    const submitButton = screen.getByRole('button', { name: /login/i });
+    fireEvent.change(emailInput, { target: { name: 'email', value: 'test@example.com' } });
+    fireEvent.change(passwordInput, { target: { name: 'password', value: 'testpass' } });
+    fireEvent.click(submitButton);
+    expect(emailInput).toBeDisabled();
+    expect(passwordInput).toBeDisabled();
+    expect(submitButton).toBeDisabled();
+    await waitFor(() => expect(mockLogin).toHaveBeenCalled());
+  });
+
+  it('submits the form with Enter key', async () => {
+    mockLogin.mockResolvedValueOnce(true);
+    renderLogin();
+    const emailInput = screen.getByLabelText(/email/i);
+    const passwordInput = screen.getByLabelText(/^password$/i);
+    fireEvent.change(emailInput, { target: { name: 'email', value: 'test@example.com' } });
+    fireEvent.change(passwordInput, { target: { name: 'password', value: 'testpass' } });
+    const form = emailInput.closest('form');
+    fireEvent.submit(form!);
+    await waitFor(() => {
+      expect(mockLogin).toHaveBeenCalledWith('test@example.com', 'testpass');
+    });
+  });
 }); 
