@@ -82,7 +82,7 @@ const Register = () => {
       if (token) {
         navigate('/snippets');
       } else {
-        setError('Registration successful but authentication failed. Please try logging in.');
+        showToast('Registration successful but authentication failed. Please try logging in.', 'danger');
       }
     } catch (error) {
       const errorMessage = getErrorMessage(error as ApiError);
