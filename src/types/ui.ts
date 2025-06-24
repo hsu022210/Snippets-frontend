@@ -1,27 +1,22 @@
 import { ThemeOption } from "./context";
+import React from 'react';
 
-export interface ButtonProps {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   variant?: string;
   size?: 'sm' | 'md' | 'lg';
-  className?: string;
   isMobile?: boolean;
-  [key: string]: any;
 }
 
-export interface CardProps {
+export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
-  className?: string;
   hover?: boolean;
-  [key: string]: any;
 }
 
-export interface ContainerProps {
+export interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
-  className?: string;
   fluid?: boolean;
   pageContainer?: boolean;
-  [key: string]: any;
 }
 
 export interface FormFieldProps {

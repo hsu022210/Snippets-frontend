@@ -106,11 +106,11 @@ describe('Profile Page', () => {
       expect(emailInput).toHaveValue('newemail@example.com');
     });
     it('submits form and calls updateProfile with updated data', async () => {
-      (authService.updateProfile as any).mockClear();
+      (authService.updateProfile as vi.Mock).mockClear();
       const user = userEvent.setup();
       const updatedUser = { ...mockUser, username: 'updateduser' };
       mockMakeRequest.mockImplementation(async (fn) => await fn());
-      (authService.updateProfile as any).mockResolvedValueOnce(updatedUser);
+      (authService.updateProfile as vi.Mock).mockResolvedValueOnce(updatedUser);
       const usernameInput = screen.getByDisplayValue('testuser');
       await user.clear(usernameInput);
       await user.type(usernameInput, 'updateduser');

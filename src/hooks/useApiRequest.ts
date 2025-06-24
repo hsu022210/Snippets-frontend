@@ -3,16 +3,16 @@ import { useToast } from '../contexts/ToastContext'
 import { ApiError } from '../services'
 
 // Updated type for the new service layer
-export type ServiceCall<T = any> = () => Promise<T>;
+export type ServiceCall<T = unknown> = () => Promise<T>;
 
 export interface UseApiRequestReturn {
-  makeRequest: <T = any>(serviceCall: ServiceCall<T>, loadingMessage?: string) => Promise<T>;
+  makeRequest: <T = unknown>(serviceCall: ServiceCall<T>, loadingMessage?: string) => Promise<T>;
 }
 
 export const useApiRequest = (): UseApiRequestReturn => {
   const { showToast, hideToast } = useToast();
 
-  const makeRequest = useCallback(async <T = any>(
+  const makeRequest = useCallback(async <T = unknown>(
     serviceCall: ServiceCall<T>,
     loadingMessage: string = 'The site may be slow to respond after a certain time of inactivity at first, please wait for a minute to refresh the page if needed.'
   ): Promise<T> => {

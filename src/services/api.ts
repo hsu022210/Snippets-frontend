@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosResponse, AxiosError, InternalAxiosRequestConfig } from 'axios';
+import axios, { AxiosInstance, AxiosResponse, AxiosError, InternalAxiosRequestConfig, AxiosRequestConfig } from 'axios';
 import { ApiErrorResponse } from '../types';
 
 // Environment configuration
@@ -32,10 +32,10 @@ class TokenStorage {
 // API Error class for better error handling
 export class ApiError extends Error {
   public status: number;
-  public data: any;
+  public data: unknown;
   public isNetworkError: boolean;
 
-  constructor(message: string, status: number = 0, data: any = null, isNetworkError: boolean = false) {
+  constructor(message: string, status: number = 0, data: unknown = null, isNetworkError: boolean = false) {
     super(message);
     this.name = 'ApiError';
     this.status = status;
@@ -60,6 +60,8 @@ export class ApiError extends Error {
     return new ApiError(message, status, data, false);
   }
 }
+
+type RetryableAxiosRequestConfig = AxiosRequestConfig & { _retry?: boolean };
 
 // API Client class
 export class ApiClient {
@@ -98,7 +100,7 @@ export class ApiClient {
     instance.interceptors.response.use(
       (response) => response,
       async (error: AxiosError) => {
-        const originalRequest = error.config as any;
+        const originalRequest = error.config as RetryableAxiosRequestConfig;
 
         if (error.response?.status === 401 && !originalRequest._retry) {
           originalRequest._retry = true;
@@ -147,7 +149,7 @@ export class ApiClient {
   }
 
   // Generic request method with error handling
-  async request<T = any>(config: any): Promise<T> {
+  async request<T = unknown>(config: AxiosRequestConfig): Promise<T> {
     try {
       const response: AxiosResponse<T> = await this.instance(config);
       return response.data;
@@ -157,23 +159,23 @@ export class ApiClient {
   }
 
   // HTTP methods
-  async get<T = any>(url: string, config?: any): Promise<T> {
+  async get<T = unknown>(url: string, config?: AxiosRequestConfig): Promise<T> {
     return this.request<T>({ ...config, method: 'GET', url });
   }
 
-  async post<T = any>(url: string, data?: any, config?: any): Promise<T> {
+  async post<T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> {
     return this.request<T>({ ...config, method: 'POST', url, data });
   }
 
-  async put<T = any>(url: string, data?: any, config?: any): Promise<T> {
+  async put<T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> {
     return this.request<T>({ ...config, method: 'PUT', url, data });
   }
 
-  async patch<T = any>(url: string, data?: any, config?: any): Promise<T> {
+  async patch<T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> {
     return this.request<T>({ ...config, method: 'PATCH', url, data });
   }
 
-  async delete<T = any>(url: string, config?: any): Promise<T> {
+  async delete<T = unknown>(url: string, config?: AxiosRequestConfig): Promise<T> {
     return this.request<T>({ ...config, method: 'DELETE', url });
   }
 

@@ -228,8 +228,8 @@ describe('processCode', () => {
     console.error = vi.fn();
 
     // Create an object that will cause an error when stringified
-    const circularObject: any = {};
-    circularObject.self = circularObject;
+    const circularObject: Record<string, unknown> = {};
+    (circularObject as Record<string, unknown>).self = circularObject;
 
     expect(processCode(circularObject)).toBe('// Error: Could not process code content');
     expect(console.error).toHaveBeenCalledWith(

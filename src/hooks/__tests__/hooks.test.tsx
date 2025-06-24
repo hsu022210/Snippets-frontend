@@ -36,7 +36,7 @@ describe('Hooks (with MSW)', () => {
       const { result } = renderHook(() => useApiRequest(), {
         wrapper: TestProviders,
       })
-      let response: any
+      let response: { data: { id: string; title: string } } | undefined
       await act(async () => {
         response = await result.current.makeRequest(() => axios.get('/snippets/1'))
       })

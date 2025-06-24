@@ -3,10 +3,10 @@ import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import react from 'eslint-plugin-react'
-import tseslint from 'typescript-eslint'
-import type { Linter } from 'eslint'
+import parser from '@typescript-eslint/parser'
+import tseslint from '@typescript-eslint/eslint-plugin'
 
-const config: Linter.Config[] = [
+export default [
   { ignores: ['dist', 'coverage', 'eslint.config.ts'] },
   {
     files: ['**/*.{js,jsx,ts,tsx}'],
@@ -19,7 +19,7 @@ const config: Linter.Config[] = [
         node: true, // 👈 This tells ESLint that Node.js globals (like `process`) are allowed,
         process: true,
       },
-      parser: tseslint.parser,
+      parser,
       parserOptions: {
         ecmaVersion: 'latest',
         ecmaFeatures: { jsx: true },
@@ -29,10 +29,10 @@ const config: Linter.Config[] = [
       },
     },
     plugins: {
-      'react': react,
+      react,
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
-      '@typescript-eslint': tseslint.plugin,
+      '@typescript-eslint': tseslint,
     },
     rules: {
       ...js.configs.recommended.rules,
@@ -51,6 +51,4 @@ const config: Linter.Config[] = [
       'react/react-in-jsx-scope': 'off',
     },
   },
-]
-
-export default config 
+] 
