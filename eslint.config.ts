@@ -5,6 +5,7 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import react from 'eslint-plugin-react'
 import parser from '@typescript-eslint/parser'
 import tseslint from '@typescript-eslint/eslint-plugin'
+import unusedImports from 'eslint-plugin-unused-imports'
 
 export default [
   { ignores: ['dist', 'coverage', 'eslint.config.ts'] },
@@ -33,15 +34,19 @@ export default [
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
       '@typescript-eslint': tseslint,
+      'unused-imports': unusedImports,
     },
     rules: {
       ...js.configs.recommended.rules,
       ...reactHooks.configs.recommended.rules,
       ...tseslint.configs.recommended.rules,
       "no-unused-vars": "off",
-      "@typescript-eslint/no-unused-vars": "error",
-      // "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
-      // "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+      "@typescript-eslint/no-unused-vars": "off",
+      'unused-imports/no-unused-imports': 'error',
+      'unused-imports/no-unused-vars': [
+        'warn',
+        { vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' },
+      ],
       'react-refresh/only-export-components': [
         'off',
         { allowConstantExport: true },
