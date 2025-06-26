@@ -8,16 +8,18 @@ import AuthForm from '../components/auth/AuthForm'
 import FormField from '../components/auth/FormField'
 import SubmitButton from '../components/auth/SubmitButton'
 import PasswordRules from '../components/auth/PasswordRules'
-import { RegisterFormData, ApiRegisterErrorResponse } from '../types'
+import { ApiRegisterErrorResponse } from '../types'
 import { ApiError } from '../services'
+import { registerSchema, validateFormDataWithFieldErrors, RegisterFormData } from '../utils/validationSchemas'
 
 const Register = () => {
   const [formData, setFormData] = useState<RegisterFormData>({
     username: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    password2: ''
   });
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const { register } = useAuth();
@@ -29,12 +31,17 @@ const Register = () => {
       ...prev,
       [name]: value
     }));
+    
+    // Clear field-specific error when user starts typing
+    if (formErrors[name]) {
+      setFormErrors(prev => ({ ...prev, [name]: '' }));
+    }
   };
 
   const getErrorMessage = (error: ApiError): string => {
     // Handle validation errors from the API
-    if (error.data && typeof error.data === 'object' && 'detail' in error.data) {
-      const data = error.data.detail as ApiRegisterErrorResponse['detail'];
+    if (error.data && typeof error.data === 'object') {
+      const data = error.data as ApiRegisterErrorResponse;
       
       // Handle field-specific errors
       if (data.email) {
@@ -68,15 +75,23 @@ const Register = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (formData.password !== formData.confirmPassword) {
-      showToast('Passwords do not match', 'danger');
+    const validation = validateFormDataWithFieldErrors(registerSchema, formData);
+    
+    if (!validation.success) {
+      setFormErrors(validation.fieldErrors);
+      validation.generalErrors.forEach(error => showToast(error, 'danger'));
       return;
     }
 
     try {
       setLoading(true);
       
-      const token = await register(formData.username, formData.password, formData.confirmPassword, formData.email);
+      const token = await register(
+        formData.username,
+        formData.password,
+        formData.password2,
+        formData.email
+      );
       
       // Ensure we have a valid token before navigating
       if (token) {
@@ -105,6 +120,8 @@ const Register = () => {
           disabled={loading}
           required
           autoComplete="username"
+          error={formErrors.username}
+          isInvalid={!!formErrors.username}
         />
         <FormField
           label="Email"
@@ -116,6 +133,8 @@ const Register = () => {
           disabled={loading}
           required
           autoComplete="email"
+          error={formErrors.email}
+          isInvalid={!!formErrors.email}
         />
         <PasswordInput
           label="Password"
@@ -128,21 +147,23 @@ const Register = () => {
           size="lg"
           className="mb-3"
           autoComplete="new-password"
+          error={formErrors.password}
+          isInvalid={!!formErrors.password}
         />
         <PasswordRules password={formData.password} />
         <PasswordInput
           label="Confirm Password"
-          name="confirmPassword"
-          id="confirmPassword"
-          value={formData.confirmPassword}
+          name="password2"
+          id="password2"
+          value={formData.password2}
           onChange={handleChange}
           required
           disabled={loading}
           size="lg"
           className="mb-4"
           autoComplete="new-password"
-          isInvalid={formData.password !== formData.confirmPassword && formData.confirmPassword !== ''}
-          error={formData.password !== formData.confirmPassword && formData.confirmPassword !== '' ? 'Passwords do not match' : ''}
+          error={formErrors.password2}
+          isInvalid={!!formErrors.password2}
         />
         <SubmitButton loading={loading} loadingText="Registering...">
           Register

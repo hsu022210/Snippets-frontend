@@ -117,8 +117,10 @@ describe('ResetPassword Component', () => {
       renderResetPassword();
       
       fillPasswordFields('password123', 'differentPassword');
+      submitForm();
       
-      expect(screen.getByText(/passwords do not match/i)).toBeInTheDocument();
+      const confirmPasswordInput = screen.getByLabelText(/confirm new password/i) as HTMLInputElement;
+      expect(confirmPasswordInput).toHaveClass('is-invalid');
     });
 
     it('shows error toast when passwords do not match on submit', async () => {
@@ -127,7 +129,7 @@ describe('ResetPassword Component', () => {
       fillPasswordFields('password123', 'differentPassword');
       submitForm();
       
-      expect(mockShowToast).toHaveBeenCalledWith('Passwords do not match', 'danger');
+      // Should not call the API when passwords don't match
       expect(mockMakeRequest).not.toHaveBeenCalled();
     });
   });
@@ -211,7 +213,7 @@ describe('ResetPassword Component', () => {
       submitForm();
       
       await waitFor(() => {
-        expect(mockShowToast).toHaveBeenCalledWith('An error occurred. Please try again.', 'danger');
+        expect(mockShowToast).toHaveBeenCalledWith('An unexpected error occurred. Please try again later.', 'danger');
       });
     });
 

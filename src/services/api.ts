@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse, AxiosError, InternalAxiosRequestConfig, AxiosRequestConfig } from 'axios';
 import { ApiErrorResponse } from '../types';
+import { z } from 'zod';
 
 // Environment configuration
 const isDevelopment = import.meta.env.MODE === 'development';
@@ -148,35 +149,45 @@ export class ApiClient {
     this.onLogout = onLogout;
   }
 
-  // Generic request method with error handling
-  async request<T = unknown>(config: AxiosRequestConfig): Promise<T> {
+  // Generic request method with error handling and response validation
+  async request<T = unknown>(config: AxiosRequestConfig, schema?: z.ZodSchema<T>): Promise<T> {
     try {
       const response: AxiosResponse<T> = await this.instance(config);
+      
+      // Validate response data if schema is provided
+      if (schema) {
+        const validation = schema.safeParse(response.data);
+        if (!validation.success) {
+          console.warn('API response validation failed:', validation.error);
+          // Still return the data but log the validation error
+        }
+      }
+      
       return response.data;
     } catch (error) {
       throw ApiError.fromAxiosError(error as AxiosError<ApiErrorResponse>);
     }
   }
 
-  // HTTP methods
-  async get<T = unknown>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    return this.request<T>({ ...config, method: 'GET', url });
+  // HTTP methods with response validation
+  async get<T = unknown>(url: string, config?: AxiosRequestConfig, schema?: z.ZodSchema<T>): Promise<T> {
+    return this.request<T>({ ...config, method: 'GET', url }, schema);
   }
 
-  async post<T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> {
-    return this.request<T>({ ...config, method: 'POST', url, data });
+  async post<T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig, schema?: z.ZodSchema<T>): Promise<T> {
+    return this.request<T>({ ...config, method: 'POST', url, data }, schema);
   }
 
-  async put<T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> {
-    return this.request<T>({ ...config, method: 'PUT', url, data });
+  async put<T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig, schema?: z.ZodSchema<T>): Promise<T> {
+    return this.request<T>({ ...config, method: 'PUT', url, data }, schema);
   }
 
-  async patch<T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig): Promise<T> {
-    return this.request<T>({ ...config, method: 'PATCH', url, data });
+  async patch<T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig, schema?: z.ZodSchema<T>): Promise<T> {
+    return this.request<T>({ ...config, method: 'PATCH', url, data }, schema);
   }
 
-  async delete<T = unknown>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    return this.request<T>({ ...config, method: 'DELETE', url });
+  async delete<T = unknown>(url: string, config?: AxiosRequestConfig, schema?: z.ZodSchema<T>): Promise<T> {
+    return this.request<T>({ ...config, method: 'DELETE', url }, schema);
   }
 
   // Token management
