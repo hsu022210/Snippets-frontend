@@ -7,8 +7,9 @@ import SubmitButton from '../components/auth/SubmitButton'
 import PasswordRules from '../components/auth/PasswordRules'
 import { useApiRequest } from '../hooks/useApiRequest'
 import { useToast } from '../contexts/ToastContext'
-import { PasswordFormData } from '../types'
+import { PasswordFormData, ApiPasswordResetErrorResponse } from '../types'
 import { authService, ApiError } from '../services'
+import { passwordResetConfirmSchema, validateFormDataWithFieldErrors } from '../utils/validationSchemas'
 
 const ResetPassword = () => {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ const ResetPassword = () => {
     password: '',
     confirmPassword: '',
   });
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -28,6 +30,39 @@ const ResetPassword = () => {
       ...prev,
       [name]: value
     }));
+    
+    // Clear field-specific error when user starts typing
+    if (formErrors[name]) {
+      setFormErrors(prev => ({ ...prev, [name]: '' }));
+    }
+  };
+
+  const getErrorMessage = (error: ApiError): string => {
+    // Handle validation errors from the API
+    if (error.data && typeof error.data === 'object') {
+      const data = error.data as ApiPasswordResetErrorResponse;
+      
+      // Handle field-specific errors
+      if (data.password) {
+        return `${Array.isArray(data.password) ? data.password.join(', ') : data.password}`;
+      }
+      if (data.password2) {
+        return `${Array.isArray(data.password2) ? data.password2.join(', ') : data.password2}`;
+      }
+      
+      // Handle non-field errors
+      if (data.detail) {
+        return data.detail;
+      }
+    }
+    
+    // Handle network errors
+    if (error.isNetworkError) {
+      return 'Unable to connect to the server. Please check your internet connection.';
+    }
+    
+    // Use the error message from ApiError
+    return error.message || 'An unexpected error occurred. Please try again later.';
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -38,8 +73,20 @@ const ResetPassword = () => {
       return;
     }
 
+    const validation = validateFormDataWithFieldErrors(passwordResetConfirmSchema, {
+      token,
+      password: formData.password
+    });
+    
+    if (!validation.success) {
+      setFormErrors(validation.fieldErrors);
+      validation.generalErrors.forEach(error => showToast(error, 'danger'));
+      return;
+    }
+
+    // Check if passwords match
     if (formData.password !== formData.confirmPassword) {
-      showToast('Passwords do not match', 'danger');
+      setFormErrors({ confirmPassword: 'Passwords do not match' });
       return;
     }
 
@@ -54,8 +101,9 @@ const ResetPassword = () => {
       showToast('Password has been reset successfully. Please login with your new password.', 'primary', 3);
       navigate('/login');
     } catch (error) {
-      const apiError = error as ApiError;
-      showToast(apiError.message || 'An error occurred. Please try again.', 'danger');
+      console.log(error);
+      const errorMessage = getErrorMessage(error as ApiError);
+      showToast(errorMessage, 'danger');
       console.error('Password reset error:', error);
     } finally {
       setLoading(false);
@@ -76,6 +124,8 @@ const ResetPassword = () => {
           size="lg"
           className="mb-2"
           autoComplete="new-password"
+          error={formErrors.password}
+          isInvalid={!!formErrors.password}
         />
         <PasswordRules password={formData.password} />
         <PasswordInput
@@ -89,8 +139,8 @@ const ResetPassword = () => {
           size="lg"
           className="mb-4"
           autoComplete="new-password"
-          isInvalid={formData.password !== formData.confirmPassword && formData.confirmPassword !== ''}
-          error={formData.password !== formData.confirmPassword && formData.confirmPassword !== '' ? 'Passwords do not match' : ''}
+          error={formErrors.confirmPassword}
+          isInvalid={!!formErrors.confirmPassword}
         />
         <SubmitButton loading={loading} loadingText="Resetting...">
           Reset Password

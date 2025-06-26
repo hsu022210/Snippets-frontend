@@ -1,24 +1,16 @@
-export interface Snippet {
-  id: string;
-  title: string;
-  code: string;
-  language: string;
-  created: string;
-  user?: number;
-}
+import { 
+  Snippet, 
+  SnippetData, 
+  SnippetUpdateData, 
+  SnippetFilterData, 
+  SnippetListResponse,
+  Language, 
+  Style 
+} from '../utils/validationSchemas';
 
-export interface SnippetData {
-  title: string;
-  code: string;
-  language: string;
-}
-
-export interface SnippetListResponse {
-  results: Snippet[];
-  count: number;
-  next: string | null;
-  previous: string | null;
-}
+// ============================================================================
+// COMPONENT PROPS
+// ============================================================================
 
 export interface SnippetHeaderProps {
   isEditing: boolean;
@@ -40,15 +32,35 @@ export interface SnippetCardProps {
 
 export interface SnippetLanguageSelectorProps {
   isEditing: boolean;
-  editedLanguage: string;
-  setEditedLanguage: (language: string) => void;
-  language: string;
+  editedLanguage: Language;
+  setEditedLanguage: (language: Language) => void;
+  language: Language;
 }
 
 export interface SnippetLanguageFilterProps {
   language: string;
   onLanguageChange: (language: string) => void;
 }
+
+export interface SnippetSearchProps {
+  searchTitle: string;
+  searchCode: string;
+  onSearchChange: (field: 'searchTitle' | 'searchCode', value: string) => void;
+  loading?: boolean;
+}
+
+export interface SnippetListHeaderProps {
+  totalCount: number;
+  hasActiveFilters: boolean;
+}
+
+export interface SnippetGridProps {
+  snippets: Snippet[];
+}
+
+// ============================================================================
+// FILTER TYPES
+// ============================================================================
 
 export interface SnippetFilterValues {
   language: string;
@@ -86,35 +98,41 @@ export interface FilterOptions {
   searchCode?: string;
 }
 
-export interface SnippetSearchProps {
-  searchTitle: string;
-  searchCode: string;
-  onSearchChange: (field: 'searchTitle' | 'searchCode', value: string) => void;
-  loading?: boolean;
-}
-
-export interface SnippetListHeaderProps {
-  totalCount: number;
-  hasActiveFilters: boolean;
-}
-
-export interface SnippetGridProps {
-  snippets: Snippet[];
-} 
-
 export interface SnippetFilters extends FilterOptions {
   page?: number;
   page_size?: number;
 }
 
+// ============================================================================
+// API REQUEST TYPES
+// ============================================================================
+
 export interface CreateSnippetRequest {
   title: string;
   code: string;
-  language: string;
+  language: Language;
+  linenos?: boolean;
+  style?: Style;
 }
 
 export interface UpdateSnippetRequest {
   title?: string;
   code?: string;
-  language?: string;
-} 
+  language?: Language;
+  linenos?: boolean;
+  style?: Style;
+}
+
+// ============================================================================
+// RE-EXPORTS FROM VALIDATION SCHEMAS
+// ============================================================================
+
+export type {
+  Snippet,
+  SnippetData,
+  SnippetUpdateData,
+  SnippetFilterData,
+  SnippetListResponse,
+  Language,
+  Style
+}; 

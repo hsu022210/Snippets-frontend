@@ -70,11 +70,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   // Auth operations
-  const register = async (username: string, password: string, password2: string, email: string): Promise<string> => {
+  const register = async (username: string, password: string, password2: string, email: string, first_name?: string, last_name?: string): Promise<string> => {
     try {
       // First, register the user
       await makeRequest(
-        () => authService.register(username, password, password2, email)
+        () => authService.register(username, password, password2, email, first_name, last_name)
       );
       
       // Then automatically log in the user to get tokens

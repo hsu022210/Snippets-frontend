@@ -1,22 +1,32 @@
-export interface User {
-  id: number;
-  username: string;
-  email: string;
-  first_name: string;
-  last_name: string;
-}
+import { 
+  User, 
+  LoginFormData, 
+  RegisterFormData, 
+  LoginResponse, 
+  RegisterResponse,
+  PasswordResetRequestData,
+  PasswordResetConfirmData
+} from '../utils/validationSchemas';
+
+// ============================================================================
+// CONTEXT TYPES
+// ============================================================================
 
 export interface AuthContextType {
   user: User | null;
   token: string | null;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => Promise<boolean>;
-  register: (username: string, password: string, password2: string, email: string) => Promise<string>;
+  register: (username: string, password: string, password2: string, email: string, first_name?: string, last_name?: string) => Promise<string>;
 }
 
 export interface AuthProviderProps {
   children: React.ReactNode;
 }
+
+// ============================================================================
+// COMPONENT PROPS
+// ============================================================================
 
 export interface AuthFormProps {
   title: string;
@@ -24,38 +34,16 @@ export interface AuthFormProps {
   children: React.ReactNode;
 }
 
-export interface FormData {
-  email: string;
-  password: string;
-}
+// ============================================================================
+// FORM DATA ALIASES (for backward compatibility)
+// ============================================================================
 
-export interface RegisterFormData {
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
+export type FormData = LoginFormData;
+export type UserProfile = Pick<User, 'username' | 'email' | 'first_name' | 'last_name'>;
 
-export interface UserProfile {
-  username: string;
-  email: string;
-  first_name: string;
-  last_name: string;
-}
-
-export interface LoginResponse {
-  access: string;
-  refresh: string;
-}
-
-export interface RegisterResponse {
-  message?: string;
-  user?: {
-    id: number;
-    username: string;
-    email: string;
-  };
-}
+// ============================================================================
+// API REQUEST TYPES
+// ============================================================================
 
 export interface PasswordResetRequest {
   email: string;
@@ -68,4 +56,18 @@ export interface PasswordResetConfirm {
 
 export interface PasswordResetResponse {
   message: string;
-} 
+}
+
+// ============================================================================
+// RE-EXPORTS FROM VALIDATION SCHEMAS
+// ============================================================================
+
+export type {
+  User,
+  LoginFormData,
+  RegisterFormData,
+  LoginResponse,
+  RegisterResponse,
+  PasswordResetRequestData,
+  PasswordResetConfirmData
+}; 
