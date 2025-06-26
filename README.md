@@ -27,7 +27,8 @@ A modern, responsive web application for managing and organizing code snippets a
 - **Advanced Search**: Powerful search and filtering capabilities
 - **Comprehensive Testing**: Full test coverage with Vitest and React Testing Library
 - **Dark/Light Mode**: Theme switching with persistent preferences
-- **User Authentication**: Secure login/register system with password validation
+- **User Authentication**: Secure login/register system with robust validation using Zod
+- **Type-Safe Validation**: All forms and API responses are validated with Zod schemas for reliability
 
 ## 🚀 Supported Languages
 
@@ -64,6 +65,9 @@ A modern, responsive web application for managing and organizing code snippets a
 - **CodeMirror 6** - Advanced code editor
 - **@uiw/react-codemirror** - React wrapper for CodeMirror
 - **Multiple Language Support** - 15+ programming languages
+
+### Validation & Type Safety
+- **Zod** - TypeScript-first schema validation for forms and API responses
 
 ### Testing & Quality
 - **Vitest** - Fast unit testing framework
@@ -128,6 +132,7 @@ src/
 ├── types/              # TypeScript type definitions
 ├── utils/              # Utility functions
 └── test/               # Test setup and utilities
+├── services/           # Centralized API service layer (with Zod validation)
 ```
 
 ### Code Style Guidelines
@@ -138,10 +143,35 @@ src/
 - Write tests for new features
 - Follow existing code patterns and conventions
 - Use proper TypeScript types and interfaces
+- Use Zod schemas for all validation and type inference
 
 ### Customizing the Primary Color
 
 You can customize the primary color used throughout the app from the Settings page. The color picker modal provides a live preview for buttons and pagination components.
+
+### Editor & Display Settings
+
+The Settings page now allows users to:
+- Select a CodeMirror theme for the code editor
+- Adjust the snippet preview height (with live preview)
+- Change the primary color (with modal and live preview)
+- Set pagination size for snippet lists
+
+### Improved Filtering & Search
+
+Snippet filtering now supports:
+- Language selection
+- Date range filtering (created after/before)
+- Title and code search
+- All filters are persisted in localStorage for a better UX
+
+### API Service Layer
+
+All API calls are centralized in the `src/services/` directory, with:
+- Consistent error handling via a custom `ApiError` class
+- Automatic token management for authentication
+- Zod-based response validation for all endpoints
+- TypeScript types inferred from Zod schemas
 
 ## 🧪 Testing
 
