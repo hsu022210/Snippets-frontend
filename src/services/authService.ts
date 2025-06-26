@@ -18,12 +18,14 @@ export class AuthService {
     }, undefined, loginResponseSchema);
   }
 
-  async register(username: string, password: string, password2: string, email: string): Promise<RegisterResponse> {
+  async register(username: string, password: string, password2: string, email: string, first_name: string = '', last_name: string = ''): Promise<RegisterResponse> {
     return apiClient.post<ZodRegisterResponse>('/auth/register/', {
       username,
       password,
       password2,
       email,
+      ...(first_name && { first_name }),
+      ...(last_name && { last_name }),
     }, undefined, registerResponseSchema);
   }
 

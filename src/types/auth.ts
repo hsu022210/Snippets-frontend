@@ -11,7 +11,7 @@ export interface AuthContextType {
   token: string | null;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => Promise<boolean>;
-  register: (username: string, password: string, password2: string, email: string) => Promise<string>;
+  register: (username: string, password: string, password2: string, email: string, first_name?: string, last_name?: string) => Promise<string>;
 }
 
 export interface AuthProviderProps {
@@ -33,7 +33,9 @@ export interface RegisterFormData {
   username: string;
   email: string;
   password: string;
-  confirmPassword: string;
+  password2: string;
+  first_name?: string;
+  last_name?: string;
 }
 
 export interface UserProfile {

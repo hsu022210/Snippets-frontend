@@ -17,7 +17,9 @@ const Register = () => {
     username: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    password2: '',
+    first_name: '',
+    last_name: ''
   });
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState<boolean>(false);
@@ -101,7 +103,24 @@ const Register = () => {
     try {
       setLoading(true);
       
-      const token = await register(formData.username, formData.password, formData.confirmPassword, formData.email);
+      let token;
+      if (formData.first_name || formData.last_name) {
+        token = await register(
+          formData.username,
+          formData.password,
+          formData.password2,
+          formData.email,
+          formData.first_name || '',
+          formData.last_name || ''
+        );
+      } else {
+        token = await register(
+          formData.username,
+          formData.password,
+          formData.password2,
+          formData.email
+        );
+      }
       
       // Ensure we have a valid token before navigating
       if (token) {
@@ -146,6 +165,28 @@ const Register = () => {
           error={formErrors.email}
           isInvalid={!!formErrors.email}
         />
+        <FormField
+          label="First Name (Optional)"
+          name="first_name"
+          id="first_name"
+          value={formData.first_name}
+          onChange={handleChange}
+          disabled={loading}
+          autoComplete="given-name"
+          error={formErrors.first_name}
+          isInvalid={!!formErrors.first_name}
+        />
+        <FormField
+          label="Last Name (Optional)"
+          name="last_name"
+          id="last_name"
+          value={formData.last_name}
+          onChange={handleChange}
+          disabled={loading}
+          autoComplete="family-name"
+          error={formErrors.last_name}
+          isInvalid={!!formErrors.last_name}
+        />
         <PasswordInput
           label="Password"
           name="password"
@@ -163,17 +204,17 @@ const Register = () => {
         <PasswordRules password={formData.password} />
         <PasswordInput
           label="Confirm Password"
-          name="confirmPassword"
-          id="confirmPassword"
-          value={formData.confirmPassword}
+          name="password2"
+          id="password2"
+          value={formData.password2}
           onChange={handleChange}
           required
           disabled={loading}
           size="lg"
           className="mb-4"
           autoComplete="new-password"
-          error={formErrors.confirmPassword}
-          isInvalid={!!formErrors.confirmPassword}
+          error={formErrors.password2}
+          isInvalid={!!formErrors.password2}
         />
         <SubmitButton loading={loading} loadingText="Registering...">
           Register

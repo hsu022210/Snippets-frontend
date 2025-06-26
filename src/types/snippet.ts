@@ -1,8 +1,12 @@
+import { Language, Style } from '../utils/validationSchemas';
+
 export interface Snippet {
   id: string;
   title: string;
   code: string;
-  language: string;
+  language: Language;
+  linenos?: boolean;
+  style?: Style;
   created: string;
   user?: number;
 }
@@ -10,7 +14,9 @@ export interface Snippet {
 export interface SnippetData {
   title: string;
   code: string;
-  language: string;
+  language: Language;
+  linenos?: boolean;
+  style?: Style;
 }
 
 export interface SnippetListResponse {
@@ -40,9 +46,9 @@ export interface SnippetCardProps {
 
 export interface SnippetLanguageSelectorProps {
   isEditing: boolean;
-  editedLanguage: string;
-  setEditedLanguage: (language: string) => void;
-  language: string;
+  editedLanguage: Language;
+  setEditedLanguage: (language: Language) => void;
+  language: Language;
 }
 
 export interface SnippetLanguageFilterProps {
@@ -110,11 +116,15 @@ export interface SnippetFilters extends FilterOptions {
 export interface CreateSnippetRequest {
   title: string;
   code: string;
-  language: string;
+  language: Language;
+  linenos?: boolean;
+  style?: Style;
 }
 
 export interface UpdateSnippetRequest {
   title?: string;
   code?: string;
-  language?: string;
+  language?: Language;
+  linenos?: boolean;
+  style?: Style;
 } 
