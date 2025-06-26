@@ -118,7 +118,7 @@ export const useCreateSnippet = () => {
         () => snippetService.createSnippet(snippetData)
       );
       showToast('Snippet created successfully!', 'primary', 3);
-      navigate(`/snippets/${newSnippet.id}`);
+      navigate(`/snippets/${newSnippet.id.toString()}`);
       return newSnippet;
     } catch (error) {
       const apiError = error as ApiError;

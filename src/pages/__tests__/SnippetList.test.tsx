@@ -65,21 +65,21 @@ vi.mock('../../components/snippet/SnippetSearch', () => ({
 
 const mockSnippets: Snippet[] = [
   {
-    id: '1',
+    id: 1,
     title: 'React Component',
     code: 'function App() { return <div>Hello</div>; }',
     language: 'javascript',
     created: '2024-01-01T00:00:00Z',
   },
   {
-    id: '2',
+    id: 2,
     title: 'Python Function',
     code: 'def hello(): print("Hello")',
     language: 'python',
     created: '2024-01-02T00:00:00Z',
   },
   {
-    id: '3',
+    id: 3,
     title: 'CSS Styles',
     code: '.container { display: flex; }',
     language: 'css',

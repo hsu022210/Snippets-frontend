@@ -36,7 +36,7 @@ const mockHandleDelete = vi.fn();
 const mockHandleCancel = vi.fn();
 
 const baseSnippet = {
-  id: '1',
+  id: 1,
   title: 'Test Snippet',
   code: 'console.log("Hello World")',
   language: 'javascript',

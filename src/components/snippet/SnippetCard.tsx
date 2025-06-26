@@ -35,11 +35,11 @@ export const SnippetCard = ({ snippet }: SnippetCardProps) => {
   const handleShareClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    handleShare(snippet.id);
+    handleShare(snippet.id.toString());
   };
 
   return (
-    <Link to={`/snippets/${snippet.id}`} className="text-decoration-none">
+    <Link to={`/snippets/${snippet.id.toString()}`} className="text-decoration-none">
       <Card hover className="h-100">
         <Body className="d-flex flex-column">
           <Stack gap={3}>

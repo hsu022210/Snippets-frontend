@@ -3,7 +3,7 @@ import { Snippet, SnippetListResponse } from '../types'
 
 // Mock data
 const mockSnippet: Snippet = {
-  id: '1',
+  id: 1,
   title: 'Test Snippet',
   language: 'javascript',
   code: 'console.log("test")',
@@ -29,7 +29,7 @@ export const handlers = [
   http.post('/snippets', async ({ request }) => {
     const body = await request.json() as Partial<Snippet>
     return HttpResponse.json<Snippet>({
-      id: Date.now().toString(),
+      id: Date.now(),
       title: body.title || 'Untitled Snippet',
       language: body.language || 'plaintext',
       code: body.code || '',

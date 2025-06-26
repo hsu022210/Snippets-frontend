@@ -20,7 +20,7 @@ vi.mock('../../contexts/ToastContext', () => ({
 }));
 
 interface Snippet {
-  id: string;
+  id: number;
   title: string;
   code: string;
   language: string;
@@ -36,11 +36,11 @@ describe('Hooks (with MSW)', () => {
       const { result } = renderHook(() => useApiRequest(), {
         wrapper: TestProviders,
       })
-      let response: { data: { id: string; title: string } } | undefined
+      let response: { data: { id: number; title: string } } | undefined
       await act(async () => {
         response = await result.current.makeRequest(() => axios.get('/snippets/1'))
       })
-      expect(response?.data.id).toBe('1')
+      expect(response?.data.id).toBe(1)
       expect(response?.data.title).toBe('Test Snippet')
     })
 
@@ -81,7 +81,7 @@ describe('Hooks (with MSW)', () => {
       expect(result.current.snippets.length).toBeGreaterThan(0)
       expect(result.current.totalCount).toBeGreaterThan(0)
       const snippet = result.current.snippets[0] as Snippet
-      expect(snippet.id).toBe('1')
+      expect(snippet.id).toBe(1)
     })
 
     it('should handle fetch error', async () => {
@@ -113,7 +113,7 @@ describe('Hooks (with MSW)', () => {
           expect(url.searchParams.get('language')).toBe('javascript')
           return HttpResponse.json({
             results: [
-              { id: '1', title: 'JS Snippet', code: 'console.log("test")', language: 'javascript' }
+              { id: 1, title: 'JS Snippet', code: 'console.log("test")', language: 'javascript' }
             ]
           })
         })
@@ -143,7 +143,7 @@ describe('Hooks (with MSW)', () => {
           expect(url.searchParams.get('created_before')).toBe(createdBefore)
           return HttpResponse.json({
             results: [
-              { id: '1', title: 'Date Filtered Snippet', code: 'test', language: 'python' }
+              { id: 1, title: 'Date Filtered Snippet', code: 'test', language: 'python' }
             ]
           })
         })
@@ -175,7 +175,7 @@ describe('Hooks (with MSW)', () => {
           expect(url.searchParams.get('search_code')).toBe(searchCode)
           return HttpResponse.json({
             results: [
-              { id: '1', title: 'Test Snippet', code: 'console.log("test")', language: 'javascript' }
+              { id: 1, title: 'Test Snippet', code: 'console.log("test")', language: 'javascript' }
             ]
           })
         })
@@ -227,7 +227,7 @@ describe('Hooks (with MSW)', () => {
           expect(url.searchParams.get('page')).toBe('2')
           return HttpResponse.json({
             results: [
-              { id: '3', title: 'Page 2 Snippet', code: 'test', language: 'python' }
+              { id: 3, title: 'Page 2 Snippet', code: 'test', language: 'python' }
             ],
             count: 3,
             next: null,
@@ -245,7 +245,7 @@ describe('Hooks (with MSW)', () => {
       })
 
       expect(result.current.snippets.length).toBe(1)
-      expect(result.current.snippets[0].id).toBe('3')
+      expect(result.current.snippets[0].id).toBe(3)
       expect(result.current.hasPreviousPage).toBe(true)
       expect(result.current.hasNextPage).toBe(false)
     })
@@ -265,7 +265,7 @@ describe('Hooks (with MSW)', () => {
       })
 
       expect(result.current.snippet).toBeTruthy()
-      expect(result.current.snippet?.id).toBe('1')
+      expect(result.current.snippet?.id).toBe(1)
       expect(result.current.snippet?.title).toBe('Test Snippet')
     })
 

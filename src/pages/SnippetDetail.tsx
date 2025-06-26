@@ -123,7 +123,7 @@ const SnippetDetail: React.FC = () => {
           setShowDeleteModal={setShowDeleteModal}
           title={snippet.title}
           isAuthenticated={!!token}
-          snippetId={snippet.id}
+          snippetId={snippet.id.toString()}
         />
 
         <div className="d-flex flex-column gap-2 mb-3">

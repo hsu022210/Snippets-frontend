@@ -16,7 +16,7 @@ import { getLanguageDisplayName } from '../../../utils/languageUtils'
 
 // Mock data
 const mockSnippet: Snippet = {
-  id: '1',
+  id: 1,
   title: 'Test Snippet',
   language: 'javascript',
   code: 'console.log("test")',

@@ -166,7 +166,7 @@ export const registerResponseSchema = z.object({
 });
 
 export const snippetSchema = z.object({
-  id: z.string(),
+  id: z.number(),
   title: z.string(),
   code: z.string(),
   language: z.string(),
