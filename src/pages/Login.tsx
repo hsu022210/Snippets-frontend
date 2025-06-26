@@ -7,13 +7,14 @@ import PasswordInput from '../components/auth/PasswordInput'
 import AuthForm from '../components/auth/AuthForm'
 import FormField from '../components/auth/FormField'
 import SubmitButton from '../components/auth/SubmitButton'
-import { FormData } from '../types'
+import { loginSchema, validateFormData, LoginFormData } from '../utils/validationSchemas'
 
 const Login = () => {
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<LoginFormData>({
     email: '',
     password: ''
   });
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -25,10 +26,38 @@ const Login = () => {
       ...prev,
       [name]: value
     }));
+    
+    // Clear field-specific error when user starts typing
+    if (formErrors[name]) {
+      setFormErrors(prev => ({ ...prev, [name]: '' }));
+    }
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    // Validate form data using Zod
+    const validation = validateFormData(loginSchema, formData);
+    
+    if (!validation.success) {
+      // Convert Zod errors to field-specific errors
+      const errors: Record<string, string> = {};
+      validation.errors.forEach(error => {
+        // Extract field name from error path
+        const fieldMatch = error.match(/^(.+?):/);
+        if (fieldMatch) {
+          const field = fieldMatch[1];
+          errors[field] = error.replace(/^.+?: /, '');
+        } else {
+          // For general errors, show in toast
+          showToast(error, 'danger');
+        }
+      });
+      
+      setFormErrors(errors);
+      return;
+    }
+    
     try {
       setLoading(true);
       const success = await login(formData.email, formData.password);
@@ -59,6 +88,8 @@ const Login = () => {
           disabled={loading}
           required
           autoComplete="email"
+          error={formErrors.email}
+          isInvalid={!!formErrors.email}
         />
         <PasswordInput
           label="Password"
@@ -71,6 +102,8 @@ const Login = () => {
           size="lg"
           className="mb-4"
           autoComplete="current-password"
+          error={formErrors.password}
+          isInvalid={!!formErrors.password}
         />
         <SubmitButton loading={loading} loadingText="Logging in...">
           Login

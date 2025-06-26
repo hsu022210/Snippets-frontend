@@ -1,5 +1,11 @@
 import { apiClient } from './api';
 import { Snippet, SnippetListResponse, SnippetFilters, CreateSnippetRequest, UpdateSnippetRequest } from '../types';
+import { 
+  snippetSchema, 
+  snippetListResponseSchema,
+  Snippet as ZodSnippet,
+  SnippetListResponse as ZodSnippetListResponse
+} from '../utils/validationSchemas';
 
 export class SnippetService {
   // Get snippets with optional filters
@@ -31,22 +37,22 @@ export class SnippetService {
     const queryString = params.toString();
     const url = queryString ? `/snippets/?${queryString}` : '/snippets/';
     
-    return apiClient.get<SnippetListResponse>(url);
+    return apiClient.get<ZodSnippetListResponse>(url, undefined, snippetListResponseSchema);
   }
 
   // Get a single snippet by ID
   async getSnippet(id: number): Promise<Snippet> {
-    return apiClient.get<Snippet>(`/snippets/${id}/`);
+    return apiClient.get<ZodSnippet>(`/snippets/${id}/`, undefined, snippetSchema);
   }
 
   // Create a new snippet
   async createSnippet(snippetData: CreateSnippetRequest): Promise<Snippet> {
-    return apiClient.post<Snippet>('/snippets/', snippetData);
+    return apiClient.post<ZodSnippet>('/snippets/', snippetData, undefined, snippetSchema);
   }
 
   // Update an existing snippet
   async updateSnippet(id: number, snippetData: UpdateSnippetRequest): Promise<Snippet> {
-    return apiClient.patch<Snippet>(`/snippets/${id}/`, snippetData);
+    return apiClient.patch<ZodSnippet>(`/snippets/${id}/`, snippetData, undefined, snippetSchema);
   }
 
   // Delete a snippet

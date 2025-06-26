@@ -5,18 +5,64 @@ import Container from '../components/shared/Container'
 import CodeEditor from '../components/shared/CodeEditor'
 import { useCreateSnippet } from '../hooks/useSnippet'
 import { LanguageOptions } from '../utils/languageUtils'
-import { SnippetData } from '../types'
+import { snippetDataSchema, validateFormData, SnippetData } from '../utils/validationSchemas'
 
 const CreateSnippet: React.FC = () => {
   const [title, setTitle] = useState<string>('');
   const [code, setCode] = useState<string>('');
   const [language, setLanguage] = useState<string>('');
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const { createSnippet, loading } = useCreateSnippet();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
     const snippetData: SnippetData = { title, code, language };
+    
+    // Validate snippet data using Zod
+    const validation = validateFormData(snippetDataSchema, snippetData);
+    
+    if (!validation.success) {
+      // Convert Zod errors to field-specific errors
+      const errors: Record<string, string> = {};
+      validation.errors.forEach(error => {
+        // Extract field name from error path
+        const fieldMatch = error.match(/^(.+?):/);
+        if (fieldMatch) {
+          const field = fieldMatch[1];
+          errors[field] = error.replace(/^.+?: /, '');
+        }
+      });
+      
+      setFormErrors(errors);
+      return;
+    }
+    
+    // Clear errors if validation passes
+    setFormErrors({});
+    
     await createSnippet(snippetData);
+  };
+
+  const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+    if (formErrors.title) {
+      setFormErrors(prev => ({ ...prev, title: '' }));
+    }
+  };
+
+  const handleLanguageChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setLanguage(e.target.value);
+    if (formErrors.language) {
+      setFormErrors(prev => ({ ...prev, language: '' }));
+    }
+  };
+
+  const handleCodeChange = (value: string) => {
+    setCode(value);
+    if (formErrors.code) {
+      setFormErrors(prev => ({ ...prev, code: '' }));
+    }
   };
 
   return (
@@ -28,32 +74,49 @@ const CreateSnippet: React.FC = () => {
           <Form.Control
             type="text"
             value={title}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)}
+            onChange={handleTitleChange}
             placeholder="Enter snippet title"
             required
+            isInvalid={!!formErrors.title}
           />
+          {formErrors.title && (
+            <Form.Control.Feedback type="invalid">
+              {formErrors.title}
+            </Form.Control.Feedback>
+          )}
         </Form.Group>
 
         <Form.Group className="mb-3">
           <Form.Label>Language</Form.Label>
           <Form.Select
             value={language}
-            onChange={(e: ChangeEvent<HTMLSelectElement>) => setLanguage(e.target.value)}
+            onChange={handleLanguageChange}
             required
+            isInvalid={!!formErrors.language}
           >
             <option value="">Select language</option>
             <LanguageOptions />
           </Form.Select>
+          {formErrors.language && (
+            <Form.Control.Feedback type="invalid">
+              {formErrors.language}
+            </Form.Control.Feedback>
+          )}
         </Form.Group>
 
         <Form.Group className="mb-3">
           <Form.Label>Code</Form.Label>
           <CodeEditor
             value={code}
-            onChange={setCode}
+            onChange={handleCodeChange}
             language={language}
             className="mb-4"
           />
+          {formErrors.code && (
+            <div className="text-danger small mt-1">
+              {formErrors.code}
+            </div>
+          )}
         </Form.Group>
 
         <Form.Group className="mb-3">

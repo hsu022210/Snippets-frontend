@@ -8,15 +8,26 @@ import { useApiRequest } from '../hooks/useApiRequest'
 import { useToast } from '../contexts/ToastContext'
 import { ApiError } from '../services'
 import { authService } from '../services'
+import { emailSchema, validateFormData } from '../utils/validationSchemas'
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState<string>('');
+  const [emailError, setEmailError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const { makeRequest } = useApiRequest();
   const { showToast } = useToast();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    
+    // Validate email using Zod
+    const validation = validateFormData(emailSchema, email);
+    
+    if (!validation.success) {
+      setEmailError(validation.errors[0]);
+      return;
+    }
+    
     try {
       setLoading(true);
       
@@ -27,6 +38,7 @@ const ForgotPassword = () => {
 
       showToast('Password reset instructions have been sent to your email.', 'primary', 3);
       setEmail('');
+      setEmailError('');
     } catch (error) {
       const apiError = error as ApiError;
       showToast(apiError.message || 'An error occurred. Please try again.', 'danger');
@@ -38,6 +50,9 @@ const ForgotPassword = () => {
 
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
+    if (emailError) {
+      setEmailError('');
+    }
   };
 
   return (
@@ -53,6 +68,8 @@ const ForgotPassword = () => {
           disabled={loading}
           required
           autoComplete="email"
+          error={emailError}
+          isInvalid={!!emailError}
         />
         <SubmitButton loading={loading} loadingText="Sending...">
           Send Reset Instructions

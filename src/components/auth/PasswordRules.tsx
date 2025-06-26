@@ -1,9 +1,9 @@
 import { Form } from 'react-bootstrap'
-import { PasswordRule, PasswordRulesProps } from '../../types'
+import { PasswordRulesProps } from '../../types'
 import { TbCircleCheck, TbCircle } from 'react-icons/tb'
 
 const PasswordRules = ({ password }: PasswordRulesProps) => {
-  const rules: PasswordRule[] = [
+  const rules = [
     {
       label: 'At least 8 characters',
       isValid: password.length >= 8

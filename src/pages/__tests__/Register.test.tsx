@@ -52,17 +52,27 @@ describe('Register Component', () => {
 
   it('shows error when passwords do not match', async () => {
     renderRegister();
-    
+
+    const usernameInput = screen.getByLabelText(/username/i) as HTMLInputElement;
+    const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
     const passwordInput = screen.getByLabelText(/^password$/i) as HTMLInputElement;
     const confirmPasswordInput = screen.getByLabelText(/confirm password/i) as HTMLInputElement;
     const submitButton = screen.getByRole('button', { name: /register/i });
 
+    // Fill in all required fields
+    fireEvent.change(usernameInput, { target: { value: 'testuser' } });
+    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
     fireEvent.change(passwordInput, { target: { value: 'password123' } });
     fireEvent.change(confirmPasswordInput, { target: { value: 'password456' } });
+    
+    // Submit the form
     fireEvent.click(submitButton);
 
-    // Check for the form validation error message in the DOM
-    expect(screen.getByText('Passwords do not match')).toBeInTheDocument();
+    // Check if the form submission was prevented and error is shown
+    await waitFor(() => {
+      // The confirm password input should have the is-invalid class
+      expect(confirmPasswordInput).toHaveClass('is-invalid');
+    });
   });
 
   it('handles successful registration', async () => {

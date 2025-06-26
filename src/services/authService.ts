@@ -1,22 +1,30 @@
 import { apiClient } from './api';
 import { User, UserProfile, LoginResponse, RegisterResponse, PasswordResetResponse } from '../types';
+import { 
+  loginResponseSchema, 
+  registerResponseSchema, 
+  userSchema,
+  LoginResponse as ZodLoginResponse,
+  RegisterResponse as ZodRegisterResponse,
+  User as ZodUser
+} from '../utils/validationSchemas';
 
 export class AuthService {
   // User authentication
   async login(email: string, password: string): Promise<LoginResponse> {
-    return apiClient.post<LoginResponse>('/auth/login/', {
+    return apiClient.post<ZodLoginResponse>('/auth/login/', {
       email,
       password,
-    });
+    }, undefined, loginResponseSchema);
   }
 
   async register(username: string, password: string, password2: string, email: string): Promise<RegisterResponse> {
-    return apiClient.post<RegisterResponse>('/auth/register/', {
+    return apiClient.post<ZodRegisterResponse>('/auth/register/', {
       username,
       password,
       password2,
       email,
-    });
+    }, undefined, registerResponseSchema);
   }
 
   async logout(): Promise<void> {
@@ -32,11 +40,11 @@ export class AuthService {
 
   // User profile management
   async getCurrentUser(): Promise<User> {
-    return apiClient.get<User>('/auth/user/');
+    return apiClient.get<ZodUser>('/auth/user/', undefined, userSchema);
   }
 
   async updateProfile(profile: Partial<UserProfile>): Promise<User> {
-    return apiClient.patch<User>('/auth/user/', profile);
+    return apiClient.patch<ZodUser>('/auth/user/', profile, undefined, userSchema);
   }
 
   // Password reset

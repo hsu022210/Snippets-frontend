@@ -8,8 +8,9 @@ import AuthForm from '../components/auth/AuthForm'
 import FormField from '../components/auth/FormField'
 import SubmitButton from '../components/auth/SubmitButton'
 import PasswordRules from '../components/auth/PasswordRules'
-import { RegisterFormData, ApiRegisterErrorResponse } from '../types'
+import { ApiRegisterErrorResponse } from '../types'
 import { ApiError } from '../services'
+import { registerSchema, validateFormData, RegisterFormData } from '../utils/validationSchemas'
 
 const Register = () => {
   const [formData, setFormData] = useState<RegisterFormData>({
@@ -18,6 +19,7 @@ const Register = () => {
     password: '',
     confirmPassword: ''
   });
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
   const { register } = useAuth();
@@ -29,6 +31,11 @@ const Register = () => {
       ...prev,
       [name]: value
     }));
+    
+    // Clear field-specific error when user starts typing
+    if (formErrors[name]) {
+      setFormErrors(prev => ({ ...prev, [name]: '' }));
+    }
   };
 
   const getErrorMessage = (error: ApiError): string => {
@@ -68,8 +75,26 @@ const Register = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (formData.password !== formData.confirmPassword) {
-      showToast('Passwords do not match', 'danger');
+    // Validate form data using Zod
+    const validation = validateFormData(registerSchema, formData);
+    
+    if (!validation.success) {
+      // Convert Zod errors to field-specific errors
+      const errors: Record<string, string> = {};
+      validation.errors.forEach(error => {
+        // Extract field name from error path - format is "field: message"
+        const fieldMatch = error.match(/^([^:]+):\s*(.+)$/);
+        if (fieldMatch) {
+          const field = fieldMatch[1];
+          const message = fieldMatch[2];
+          errors[field] = message;
+        } else {
+          // For general errors, show in toast
+          showToast(error, 'danger');
+        }
+      });
+      
+      setFormErrors(errors);
       return;
     }
 
@@ -105,6 +130,8 @@ const Register = () => {
           disabled={loading}
           required
           autoComplete="username"
+          error={formErrors.username}
+          isInvalid={!!formErrors.username}
         />
         <FormField
           label="Email"
@@ -116,6 +143,8 @@ const Register = () => {
           disabled={loading}
           required
           autoComplete="email"
+          error={formErrors.email}
+          isInvalid={!!formErrors.email}
         />
         <PasswordInput
           label="Password"
@@ -128,6 +157,8 @@ const Register = () => {
           size="lg"
           className="mb-3"
           autoComplete="new-password"
+          error={formErrors.password}
+          isInvalid={!!formErrors.password}
         />
         <PasswordRules password={formData.password} />
         <PasswordInput
@@ -141,8 +172,8 @@ const Register = () => {
           size="lg"
           className="mb-4"
           autoComplete="new-password"
-          isInvalid={formData.password !== formData.confirmPassword && formData.confirmPassword !== ''}
-          error={formData.password !== formData.confirmPassword && formData.confirmPassword !== '' ? 'Passwords do not match' : ''}
+          error={formErrors.confirmPassword}
+          isInvalid={!!formErrors.confirmPassword}
         />
         <SubmitButton loading={loading} loadingText="Registering...">
           Register
