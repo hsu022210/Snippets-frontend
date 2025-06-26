@@ -7,7 +7,7 @@ import PasswordInput from '../components/auth/PasswordInput'
 import AuthForm from '../components/auth/AuthForm'
 import FormField from '../components/auth/FormField'
 import SubmitButton from '../components/auth/SubmitButton'
-import { loginSchema, validateFormData, LoginFormData } from '../utils/validationSchemas'
+import { loginSchema, validateFormDataWithFieldErrors, LoginFormData } from '../utils/validationSchemas'
 
 const Login = () => {
   const [formData, setFormData] = useState<LoginFormData>({
@@ -36,25 +36,11 @@ const Login = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
-    // Validate form data using Zod
-    const validation = validateFormData(loginSchema, formData);
+    const validation = validateFormDataWithFieldErrors(loginSchema, formData);
     
     if (!validation.success) {
-      // Convert Zod errors to field-specific errors
-      const errors: Record<string, string> = {};
-      validation.errors.forEach(error => {
-        // Extract field name from error path
-        const fieldMatch = error.match(/^(.+?):/);
-        if (fieldMatch) {
-          const field = fieldMatch[1];
-          errors[field] = error.replace(/^.+?: /, '');
-        } else {
-          // For general errors, show in toast
-          showToast(error, 'danger');
-        }
-      });
-      
-      setFormErrors(errors);
+      setFormErrors(validation.fieldErrors);
+      validation.generalErrors.forEach(error => showToast(error, 'danger'));
       return;
     }
     

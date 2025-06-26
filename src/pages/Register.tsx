@@ -10,16 +10,14 @@ import SubmitButton from '../components/auth/SubmitButton'
 import PasswordRules from '../components/auth/PasswordRules'
 import { ApiRegisterErrorResponse } from '../types'
 import { ApiError } from '../services'
-import { registerSchema, validateFormData, RegisterFormData } from '../utils/validationSchemas'
+import { registerSchema, validateFormDataWithFieldErrors, RegisterFormData } from '../utils/validationSchemas'
 
 const Register = () => {
   const [formData, setFormData] = useState<RegisterFormData>({
     username: '',
     email: '',
     password: '',
-    password2: '',
-    first_name: '',
-    last_name: ''
+    password2: ''
   });
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState<boolean>(false);
@@ -77,50 +75,23 @@ const Register = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Validate form data using Zod
-    const validation = validateFormData(registerSchema, formData);
+    const validation = validateFormDataWithFieldErrors(registerSchema, formData);
     
     if (!validation.success) {
-      // Convert Zod errors to field-specific errors
-      const errors: Record<string, string> = {};
-      validation.errors.forEach(error => {
-        // Extract field name from error path - format is "field: message"
-        const fieldMatch = error.match(/^([^:]+):\s*(.+)$/);
-        if (fieldMatch) {
-          const field = fieldMatch[1];
-          const message = fieldMatch[2];
-          errors[field] = message;
-        } else {
-          // For general errors, show in toast
-          showToast(error, 'danger');
-        }
-      });
-      
-      setFormErrors(errors);
+      setFormErrors(validation.fieldErrors);
+      validation.generalErrors.forEach(error => showToast(error, 'danger'));
       return;
     }
 
     try {
       setLoading(true);
       
-      let token;
-      if (formData.first_name || formData.last_name) {
-        token = await register(
-          formData.username,
-          formData.password,
-          formData.password2,
-          formData.email,
-          formData.first_name || '',
-          formData.last_name || ''
-        );
-      } else {
-        token = await register(
-          formData.username,
-          formData.password,
-          formData.password2,
-          formData.email
-        );
-      }
+      const token = await register(
+        formData.username,
+        formData.password,
+        formData.password2,
+        formData.email
+      );
       
       // Ensure we have a valid token before navigating
       if (token) {
@@ -164,28 +135,6 @@ const Register = () => {
           autoComplete="email"
           error={formErrors.email}
           isInvalid={!!formErrors.email}
-        />
-        <FormField
-          label="First Name (Optional)"
-          name="first_name"
-          id="first_name"
-          value={formData.first_name}
-          onChange={handleChange}
-          disabled={loading}
-          autoComplete="given-name"
-          error={formErrors.first_name}
-          isInvalid={!!formErrors.first_name}
-        />
-        <FormField
-          label="Last Name (Optional)"
-          name="last_name"
-          id="last_name"
-          value={formData.last_name}
-          onChange={handleChange}
-          disabled={loading}
-          autoComplete="family-name"
-          error={formErrors.last_name}
-          isInvalid={!!formErrors.last_name}
         />
         <PasswordInput
           label="Password"

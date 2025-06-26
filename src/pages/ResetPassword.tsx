@@ -9,7 +9,7 @@ import { useApiRequest } from '../hooks/useApiRequest'
 import { useToast } from '../contexts/ToastContext'
 import { PasswordFormData, ApiPasswordResetErrorResponse } from '../types'
 import { authService, ApiError } from '../services'
-import { passwordResetConfirmSchema, validateFormData } from '../utils/validationSchemas'
+import { passwordResetConfirmSchema, validateFormDataWithFieldErrors } from '../utils/validationSchemas'
 
 const ResetPassword = () => {
   const navigate = useNavigate();
@@ -73,29 +73,14 @@ const ResetPassword = () => {
       return;
     }
 
-    // Validate form data using Zod
-    const validation = validateFormData(passwordResetConfirmSchema, {
+    const validation = validateFormDataWithFieldErrors(passwordResetConfirmSchema, {
       token,
       password: formData.password
     });
     
     if (!validation.success) {
-      // Convert Zod errors to field-specific errors
-      const errors: Record<string, string> = {};
-      validation.errors.forEach(error => {
-        // Extract field name from error path - format is "field: message"
-        const fieldMatch = error.match(/^([^:]+):\s*(.+)$/);
-        if (fieldMatch) {
-          const field = fieldMatch[1];
-          const message = fieldMatch[2];
-          errors[field] = message;
-        } else {
-          // For general errors, show in toast
-          showToast(error, 'danger');
-        }
-      });
-      
-      setFormErrors(errors);
+      setFormErrors(validation.fieldErrors);
+      validation.generalErrors.forEach(error => showToast(error, 'danger'));
       return;
     }
 

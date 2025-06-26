@@ -19,14 +19,18 @@ export class AuthService {
   }
 
   async register(username: string, password: string, password2: string, email: string, first_name: string = '', last_name: string = ''): Promise<RegisterResponse> {
-    return apiClient.post<ZodRegisterResponse>('/auth/register/', {
+    const requestBody: Record<string, string> = {
       username,
       password,
       password2,
       email,
-      ...(first_name && { first_name }),
-      ...(last_name && { last_name }),
-    }, undefined, registerResponseSchema);
+    };
+    
+    // Only add first_name and last_name if they have values
+    if (first_name) requestBody.first_name = first_name;
+    if (last_name) requestBody.last_name = last_name;
+    
+    return apiClient.post<ZodRegisterResponse>('/auth/register/', requestBody, undefined, registerResponseSchema);
   }
 
   async logout(): Promise<void> {

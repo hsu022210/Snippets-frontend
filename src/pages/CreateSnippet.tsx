@@ -5,7 +5,7 @@ import Container from '../components/shared/Container'
 import CodeEditor from '../components/shared/CodeEditor'
 import { useCreateSnippet } from '../hooks/useSnippet'
 import { LanguageOptions } from '../utils/languageUtils'
-import { snippetDataSchema, validateFormData, SnippetData } from '../utils/validationSchemas'
+import { snippetDataSchema, validateFormDataWithFieldErrors, SnippetData, Language } from '../utils/validationSchemas'
 
 const CreateSnippet: React.FC = () => {
   const [title, setTitle] = useState<string>('');
@@ -17,24 +17,17 @@ const CreateSnippet: React.FC = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
-    const snippetData: SnippetData = { title, code, language };
+    const snippetData: SnippetData = { 
+      title, 
+      code, 
+      language: language as Language 
+    };
     
-    // Validate snippet data using Zod
-    const validation = validateFormData(snippetDataSchema, snippetData);
+    const validation = validateFormDataWithFieldErrors(snippetDataSchema, snippetData);
     
     if (!validation.success) {
-      // Convert Zod errors to field-specific errors
-      const errors: Record<string, string> = {};
-      validation.errors.forEach(error => {
-        // Extract field name from error path
-        const fieldMatch = error.match(/^(.+?):/);
-        if (fieldMatch) {
-          const field = fieldMatch[1];
-          errors[field] = error.replace(/^.+?: /, '');
-        }
-      });
-      
-      setFormErrors(errors);
+      setFormErrors(validation.fieldErrors);
+      validation.generalErrors.forEach(error => console.error('Validation error:', error));
       return;
     }
     

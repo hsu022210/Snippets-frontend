@@ -1,6 +1,43 @@
 import { z } from 'zod';
 
-// Language enum based on backend API
+// ============================================================================
+// CONSTANTS
+// ============================================================================
+
+const VALIDATION_MESSAGES = {
+  REQUIRED: {
+    EMAIL: 'Email is required',
+    PASSWORD: 'Password is required',
+    USERNAME: 'Username is required',
+    TITLE: 'Title is required',
+    CODE: 'Code is required',
+    LANGUAGE: 'Language is required',
+    TOKEN: 'Token is required',
+    CONFIRM_PASSWORD: 'Please confirm your password',
+  },
+  LENGTH: {
+    EMAIL_MAX: 'Email must be less than 254 characters',
+    USERNAME_MIN: 'Username must be at least 3 characters',
+    USERNAME_MAX: 'Username must be less than 150 characters',
+    PASSWORD_MIN: 'Password must be at least 8 characters',
+    TITLE_MAX: 'Title must be less than 100 characters',
+    NAME_MAX: 'Name must be less than 150 characters',
+  },
+  FORMAT: {
+    EMAIL: 'Please enter a valid email address',
+    USERNAME: 'Username can only contain letters, numbers, and underscores',
+    PASSWORD_LETTER: 'Password must contain at least one letter',
+  },
+  CUSTOM: {
+    PASSWORDS_MATCH: "Passwords don't match",
+    AT_LEAST_ONE_FIELD: 'At least one field must be provided',
+  },
+} as const;
+
+// ============================================================================
+// ENUMS
+// ============================================================================
+
 export const LanguageEnum = z.enum([
   'abap', 'abnf', 'actionscript', 'actionscript3', 'ada', 'adl', 'agda', 'aheui', 'alloy',
   'ambienttalk', 'amdgpu', 'ampl', 'androidbp', 'ansys', 'antlr', 'antlr-actionscript',
@@ -64,7 +101,6 @@ export const LanguageEnum = z.enum([
   'xul+mozpreproc', 'yaml', 'zephir', 'zig'
 ]);
 
-// Style enum based on backend API
 export const StyleEnum = z.enum([
   'abap', 'algol', 'algol_nu', 'arduino', 'autumn', 'borland', 'bw', 'coffee', 'colorful',
   'default', 'dracula', 'emacs', 'friendly', 'friendly_grayscale', 'fruity', 'github-dark',
@@ -75,71 +111,100 @@ export const StyleEnum = z.enum([
   'xcode'
 ]);
 
-// Base schemas
-export const emailSchema = z
-  .string()
-  .min(1, 'Email is required')
-  .email('Please enter a valid email address')
-  .max(254, 'Email must be less than 254 characters');
+// ============================================================================
+// BASE SCHEMAS
+// ============================================================================
 
-export const passwordSchema = z
-  .string()
-  .min(1, 'Password is required')
-  .min(8, 'Password must be at least 8 characters')
-  .regex(/[A-Za-z]/, 'Password must contain at least one letter');
+const createRequiredString = (message: string) => 
+  z.string().min(1, message);
 
-export const usernameSchema = z
-  .string()
-  .min(1, 'Username is required')
-  .min(3, 'Username must be at least 3 characters')
-  .max(150, 'Username must be less than 150 characters')
-  .regex(/^[a-zA-Z0-9_]+$/, 'Username can only contain letters, numbers, and underscores');
+const createEmailSchema = () => 
+  createRequiredString(VALIDATION_MESSAGES.REQUIRED.EMAIL)
+    .email(VALIDATION_MESSAGES.FORMAT.EMAIL)
+    .max(254, VALIDATION_MESSAGES.LENGTH.EMAIL_MAX);
 
-// Auth schemas
+const createPasswordSchema = () => 
+  createRequiredString(VALIDATION_MESSAGES.REQUIRED.PASSWORD)
+    .min(8, VALIDATION_MESSAGES.LENGTH.PASSWORD_MIN)
+    .regex(/[A-Za-z]/, VALIDATION_MESSAGES.FORMAT.PASSWORD_LETTER);
+
+const createUsernameSchema = () => 
+  createRequiredString(VALIDATION_MESSAGES.REQUIRED.USERNAME)
+    .min(3, VALIDATION_MESSAGES.LENGTH.USERNAME_MIN)
+    .max(150, VALIDATION_MESSAGES.LENGTH.USERNAME_MAX)
+    .regex(/^[a-zA-Z0-9_]+$/, VALIDATION_MESSAGES.FORMAT.USERNAME);
+
+const createNameSchema = () => 
+  z.string().max(150, VALIDATION_MESSAGES.LENGTH.NAME_MAX).optional();
+
+const createTitleSchema = () => 
+  createRequiredString(VALIDATION_MESSAGES.REQUIRED.TITLE)
+    .max(100, VALIDATION_MESSAGES.LENGTH.TITLE_MAX);
+
+const createCodeSchema = () => 
+  createRequiredString(VALIDATION_MESSAGES.REQUIRED.CODE);
+
+// ============================================================================
+// AUTH SCHEMAS
+// ============================================================================
+
+export const emailSchema = createEmailSchema();
+export const passwordSchema = createPasswordSchema();
+export const usernameSchema = createUsernameSchema();
+
 export const loginSchema = z.object({
   email: emailSchema,
-  password: z.string().min(1, 'Password is required'),
+  password: createRequiredString(VALIDATION_MESSAGES.REQUIRED.PASSWORD),
 });
 
 export const registerSchema = z.object({
   username: usernameSchema,
   email: emailSchema,
   password: passwordSchema,
-  password2: z.string().min(1, 'Please confirm your password'),
-  first_name: z.string().max(150, 'First name must be less than 150 characters').optional(),
-  last_name: z.string().max(150, 'Last name must be less than 150 characters').optional(),
-}).refine((data) => data.password === data.password2, {
-  message: "Passwords don't match",
-  path: ["password2"],
-});
+  password2: createRequiredString(VALIDATION_MESSAGES.REQUIRED.CONFIRM_PASSWORD),
+  first_name: createNameSchema(),
+  last_name: createNameSchema(),
+}).refine(
+  (data) => data.password === data.password2,
+  {
+    message: VALIDATION_MESSAGES.CUSTOM.PASSWORDS_MATCH,
+    path: ["password2"],
+  }
+);
 
 export const passwordResetRequestSchema = z.object({
   email: emailSchema,
 });
 
 export const passwordResetConfirmSchema = z.object({
-  token: z.string().min(1, 'Token is required'),
+  token: createRequiredString(VALIDATION_MESSAGES.REQUIRED.TOKEN),
   password: passwordSchema,
 });
 
-// Snippet schemas
+// ============================================================================
+// SNIPPET SCHEMAS
+// ============================================================================
+
 export const snippetDataSchema = z.object({
-  title: z.string().min(1, 'Title is required').max(100, 'Title must be less than 100 characters'),
-  code: z.string().min(1, 'Code is required'),
+  title: createTitleSchema(),
+  code: createCodeSchema(),
   language: LanguageEnum,
   linenos: z.boolean().optional(),
   style: StyleEnum.optional(),
 });
 
 export const snippetUpdateSchema = z.object({
-  title: z.string().min(1, 'Title is required').max(100, 'Title must be less than 100 characters').optional(),
-  code: z.string().min(1, 'Code is required').optional(),
+  title: createTitleSchema().optional(),
+  code: createCodeSchema().optional(),
   language: LanguageEnum.optional(),
   linenos: z.boolean().optional(),
   style: StyleEnum.optional(),
-}).refine((data) => Object.keys(data).length > 0, {
-  message: 'At least one field must be provided',
-});
+}).refine(
+  (data) => Object.keys(data).length > 0,
+  {
+    message: VALIDATION_MESSAGES.CUSTOM.AT_LEAST_ONE_FIELD,
+  }
+);
 
 export const snippetFilterSchema = z.object({
   language: z.string().optional(),
@@ -151,7 +216,10 @@ export const snippetFilterSchema = z.object({
   page_size: z.number().min(1).max(100).optional(),
 });
 
-// API response schemas
+// ============================================================================
+// API RESPONSE SCHEMAS
+// ============================================================================
+
 export const userSchema = z.object({
   id: z.number(),
   username: z.string(),
@@ -192,7 +260,10 @@ export const snippetListResponseSchema = z.object({
   previous: z.string().nullable(),
 });
 
-// Type exports
+// ============================================================================
+// TYPE EXPORTS
+// ============================================================================
+
 export type LoginFormData = z.infer<typeof loginSchema>;
 export type RegisterFormData = z.infer<typeof registerSchema>;
 export type PasswordResetRequestData = z.infer<typeof passwordResetRequestSchema>;
@@ -208,8 +279,14 @@ export type SnippetListResponse = z.infer<typeof snippetListResponseSchema>;
 export type Language = z.infer<typeof LanguageEnum>;
 export type Style = z.infer<typeof StyleEnum>;
 
-// Validation helper functions
-export const validateFormData = <T>(schema: z.ZodSchema<T>, data: unknown): { success: true; data: T } | { success: false; errors: string[] } => {
+// ============================================================================
+// VALIDATION UTILITIES
+// ============================================================================
+
+export const validateFormData = <T>(
+  schema: z.ZodSchema<T>, 
+  data: unknown
+): { success: true; data: T } | { success: false; errors: string[] } => {
   const result = schema.safeParse(data);
   
   if (result.success) {
@@ -217,14 +294,38 @@ export const validateFormData = <T>(schema: z.ZodSchema<T>, data: unknown): { su
   }
   
   const errors = result.error.errors.map(err => {
-    // If the error has a path, include it in the error message
     if (err.path.length > 0) {
-      // For field-specific errors, format as "field: message"
       return `${err.path[0]}: ${err.message}`;
     }
     return err.message;
   });
+  
   return { success: false, errors };
+};
+
+export const validateFormDataWithFieldErrors = <T>(
+  schema: z.ZodSchema<T>,
+  data: unknown
+): { success: true; data: T } | { success: false; fieldErrors: Record<string, string>; generalErrors: string[] } => {
+  const result = schema.safeParse(data);
+  
+  if (result.success) {
+    return { success: true, data: result.data };
+  }
+  
+  const fieldErrors: Record<string, string> = {};
+  const generalErrors: string[] = [];
+  
+  result.error.errors.forEach(err => {
+    if (err.path.length > 0) {
+      const field = err.path[0] as string;
+      fieldErrors[field] = err.message;
+    } else {
+      generalErrors.push(err.message);
+    }
+  });
+  
+  return { success: false, fieldErrors, generalErrors };
 };
 
 export const validatePassword = (password: string): { isValid: boolean; errors: string[] } => {

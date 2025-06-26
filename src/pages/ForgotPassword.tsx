@@ -8,7 +8,7 @@ import { useApiRequest } from '../hooks/useApiRequest'
 import { useToast } from '../contexts/ToastContext'
 import { ApiError } from '../services'
 import { authService } from '../services'
-import { emailSchema, validateFormData } from '../utils/validationSchemas'
+import { emailSchema, validateFormDataWithFieldErrors } from '../utils/validationSchemas'
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState<string>('');
@@ -20,11 +20,10 @@ const ForgotPassword = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
-    // Validate email using Zod
-    const validation = validateFormData(emailSchema, email);
+    const validation = validateFormDataWithFieldErrors(emailSchema, email);
     
     if (!validation.success) {
-      setEmailError(validation.errors[0]);
+      setEmailError(validation.fieldErrors.email || validation.generalErrors[0] || 'Invalid email');
       return;
     }
     
