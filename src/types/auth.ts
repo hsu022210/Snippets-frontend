@@ -5,7 +5,10 @@ import {
   LoginResponse, 
   RegisterResponse,
   PasswordResetRequestData,
-  PasswordResetConfirmData
+  PasswordResetConfirmData,
+  PasswordResetRequest,
+  PasswordResetConfirm,
+  PasswordResetResponse
 } from '../utils/validationSchemas';
 
 // ============================================================================
@@ -35,30 +38,6 @@ export interface AuthFormProps {
 }
 
 // ============================================================================
-// FORM DATA ALIASES (for backward compatibility)
-// ============================================================================
-
-export type FormData = LoginFormData;
-export type UserProfile = Pick<User, 'username' | 'email' | 'first_name' | 'last_name'>;
-
-// ============================================================================
-// API REQUEST TYPES
-// ============================================================================
-
-export interface PasswordResetRequest {
-  email: string;
-}
-
-export interface PasswordResetConfirm {
-  token: string;
-  password: string;
-}
-
-export interface PasswordResetResponse {
-  message: string;
-}
-
-// ============================================================================
 // RE-EXPORTS FROM VALIDATION SCHEMAS
 // ============================================================================
 
@@ -69,5 +48,8 @@ export type {
   LoginResponse,
   RegisterResponse,
   PasswordResetRequestData,
-  PasswordResetConfirmData
+  PasswordResetConfirmData,
+  PasswordResetRequest,
+  PasswordResetConfirm,
+  PasswordResetResponse
 }; 

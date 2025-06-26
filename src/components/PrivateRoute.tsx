@@ -1,8 +1,7 @@
 import { Navigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
-import { PrivateRouteProps } from '../types'
 
-const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
+const PrivateRoute: React.FC<{children: React.ReactNode}> = ({ children }) => {
   const { token } = useAuth();
   const location = useLocation();
 

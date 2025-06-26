@@ -5,7 +5,7 @@ import ResetPassword from '../ResetPassword';
 import { TestProviders } from '../../test/setup';
 import { useApiRequest } from '../../hooks/useApiRequest';
 import { useToast } from '../../contexts/ToastContext';
-import { PasswordResetResponse } from '../../types/auth';
+import { PasswordResetResponse } from '../../types';
 
 // Mock react-router-dom
 vi.mock('react-router-dom', () => ({

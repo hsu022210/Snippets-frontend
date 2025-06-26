@@ -198,9 +198,102 @@ export type SnippetUpdateData = z.infer<typeof snippetUpdateSchema>;
 export type SnippetFilterData = z.infer<typeof snippetFilterSchema>;
 export type SnippetListResponse = z.infer<typeof snippetListResponseSchema>;
 
-// Enum Types
+// Utility Types
 export type Language = string;
 export type Style = string;
+
+// ============================================================================
+// API REQUEST TYPES
+// ============================================================================
+
+export interface CreateSnippetRequest {
+  title: string;
+  code: string;
+  language: Language;
+  linenos?: boolean;
+  style?: Style;
+}
+
+export interface UpdateSnippetRequest {
+  title?: string;
+  code?: string;
+  language?: Language;
+  linenos?: boolean;
+  style?: Style;
+}
+
+export interface PasswordResetRequest {
+  email: string;
+}
+
+export interface PasswordResetConfirm {
+  token: string;
+  password: string;
+}
+
+export interface PasswordResetResponse {
+  message: string;
+}
+
+// ============================================================================
+// API ERROR TYPES
+// ============================================================================
+
+export interface ApiErrorResponse {
+  detail?: string;
+  message?: string;
+}
+
+export interface ApiRegisterErrorResponse {
+  email?: string | string[];
+  username?: string | string[];
+  password?: string | string[];
+  password2?: string | string[];
+  detail?: string;
+}
+
+export interface ApiPasswordResetErrorResponse {
+  password?: string | string[];
+  password2?: string | string[];
+  token?: string | string[];
+  detail?: string;
+}
+
+// ============================================================================
+// FILTER TYPES
+// ============================================================================
+
+export interface SnippetFilterValues {
+  language: string;
+  createdAfter: string;
+  createdBefore: string;
+  searchTitle: string;
+  searchCode: string;
+}
+
+export interface FilterOptions {
+  language?: string;
+  createdAfter?: string;
+  createdBefore?: string;
+  searchTitle?: string;
+  searchCode?: string;
+}
+
+export interface SnippetFilters extends FilterOptions {
+  page?: number;
+  page_size?: number;
+}
+
+// ============================================================================
+// FORM DATA ALIASES (for backward compatibility)
+// ============================================================================
+
+export type FormData = LoginFormData;
+export type UserProfile = Pick<User, 'username' | 'email' | 'first_name' | 'last_name'>;
+export type PasswordFormData = {
+  password: string;
+  confirmPassword: string;
+};
 
 // ============================================================================
 // VALIDATION UTILITIES
@@ -216,13 +309,12 @@ export const validateFormData = <T>(
     return { success: true, data: result.data };
   }
   
-  const errors = result.error.errors.map(err => {
-    if (err.path.length > 0) {
-      return `${err.path[0]}: ${err.message}`;
+  const errors = result.error.errors.map(error => {
+    if (error.path.length > 0) {
+      return `${error.path[0]}: ${error.message}`;
     }
-    return err.message;
+    return error.message;
   });
-  
   return { success: false, errors };
 };
 
@@ -239,12 +331,12 @@ export const validateFormDataWithFieldErrors = <T>(
   const fieldErrors: Record<string, string> = {};
   const generalErrors: string[] = [];
   
-  result.error.errors.forEach(err => {
-    if (err.path.length > 0) {
-      const field = err.path[0] as string;
-      fieldErrors[field] = err.message;
+  result.error.errors.forEach(error => {
+    const path = error.path.join('.');
+    if (path) {
+      fieldErrors[path] = error.message;
     } else {
-      generalErrors.push(err.message);
+      generalErrors.push(error.message);
     }
   });
   
@@ -258,6 +350,6 @@ export const validatePassword = (password: string): { isValid: boolean; errors: 
     return { isValid: true, errors: [] };
   }
   
-  const errors = result.error.errors.map(err => err.message);
+  const errors = result.error.errors.map(error => error.message);
   return { isValid: false, errors };
 }; 

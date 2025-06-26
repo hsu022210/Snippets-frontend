@@ -1,5 +1,4 @@
 import { ThemeOption } from "./context";
-import React from 'react';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
@@ -57,11 +56,6 @@ export interface PasswordRule {
 
 export interface PasswordRulesProps {
   password: string;
-}
-
-export interface PasswordFormData {
-  password: string;
-  confirmPassword: string;
 }
 
 export interface SubmitButtonProps {

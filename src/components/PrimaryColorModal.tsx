@@ -1,7 +1,7 @@
 import { Modal, Card, Stack, Button, Pagination, Row, Col, OverlayTrigger, Tooltip, Form } from 'react-bootstrap';
 import { Colorful } from '@uiw/react-color';
 import { PRIMARY_COLORS } from '../utils/primaryColor';
-import { PrimaryColorModalProps } from '../types/ui';
+import { PrimaryColorModalProps } from '../types';
 
 const PrimaryColorModal: React.FC<PrimaryColorModalProps> = ({
   show,

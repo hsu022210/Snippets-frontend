@@ -7,7 +7,7 @@ import CodeEditor from '../components/shared/CodeEditor'
 import { getPageSize, setPageSize } from '../utils/pagination'
 import { getPrimaryColorLabel } from '../utils/primaryColor'
 import { TbSun, TbMoon, TbPalette } from 'react-icons/tb'
-import { EditorSettingsProps, DisplaySettingsProps, GeneralSettingsProps } from '../types/ui'
+import { EditorSettingsProps, DisplaySettingsProps, GeneralSettingsProps } from '../types'
 import Button from '../components/shared/Button'
 import PrimaryColorModal from '../components/PrimaryColorModal'
 

@@ -5,7 +5,12 @@ import {
   SnippetFilterData, 
   SnippetListResponse,
   Language, 
-  Style 
+  Style,
+  SnippetFilterValues,
+  FilterOptions,
+  SnippetFilters,
+  CreateSnippetRequest,
+  UpdateSnippetRequest
 } from '../utils/validationSchemas';
 
 // ============================================================================
@@ -58,18 +63,6 @@ export interface SnippetGridProps {
   snippets: Snippet[];
 }
 
-// ============================================================================
-// FILTER TYPES
-// ============================================================================
-
-export interface SnippetFilterValues {
-  language: string;
-  createdAfter: string;
-  createdBefore: string;
-  searchTitle: string;
-  searchCode: string;
-}
-
 export interface SnippetFilterProps {
   language: string;
   createdAfter: string;
@@ -90,39 +83,6 @@ export interface SnippetFilterSectionProps {
   loading?: boolean;
 }
 
-export interface FilterOptions {
-  language?: string;
-  createdAfter?: string;
-  createdBefore?: string;
-  searchTitle?: string;
-  searchCode?: string;
-}
-
-export interface SnippetFilters extends FilterOptions {
-  page?: number;
-  page_size?: number;
-}
-
-// ============================================================================
-// API REQUEST TYPES
-// ============================================================================
-
-export interface CreateSnippetRequest {
-  title: string;
-  code: string;
-  language: Language;
-  linenos?: boolean;
-  style?: Style;
-}
-
-export interface UpdateSnippetRequest {
-  title?: string;
-  code?: string;
-  language?: Language;
-  linenos?: boolean;
-  style?: Style;
-}
-
 // ============================================================================
 // RE-EXPORTS FROM VALIDATION SCHEMAS
 // ============================================================================
@@ -134,5 +94,10 @@ export type {
   SnippetFilterData,
   SnippetListResponse,
   Language,
-  Style
+  Style,
+  SnippetFilterValues,
+  FilterOptions,
+  SnippetFilters,
+  CreateSnippetRequest,
+  UpdateSnippetRequest
 }; 

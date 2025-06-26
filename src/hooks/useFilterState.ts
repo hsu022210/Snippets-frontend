@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { SnippetFilterValues } from '../types/interfaces';
+import { SnippetFilterValues } from '../types';
 
 const STORAGE_KEY = 'snippet_filters';
 

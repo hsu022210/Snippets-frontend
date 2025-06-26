@@ -4,7 +4,7 @@ import ForgotPassword from '../ForgotPassword';
 import { TestProviders } from '../../test/setup';
 import { useApiRequest } from '../../hooks/useApiRequest';
 import { useToast } from '../../contexts/ToastContext';
-import { PasswordResetResponse } from '../../types/auth';
+import { PasswordResetResponse } from '../../types';
 
 // Mock hooks and service
 vi.mock('../../hooks/useApiRequest', () => ({
