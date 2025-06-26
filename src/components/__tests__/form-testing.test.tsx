@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, it, expect } from 'vitest'
 import { server } from '../../test/setup.tsx'
 import { http, HttpResponse } from 'msw'
+import axios from 'axios'
 
 // Example form component for testing patterns
 const SnippetForm = () => {
@@ -13,20 +14,13 @@ const SnippetForm = () => {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
     try {
-      const response = await fetch('/snippets', {
-        method: 'POST',
-        body: JSON.stringify({
-          title: formData.get('title'),
-          content: formData.get('content'),
-          language: formData.get('language')
-        })
+      const response = await axios.post('/snippets', {
+        title: formData.get('title'),
+        content: formData.get('content'),
+        language: formData.get('language')
       })
       
-      if (!response.ok) {
-        throw new Error('Failed to create snippet')
-      }
-      
-      const data = await response.json()
+      const data = response.data
       setStatus({ type: 'primary', message: `Created snippet: ${data.title}` })
     } catch {
       setStatus({ type: 'error', message: 'Error creating snippet' })

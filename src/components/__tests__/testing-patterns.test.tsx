@@ -5,6 +5,7 @@ import { MemoryRouter } from 'react-router-dom'
 import { server } from '../../test/setup.tsx'
 import { http, HttpResponse } from 'msw'
 import { useState, useEffect } from 'react'
+import axios from 'axios'
 
 interface ApiResponse {
   message: string
@@ -83,9 +84,8 @@ describe('Testing Patterns', () => {
         const [data, setData] = useState<ApiResponse | null>(null)
         
         useEffect(() => {
-          fetch('/example')
-            .then(res => res.json())
-            .then(setData)
+          axios.get('/example')
+            .then(res => setData(res.data))
         }, [])
         
         return (

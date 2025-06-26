@@ -9,7 +9,7 @@ vi.mock('../../services', () => ({
 vi.mock('../../hooks/useApiRequest');
 vi.mock('../../contexts/ToastContext');
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Profile from '../Profile';
@@ -106,11 +106,11 @@ describe('Profile Page', () => {
       expect(emailInput).toHaveValue('newemail@example.com');
     });
     it('submits form and calls updateProfile with updated data', async () => {
-      (authService.updateProfile as vi.Mock).mockClear();
+      (authService.updateProfile as Mock).mockClear();
       const user = userEvent.setup();
       const updatedUser = { ...mockUser, username: 'updateduser' };
       mockMakeRequest.mockImplementation(async (fn) => await fn());
-      (authService.updateProfile as vi.Mock).mockResolvedValueOnce(updatedUser);
+      (authService.updateProfile as Mock).mockResolvedValueOnce(updatedUser);
       const usernameInput = screen.getByDisplayValue('testuser');
       await user.clear(usernameInput);
       await user.type(usernameInput, 'updateduser');
