@@ -150,7 +150,7 @@ describe('Register Component', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(mockShowToast).toHaveBeenCalledWith(emailError, 'danger');
+      expect(mockShowToast).toHaveBeenCalledWith({ email: emailError }, 'danger');
     });
   });
 
@@ -178,7 +178,7 @@ describe('Register Component', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(mockShowToast).toHaveBeenCalledWith(usernameError, 'danger');
+      expect(mockShowToast).toHaveBeenCalledWith({ username: usernameError }, 'danger');
     });
   });
 
@@ -206,7 +206,7 @@ describe('Register Component', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(mockShowToast).toHaveBeenCalledWith(passwordError, 'danger');
+      expect(mockShowToast).toHaveBeenCalledWith({ password: passwordError }, 'danger');
     });
   });
 
@@ -234,7 +234,7 @@ describe('Register Component', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(mockShowToast).toHaveBeenCalledWith(password2Error, 'danger');
+      expect(mockShowToast).toHaveBeenCalledWith({ password2: password2Error }, 'danger');
     });
   });
 
@@ -262,7 +262,7 @@ describe('Register Component', () => {
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(mockShowToast).toHaveBeenCalledWith(emailErrors.join(', '), 'danger');
+      expect(mockShowToast).toHaveBeenCalledWith({ email: emailErrors }, 'danger');
     });
   });
 

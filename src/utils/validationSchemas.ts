@@ -261,21 +261,26 @@ export const snippetListResponseSchema = z.object({
 });
 
 // ============================================================================
-// TYPE EXPORTS
+// CORE TYPES (Single Source of Truth)
 // ============================================================================
 
+// Auth Types
+export type User = z.infer<typeof userSchema>;
 export type LoginFormData = z.infer<typeof loginSchema>;
 export type RegisterFormData = z.infer<typeof registerSchema>;
 export type PasswordResetRequestData = z.infer<typeof passwordResetRequestSchema>;
 export type PasswordResetConfirmData = z.infer<typeof passwordResetConfirmSchema>;
+export type LoginResponse = z.infer<typeof loginResponseSchema>;
+export type RegisterResponse = z.infer<typeof registerResponseSchema>;
+
+// Snippet Types
+export type Snippet = z.infer<typeof snippetSchema>;
 export type SnippetData = z.infer<typeof snippetDataSchema>;
 export type SnippetUpdateData = z.infer<typeof snippetUpdateSchema>;
 export type SnippetFilterData = z.infer<typeof snippetFilterSchema>;
-export type User = z.infer<typeof userSchema>;
-export type LoginResponse = z.infer<typeof loginResponseSchema>;
-export type RegisterResponse = z.infer<typeof registerResponseSchema>;
-export type Snippet = z.infer<typeof snippetSchema>;
 export type SnippetListResponse = z.infer<typeof snippetListResponseSchema>;
+
+// Enum Types
 export type Language = z.infer<typeof LanguageEnum>;
 export type Style = z.infer<typeof StyleEnum>;
 

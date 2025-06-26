@@ -4,13 +4,11 @@ export interface ApiErrorResponse {
 }
 
 export interface ApiRegisterErrorResponse {
-  detail: {
-    email?: string | string[];
-    username?: string | string[];
-    password?: string | string[];
-    password2?: string | string[];
-    detail?: string;
-  };
+  email?: string | string[];
+  username?: string | string[];
+  password?: string | string[];
+  password2?: string | string[];
+  detail?: string;
 }
 
 export interface ApiPasswordResetErrorResponse {

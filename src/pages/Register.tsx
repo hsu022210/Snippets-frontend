@@ -40,8 +40,8 @@ const Register = () => {
 
   const getErrorMessage = (error: ApiError): string => {
     // Handle validation errors from the API
-    if (error.data && typeof error.data === 'object' && 'detail' in error.data) {
-      const data = error.data.detail as ApiRegisterErrorResponse['detail'];
+    if (error.data && typeof error.data === 'object') {
+      const data = error.data as ApiRegisterErrorResponse;
       
       // Handle field-specific errors
       if (data.email) {
