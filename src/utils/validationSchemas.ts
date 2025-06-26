@@ -57,9 +57,6 @@ const createUsernameSchema = () =>
     .max(150, VALIDATION_MESSAGES.LENGTH.USERNAME_MAX)
     .regex(/^[a-zA-Z0-9_]+$/, VALIDATION_MESSAGES.FORMAT.USERNAME);
 
-const createNameSchema = () => 
-  z.string().max(150, VALIDATION_MESSAGES.LENGTH.NAME_MAX).optional();
-
 const createTitleSchema = () => 
   createRequiredString(VALIDATION_MESSAGES.REQUIRED.TITLE)
     .max(100, VALIDATION_MESSAGES.LENGTH.TITLE_MAX);
@@ -85,8 +82,6 @@ export const registerSchema = z.object({
   email: emailSchema,
   password: passwordSchema,
   password2: createRequiredString(VALIDATION_MESSAGES.REQUIRED.CONFIRM_PASSWORD),
-  first_name: createNameSchema(),
-  last_name: createNameSchema(),
 }).refine(
   (data) => data.password === data.password2,
   {

@@ -110,7 +110,7 @@ const Register = () => {
 
   return (
     <AuthForm title="Register">
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit} noValidate>
         <FormField
           label="Username"
           name="username"

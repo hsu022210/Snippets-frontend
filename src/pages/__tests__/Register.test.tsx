@@ -452,4 +452,38 @@ describe('Register Component', () => {
     expect(screen.getByLabelText(/^password$/i)).toHaveAttribute('autocomplete', 'new-password');
     expect(screen.getByLabelText(/confirm password/i)).toHaveAttribute('autocomplete', 'new-password');
   });
+
+  it('shows validation error for invalid email format', async () => {
+    renderRegister();
+
+    const usernameInput = screen.getByLabelText(/username/i) as HTMLInputElement;
+    const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
+    const passwordInput = screen.getByLabelText(/^password$/i) as HTMLInputElement;
+    const confirmPasswordInput = screen.getByLabelText(/confirm password/i) as HTMLInputElement;
+    const submitButton = screen.getByRole('button', { name: /register/i });
+
+    // Fill in form with invalid email format
+    fireEvent.change(usernameInput, { target: { value: 'testuser' } });
+    fireEvent.change(emailInput, { target: { value: 'invalid-email' } });
+    fireEvent.change(passwordInput, { target: { value: 'password123' } });
+    fireEvent.change(confirmPasswordInput, { target: { value: 'password123' } });
+    
+    // Remove the noValidate attribute to allow browser validation to be bypassed
+    const form = emailInput.closest('form');
+    if (form) {
+      form.setAttribute('novalidate', 'true');
+    }
+    
+    // Submit the form
+    fireEvent.click(submitButton);
+
+    // Check if the email input shows validation error
+    await waitFor(() => {
+      expect(emailInput).toHaveClass('is-invalid');
+      expect(screen.getByText('Please enter a valid email address')).toBeInTheDocument();
+    });
+
+    // Verify that the register function was not called due to validation failure
+    expect(mockRegister).not.toHaveBeenCalled();
+  });
 }); 
