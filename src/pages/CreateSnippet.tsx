@@ -5,7 +5,7 @@ import Container from '../components/shared/Container'
 import CodeEditor from '../components/shared/CodeEditor'
 import { useCreateSnippet } from '../hooks/useSnippet'
 import { LanguageOptions } from '../utils/languageUtils'
-import { snippetDataSchema, validateFormDataWithFieldErrors, SnippetData, Language } from '../utils/validationSchemas'
+import { snippetDataSchema, validateFormDataWithFieldErrors, SnippetData } from '../utils/validationSchemas'
 
 const CreateSnippet: React.FC = () => {
   const [title, setTitle] = useState<string>('');
@@ -20,7 +20,7 @@ const CreateSnippet: React.FC = () => {
     const snippetData: SnippetData = { 
       title, 
       code, 
-      language: language as Language 
+      language
     };
     
     const validation = validateFormDataWithFieldErrors(snippetDataSchema, snippetData);

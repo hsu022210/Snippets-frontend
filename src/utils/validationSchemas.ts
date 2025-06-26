@@ -35,83 +35,6 @@ const VALIDATION_MESSAGES = {
 } as const;
 
 // ============================================================================
-// ENUMS
-// ============================================================================
-
-export const LanguageEnum = z.enum([
-  'abap', 'abnf', 'actionscript', 'actionscript3', 'ada', 'adl', 'agda', 'aheui', 'alloy',
-  'ambienttalk', 'amdgpu', 'ampl', 'androidbp', 'ansys', 'antlr', 'antlr-actionscript',
-  'antlr-cpp', 'antlr-csharp', 'antlr-java', 'antlr-objc', 'antlr-perl', 'antlr-python',
-  'antlr-ruby', 'apacheconf', 'apl', 'applescript', 'arduino', 'arrow', 'arturo', 'asc',
-  'asn1', 'aspectj', 'aspx-cs', 'aspx-vb', 'asymptote', 'augeas', 'autohotkey', 'autoit',
-  'awk', 'bare', 'basemake', 'bash', 'batch', 'bbcbasic', 'bbcode', 'bc', 'bdd', 'befunge',
-  'berry', 'bibtex', 'blitzbasic', 'blitzmax', 'blueprint', 'bnf', 'boa', 'boo', 'boogie',
-  'bqn', 'brainfuck', 'bst', 'bugs', 'c', 'c-objdump', 'ca65', 'cadl', 'camkes', 'capdl',
-  'capnp', 'carbon', 'cbmbas', 'cddl', 'ceylon', 'cfc', 'cfengine3', 'cfm', 'cfs', 'chaiscript',
-  'chapel', 'charmci', 'cheetah', 'cirru', 'clay', 'clean', 'clojure', 'clojurescript',
-  'cmake', 'cobol', 'cobolfree', 'codeql', 'coffeescript', 'comal', 'common-lisp',
-  'componentpascal', 'console', 'coq', 'cplint', 'cpp', 'csharp', 'css', 'css+django',
-  'css+erb', 'css+genshitext', 'css+lasso', 'css+mako', 'css+myghty', 'css+php', 'css+smarty',
-  'css+spitfire', 'css+twig', 'css+ul4', 'css+velocity', 'css+erb', 'css+genshitext',
-  'css+lasso', 'css+mako', 'css+myghty', 'css+php', 'css+smarty', 'css+spitfire', 'css+twig',
-  'css+ul4', 'css+velocity', 'cuda', 'cypher', 'cython', 'd', 'd-objdump', 'dart', 'data',
-  'django', 'docker', 'dpatch', 'dtd', 'duel', 'dylan', 'dylan-console', 'dylan-lid',
-  'dylan-repl', 'earl-grey', 'easytrieve', 'ebnf', 'ec', 'ecl', 'eiffel', 'elixir', 'elm',
-  'emacs-lisp', 'erb', 'erl', 'erlang', 'evoque', 'factor', 'fan', 'fancy', 'felix',
-  'fennel', 'fish', 'flatline', 'floscript', 'forth', 'fortran', 'fortranfixed', 'foxpro',
-  'fsharp', 'gap', 'gas', 'gcc-machine-description', 'gdb', 'gdscript', 'genshi', 'genshitext',
-  'glsl', 'gnuplot', 'go', 'golo', 'gooddata-cl', 'gosu', 'groovy', 'groovy-server-pages',
-  'hack', 'haml', 'handlebars', 'haskell', 'haxe', 'hexdump', 'hlsl', 'hsail', 'html',
-  'html+cheetah', 'html+django', 'html+erb', 'html+evoque', 'html+genshi', 'html+handlebars',
-  'html+lasso', 'html+mako', 'html+myghty', 'html+php', 'html+smarty', 'html+spitfire',
-  'html+twig', 'html+velocity', 'http', 'hx', 'hy', 'hybris', 'hylang', 'i6t', 'idl',
-  'idris', 'iex', 'igor', 'inform', 'inform7', 'ini', 'io', 'ioke', 'ipython2', 'ipython3',
-  'ipythonconsole', 'irc', 'isabelle', 'j', 'jade', 'jags', 'jasmin', 'java', 'javascript',
-  'javascript+cheetah', 'javascript+django', 'javascript+lasso', 'javascript+mako',
-  'javascript+myghty', 'javascript+php', 'javascript+smarty', 'javascript+spitfire',
-  'javascript+twig', 'javascript+velocity', 'jcl', 'jsgf', 'jslt', 'json', 'json-ld',
-  'jsonml+bst', 'jsp', 'julia', 'juttle', 'kal', 'kconfig', 'kernel-config', 'koka',
-  'kotlin', 'lasso', 'lean', 'less', 'lighttpd', 'limbo', 'liquid', 'literate-agda',
-  'literate-cryptol', 'literate-haskell', 'literate-idris', 'llvm', 'llvm-mir', 'llvm-mir-body',
-  'logos', 'logtalk', 'lsl', 'lua', 'm68k', 'make', 'mako', 'maql', 'markdown', 'mask',
-  'mason', 'mathematica', 'matlab', 'matlabsession', 'minid', 'modelica', 'modula2',
-  'monkey', 'monte', 'moocode', 'moon', 'mosel', 'mozhashpreproc', 'mozpercentpreproc',
-  'mql', 'mscgen', 'mupad', 'mxml', 'myghty', 'mysql', 'nasm', 'ncl', 'nemerle', 'nesc',
-  'newlisp', 'newspeak', 'ng2', 'nginx', 'nim', 'nit', 'nixos', 'notmuch', 'nsis', 'numpy',
-  'nusmv', 'objdump', 'objdump-nasm', 'objective-c', 'objective-c++', 'objective-j',
-  'ocaml', 'octave', 'odin', 'ooc', 'opa', 'openedge', 'pan', 'parasail', 'pawn', 'pcmk',
-  'perl', 'perl6', 'php', 'pig', 'pike', 'pkgconfig', 'plpgsql', 'pointless', 'pony',
-  'postgresql', 'postscript', 'pot', 'pov', 'powershell', 'praat', 'prolog', 'properties',
-  'protobuf', 'psql', 'psql-console', 'psql3', 'pug', 'puppet', 'py+ul4', 'pycon', 'pypylog',
-  'python', 'python2', 'qbasic', 'qml', 'qvto', 'racket', 'ragel', 'ragel-c', 'ragel-cpp',
-  'ragel-d', 'ragel-em', 'ragel-java', 'ragel-objc', 'ragel-ruby', 'raw', 'rb', 'rbcon',
-  'rconsole', 'rd', 'reasonml', 'rebol', 'red', 'redcode', 'registry', 'resource', 'restructuredtext',
-  'rexx', 'rhtml', 'rng-compact', 'roboconf-graph', 'roboconf-instances', 'robotframework',
-  'rql', 'rsl', 'ruby', 'rust', 'sarl', 'sas', 'sass', 'scala', 'scaml', 'scheme', 'scilab',
-  'scss', 'sed', 'sgf', 'shen', 'sieve', 'silver', 'slash', 'slim', 'smali', 'smalltalk',
-  'smarty', 'sml', 'snobol', 'snowball', 'solidity', 'sp', 'sparql', 'spitfire', 'splus',
-  'sql', 'sqlite3', 'squidconf', 'ssp', 'stan', 'swift', 'swig', 'systemverilog', 'tads3',
-  'tap', 'tasm', 'tcl', 'tcsh', 'tea', 'termcap', 'terminfo', 'terraform', 'tex', 'text',
-  'thrift', 'tiddler', 'todotxt', 'trac-wiki', 'treetop', 'tsql', 'turtle', 'typescript',
-  'typoscript', 'typoscriptcssdata', 'typoscripthtmldata', 'ucode', 'unicon', 'urbiscript',
-  'usd', 'vala', 'vb.net', 'vbscript', 'vcl', 'vclsnippets', 'vclsnippets', 'vctreestatus',
-  'velocity', 'verilog', 'vgl', 'vhdl', 'vim', 'wdiff', 'webidl', 'xml', 'xml+cheetah',
-  'xml+django', 'xml+erb', 'xml+evoque', 'xml+lasso', 'xml+mako', 'xml+myghty', 'xml+php',
-  'xml+smarty', 'xml+spitfire', 'xml+twig', 'xml+velocity', 'xquery', 'xslt', 'xtend',
-  'xul+mozpreproc', 'yaml', 'zephir', 'zig'
-]);
-
-export const StyleEnum = z.enum([
-  'abap', 'algol', 'algol_nu', 'arduino', 'autumn', 'borland', 'bw', 'coffee', 'colorful',
-  'default', 'dracula', 'emacs', 'friendly', 'friendly_grayscale', 'fruity', 'github-dark',
-  'gruvbox-dark', 'gruvbox-light', 'igor', 'inkpot', 'lightbulb', 'lilypond', 'lovelace',
-  'manni', 'material', 'monokai', 'murphy', 'native', 'nord', 'one-dark', 'paraiso-dark',
-  'paraiso-light', 'pastie', 'perldoc', 'rainbow_dash', 'rrt', 'sas', 'solarized-dark',
-  'solarized-light', 'stata', 'stata-dark', 'stata-light', 'tango', 'trac', 'vim', 'vs',
-  'xcode'
-]);
-
-// ============================================================================
 // BASE SCHEMAS
 // ============================================================================
 
@@ -188,17 +111,17 @@ export const passwordResetConfirmSchema = z.object({
 export const snippetDataSchema = z.object({
   title: createTitleSchema(),
   code: createCodeSchema(),
-  language: LanguageEnum,
+  language: createRequiredString(VALIDATION_MESSAGES.REQUIRED.LANGUAGE),
   linenos: z.boolean().optional(),
-  style: StyleEnum.optional(),
+  style: z.string().optional(),
 });
 
 export const snippetUpdateSchema = z.object({
   title: createTitleSchema().optional(),
   code: createCodeSchema().optional(),
-  language: LanguageEnum.optional(),
+  language: createRequiredString(VALIDATION_MESSAGES.REQUIRED.LANGUAGE).optional(),
   linenos: z.boolean().optional(),
-  style: StyleEnum.optional(),
+  style: z.string().optional(),
 }).refine(
   (data) => Object.keys(data).length > 0,
   {
@@ -246,9 +169,9 @@ export const snippetSchema = z.object({
   id: z.string(),
   title: z.string(),
   code: z.string(),
-  language: LanguageEnum,
+  language: z.string(),
   linenos: z.boolean().optional(),
-  style: StyleEnum.optional(),
+  style: z.string().optional(),
   created: z.string(),
   user: z.number().optional(),
 });
@@ -281,8 +204,8 @@ export type SnippetFilterData = z.infer<typeof snippetFilterSchema>;
 export type SnippetListResponse = z.infer<typeof snippetListResponseSchema>;
 
 // Enum Types
-export type Language = z.infer<typeof LanguageEnum>;
-export type Style = z.infer<typeof StyleEnum>;
+export type Language = string;
+export type Style = string;
 
 // ============================================================================
 // VALIDATION UTILITIES
