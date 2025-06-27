@@ -127,15 +127,15 @@
     .dropdown-toggle {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem;
+      @include spacing('gap', 'xs');
+      @include spacing('padding', 'xs');
       @include border-radius('base');
       transition: background-color 0.2s ease-in-out;
       
       &::after {
         color: var(--bs-light);
         transition: transform 0.2s ease-in-out;
-        margin-left: 0.5rem;
+        @include spacing('margin-left', 'xs');
       }
 
       &:hover {
@@ -153,7 +153,7 @@
       @include shadow('base');
       transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
       transform-origin: top right;
-      margin-top: 0.5rem;
+      @include spacing('margin-top', 'xs');
       min-width: 200px;
 
       @include breakpoint-down('md') {
@@ -187,7 +187,7 @@
 
         @include breakpoint-down('md') {
           @include spacing('padding', 'md');
-          font-size: 1.1rem;
+          @include font-size('lg');
         }
 
         svg {

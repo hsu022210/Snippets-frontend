@@ -29,9 +29,9 @@
   }
 
   .loading-text {
-    margin-top: 1rem;
+    @include spacing('margin-top', 'sm');
     color: var(--bs-light);
-    font-size: 1.25rem;
+    @include font-size('lg');
     font-weight: 500;
     opacity: 0;
     transform: translateY(10px);

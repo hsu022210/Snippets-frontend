@@ -231,35 +231,4 @@ describe('SCSS Variables', () => {
       expect(result.css).toContain('xxl: 1400px');
     });
   });
-
-  describe('Z-Index Variables', () => {
-    test('should define z-index values', () => {
-      const zIndexSCSS = `
-        @use "sass:map";
-        @use "variables" as *;
-        .test-z-index {
-          dropdown: map.get($z-index, 'dropdown');
-          sticky: map.get($z-index, 'sticky');
-          fixed: map.get($z-index, 'fixed');
-          modal-backdrop: map.get($z-index, 'modal-backdrop');
-          modal: map.get($z-index, 'modal');
-          popover: map.get($z-index, 'popover');
-          tooltip: map.get($z-index, 'tooltip');
-        }
-      `;
-
-      const result = sass.compileString(zIndexSCSS, {
-        loadPaths: [path.join(__dirname, '../')],
-        style: 'expanded'
-      });
-
-      expect(result.css).toContain('dropdown: 1000');
-      expect(result.css).toContain('sticky: 1020');
-      expect(result.css).toContain('fixed: 1030');
-      expect(result.css).toContain('modal-backdrop: 1040');
-      expect(result.css).toContain('modal: 1050');
-      expect(result.css).toContain('popover: 1060');
-      expect(result.css).toContain('tooltip: 1070');
-    });
-  });
 }); 

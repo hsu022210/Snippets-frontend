@@ -5,7 +5,7 @@
 .footer {
   border-top: 1px solid var(--bs-border-color-translucent);
   transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
-  font-size: 0.875rem;
+  @include font-size('sm');
   
   &.theme-dark {
     background-color: var(--bs-dark-bg-subtle) !important;

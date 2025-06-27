@@ -123,6 +123,57 @@ describe('SCSS Components', () => {
     });
   });
 
+  describe('Navigation Component (Extended)', () => {
+    test('should compile theme toggle button styles', () => {
+      const navSCSS = `
+        @use "components/navigation";
+      `;
+      const result = sass.compileString(navSCSS, {
+        loadPaths: [path.join(__dirname, '../')],
+        style: 'expanded'
+      });
+      expect(result.css).toContain('.theme-toggle-btn');
+      expect(result.css).toContain('border-radius: 50%');
+      expect(result.css).toContain('box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15)');
+      expect(result.css).toContain('background: radial-gradient(circle');
+    });
+    test('should compile nav-dropdown-custom styles', () => {
+      const navSCSS = `
+        @use "components/navigation";
+      `;
+      const result = sass.compileString(navSCSS, {
+        loadPaths: [path.join(__dirname, '../')],
+        style: 'expanded'
+      });
+      expect(result.css).toContain('.nav-dropdown-custom');
+      expect(result.css).toContain('min-width: 200px');
+      expect(result.css).toContain('box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15)');
+    });
+    test('should compile navbar toggler styles', () => {
+      const navSCSS = `
+        @use "components/navigation";
+      `;
+      const result = sass.compileString(navSCSS, {
+        loadPaths: [path.join(__dirname, '../')],
+        style: 'expanded'
+      });
+      expect(result.css).toContain('.navbar-toggler');
+      expect(result.css).toContain('background-image: var(--bs-navbar-toggler-icon-bg)');
+    });
+    test('should compile .navbar-custom styles', () => {
+      const navSCSS = `
+        @use "components/navigation";
+      `;
+      const result = sass.compileString(navSCSS, {
+        loadPaths: [path.join(__dirname, '../')],
+        style: 'expanded'
+      });
+      expect(result.css).toContain('.navbar-custom');
+      expect(result.css).toContain('background-color: var(--bs-dark)');
+      expect(result.css).toContain('color: var(--bs-white)');
+    });
+  });
+
   describe('Container Component', () => {
     test('should compile container styles', () => {
       const containerSCSS = `
