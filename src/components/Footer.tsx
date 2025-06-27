@@ -15,7 +15,7 @@ const Footer: React.FC = () => {
       <Container>
         <Row className="align-items-center g-3">
           <Col xs={12} md={4} className="text-center text-md-start">
-            <Link to="/" className={`text-decoration-none d-inline-flex align-items-center ${isDark ? 'text-light' : 'text-dark'}`}>
+            <Link to="/" className={`text-decoration-none d-inline-flex align-items-center ${isDark ? 'text-light' : 'text-dark'} p-2 rounded`}>
               <TbCode className="me-2" size={20} />
               <span className="fw-semibold">Code Snippets</span>
             </Link>
@@ -32,7 +32,7 @@ const Footer: React.FC = () => {
                   href="https://github.com/hsu022210/Snippets-frontend" 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className={`text-decoration-none d-inline-flex align-items-center ${isDark ? 'text-light' : 'text-dark'}`}
+                  className={`text-decoration-none d-inline-flex align-items-center ${isDark ? 'text-light' : 'text-dark'} p-2 rounded`}
                   aria-label="Frontend GitHub Repository"
                 >
                   <VscGithub className="me-1" size={18} />
@@ -42,7 +42,7 @@ const Footer: React.FC = () => {
                   href="https://snippets-backend-69z8.onrender.com/swagger/" 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className={`text-decoration-none d-inline-flex align-items-center ${isDark ? 'text-light' : 'text-dark'}`}
+                  className={`text-decoration-none d-inline-flex align-items-center ${isDark ? 'text-light' : 'text-dark'} p-2 rounded`}
                   aria-label="Backend GitHub Repository"
                 >
                   <TbApi className="me-1" size={18} />
@@ -51,7 +51,7 @@ const Footer: React.FC = () => {
               </div>
               <Link 
                 to="/disclaimer" 
-                className={`text-decoration-none d-inline-flex align-items-center justify-content-center ${isDark ? 'text-light' : 'text-dark'}`}
+                className={`text-decoration-none d-inline-flex align-items-center justify-content-center ${isDark ? 'text-light' : 'text-dark'} p-2 rounded`}
               >
                 <MdAnnouncement className="me-1" size={18} />
                 <span>Disclaimer</span>

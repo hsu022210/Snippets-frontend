@@ -5,7 +5,7 @@
 .container {
   background-color: var(--bs-body-bg);
   color: var(--bs-body-color);
-  @include transition-multi('background-color, color', 0.3s);
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
   @include spacing('padding', 'md');
 
   &-fluid {

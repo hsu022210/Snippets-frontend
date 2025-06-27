@@ -7,13 +7,12 @@
   left: 0;
   right: 0;
   bottom: 0;
-  @include flex-center;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 9999;
   backdrop-filter: blur(4px);
   opacity: 0;
   visibility: hidden;
-  @include transition-multi('opacity, visibility', 0.3s);
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
 
   &.show {
     opacity: 1;
@@ -36,7 +35,7 @@
     font-weight: 500;
     opacity: 0;
     transform: translateY(10px);
-    @include transition-multi('opacity, transform', 0.3s, ease 0.1s);
+    transition: opacity 0.3s ease 0.1s, transform 0.3s ease 0.1s;
   }
 
   &.show .loading-text {

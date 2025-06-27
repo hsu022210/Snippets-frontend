@@ -54,7 +54,7 @@ describe('SCSS Components', () => {
         style: 'expanded'
       });
 
-      expect(result.css).toContain('transition: background-color, border-color, color 0.3s ease-in-out');
+      expect(result.css).toContain('transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out, color 0.3s ease-in-out');
     });
   });
 
@@ -197,6 +197,22 @@ describe('SCSS Components', () => {
 
       expect(result.css).toContain('.settings');
     });
+
+    test('should compile settings-nav and nav-link styles', () => {
+      const settingsSCSS = `
+        @use "components/settings";
+      `;
+      const result = sass.compileString(settingsSCSS, {
+        loadPaths: [path.join(__dirname, '../')],
+        style: 'expanded'
+      });
+      expect(result.css).toContain('.settings-nav');
+      expect(result.css).toContain('.settings-nav .nav-link.active');
+      expect(result.css).toContain('background-color: var(--bs-primary) !important');
+      expect(result.css).toContain('color: white !important');
+      expect(result.css).toContain('.settings-nav .nav-link:not(.active)');
+      expect(result.css).toContain('color: var(--bs-body-color) !important');
+    });
   });
 
   describe('Component Integration', () => {
@@ -285,8 +301,8 @@ describe('SCSS Components', () => {
         style: 'expanded'
       });
 
-      expect(result.css).toContain('transition: background-color, border-color, color 0.3s ease-in-out');
-      expect(result.css).toContain('transition: background-color, border-color 0.3s ease-in-out');
+      expect(result.css).toContain('transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out, color 0.3s ease-in-out');
+      expect(result.css).toContain('transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out');
     });
   });
 

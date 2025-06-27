@@ -15,8 +15,8 @@ const LogoutLoadingSpinner: React.FC<LogoutLoadingSpinnerProps> = ({
   if (!isVisible) return null;
 
   return (
-    <div className={`loading-overlay ${isVisible ? 'show' : ''}`}>
-      <div className="spinner-container">
+    <div className={`loading-overlay d-flex align-items-center justify-content-center ${isVisible ? 'show' : ''}`}>
+      <div className="spinner-container d-flex flex-column align-items-center justify-content-center">
         <Spinner 
           animation="border" 
           role="status" 

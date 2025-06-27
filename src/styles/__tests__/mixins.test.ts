@@ -272,72 +272,6 @@ describe('SCSS Mixins', () => {
     });
   });
 
-  describe('Transition Mixins', () => {
-    test('should compile transition mixin with default property', () => {
-      const transitionSCSS = `
-        @use "mixins" as *;
-        .test-transition-default {
-          @include transition();
-        }
-      `;
-
-      const result = sass.compileString(transitionSCSS, {
-        loadPaths: [path.join(__dirname, '../')],
-        style: 'expanded'
-      });
-
-      expect(result.css).toContain('transition: all 0.2s ease-in-out');
-    });
-
-    test('should compile transition mixin with custom property', () => {
-      const transitionCustomSCSS = `
-        @use "mixins" as *;
-        .test-transition-custom {
-          @include transition('opacity');
-        }
-      `;
-
-      const result = sass.compileString(transitionCustomSCSS, {
-        loadPaths: [path.join(__dirname, '../')],
-        style: 'expanded'
-      });
-
-      expect(result.css).toContain('transition: "opacity" 0.2s ease-in-out');
-    });
-
-    test('should compile transition-multi mixin with custom parameters', () => {
-      const transitionMultiSCSS = `
-        @use "mixins" as *;
-        .test-transition-multi {
-          @include transition-multi('opacity, transform', 0.5s, ease-out);
-        }
-      `;
-
-      const result = sass.compileString(transitionMultiSCSS, {
-        loadPaths: [path.join(__dirname, '../')],
-        style: 'expanded'
-      });
-
-      expect(result.css).toContain('transition: opacity, transform 0.5s ease-out');
-    });
-
-    test('should compile transition-multi mixin with default parameters', () => {
-      const transitionMultiDefaultSCSS = `
-        @use "mixins" as *;
-        .test-transition-multi-default {
-          @include transition-multi('background-color, color');
-        }
-      `;
-
-      const result = sass.compileString(transitionMultiDefaultSCSS, {
-        loadPaths: [path.join(__dirname, '../')],
-        style: 'expanded'
-      });
-
-      expect(result.css).toContain('transition: background-color, color 0.3s ease-in-out');
-    });
-  });
-
   describe('Hover Mixins', () => {
     test('should compile hover-lift mixin', () => {
       const hoverLiftSCSS = `
@@ -400,7 +334,6 @@ describe('SCSS Mixins', () => {
           @include flex-center;
           @include shadow('lg');
           @include border-radius('base');
-          @include transition('all');
         }
       `;
       const result = sass.compileString(combinedSCSS, {
@@ -412,7 +345,6 @@ describe('SCSS Mixins', () => {
       expect(result.css).toContain('justify-content: center');
       expect(result.css).toContain('box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2)');
       expect(result.css).toContain('border-radius: 0.375rem');
-      expect(result.css).toContain('transition: "all" 0.2s ease-in-out');
     });
 
     test('should use mixins within media queries', () => {

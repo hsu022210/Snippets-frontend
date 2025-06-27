@@ -64,16 +64,6 @@
   }
 }
 
-// Transition utility
-@mixin transition($property: all) {
-  transition: $property 0.2s ease-in-out;
-}
-
-// Multi-property transition utility
-@mixin transition-multi($properties, $duration: 0.3s, $easing: ease-in-out) {
-  transition: #{$properties} #{$duration} #{$easing};
-}
-
 // Two-axis spacing utility (e.g., padding or margin with x/y values)
 @mixin spacing-x($property, $size-x, $size-y) {
   @if map.has-key($content-spacing, $size-x) and map.has-key($content-spacing, $size-y) {

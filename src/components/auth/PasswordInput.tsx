@@ -45,7 +45,7 @@ const PasswordInput = ({
           variant="outline-secondary"
           onClick={togglePasswordVisibility}
           disabled={disabled}
-          className="password-toggle-btn"
+          className="password-toggle-btn d-flex align-items-center justify-content-center"
           type="button"
           aria-label={showPassword ? 'Hide password' : 'Show password'}
         >

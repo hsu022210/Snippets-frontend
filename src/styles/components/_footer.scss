@@ -4,7 +4,7 @@
 
 .footer {
   border-top: 1px solid var(--bs-border-color-translucent);
-  @include transition-multi('background-color, border-color', 0.3s);
+  transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
   font-size: 0.875rem;
   
   &.theme-dark {
@@ -16,19 +16,7 @@
   }
 
   a {
-    @include transition-multi('opacity', 0.2s);
-    @include spacing-x('padding', 'xs', 'sm');
-    border-radius: 0.25rem;
+    transition: opacity 0.2s ease-in-out;
     @include hover-bg(var(--bs-border-color-translucent), 0.8);
-  }
-
-  @include breakpoint-down('md') {
-    .row {
-      text-align: center;
-    }
-
-    .d-flex {
-      justify-content: center;
-    }
   }
 } 

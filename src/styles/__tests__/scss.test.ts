@@ -148,26 +148,6 @@ describe('SCSS Files', () => {
       expect(result.css).toContain('box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2)');
     });
 
-    test('should compile transition mixins correctly', () => {
-      const transitionSCSS = `
-        @use "mixins" as *;
-        .test-transition {
-          @include transition('opacity');
-        }
-        .test-transition-multi {
-          @include transition-multi('opacity, transform', 0.5s, ease-out);
-        }
-      `;
-
-      const result = sass.compileString(transitionSCSS, {
-        loadPaths: [path.join(__dirname, '../')],
-        style: 'expanded'
-      });
-
-      expect(result.css).toContain('transition: "opacity" 0.2s ease-in-out');
-      expect(result.css).toContain('transition: opacity, transform 0.5s ease-out');
-    });
-
     test('should compile hover mixins correctly', () => {
       const hoverSCSS = `
         @use "mixins" as *;
@@ -251,6 +231,21 @@ describe('SCSS Files', () => {
 
       expect(result.css).toContain('.loading-overlay');
     });
+
+    test('should include consistent transitions using mixins', () => {
+      const transitionComponentsSCSS = `
+        @use "components/card";
+        @use "components/navigation";
+      `;
+
+      const result = sass.compileString(transitionComponentsSCSS, {
+        loadPaths: [path.join(__dirname, '../')],
+        style: 'expanded'
+      });
+
+      expect(result.css).toContain('transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out, color 0.3s ease-in-out');
+      expect(result.css).toContain('transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out');
+    });
   });
 
   describe('Main SCSS Compilation', () => {
@@ -302,8 +297,8 @@ describe('SCSS Files', () => {
     });
 
     test('should include transition properties for theme switching', () => {
-      expect(compiledCSS).toContain('transition: background-color, color 0.3s ease-in-out');
-      expect(compiledCSS).toContain('transition: background-color, border-color 0.3s ease-in-out');
+      expect(compiledCSS).toContain('transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out, color 0.3s ease-in-out');
+      expect(compiledCSS).toContain('transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out');
     });
   });
 
@@ -342,6 +337,24 @@ describe('SCSS Files', () => {
       // Check that text colors are properly defined
       expect(compiledCSS).toContain('color: var(--bs-body-color)');
       expect(compiledCSS).toContain('color: var(--bs-card-color)');
+    });
+  });
+
+  describe('Settings SCSS', () => {
+    test('should compile settings-nav and nav-link styles', () => {
+      const settingsSCSS = `
+        @use "components/settings";
+      `;
+      const result = sass.compileString(settingsSCSS, {
+        loadPaths: [path.join(__dirname, '../')],
+        style: 'expanded'
+      });
+      expect(result.css).toContain('.settings-nav');
+      expect(result.css).toContain('.settings-nav .nav-link.active');
+      expect(result.css).toContain('background-color: var(--bs-primary) !important');
+      expect(result.css).toContain('color: white !important');
+      expect(result.css).toContain('.settings-nav .nav-link:not(.active)');
+      expect(result.css).toContain('color: var(--bs-body-color) !important');
     });
   });
 }); 
