@@ -6,26 +6,26 @@
   background-color: var(--bs-card-bg);
   border: 1px solid var(--bs-card-border-color);
   color: var(--bs-card-color);
-  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
-  box-shadow: $card-shadow;
+  @include transition-multi('background-color, border-color, color', 0.3s);
+  @include shadow('sm');
 
   &:hover {
-    box-shadow: $card-shadow-hover;
+    @include shadow('lg');
   }
 
   &-header {
     background-color: var(--bs-card-cap-bg);
     border-bottom: 1px solid var(--bs-card-border-color);
-    padding: map.get($content-spacing, 'sm') map.get($content-spacing, 'md');
+    @include spacing-x('padding', 'sm', 'md');
   }
 
   &-body {
-    padding: map.get($content-spacing, 'md');
+    @include spacing('padding', 'md');
   }
 
   &-title {
     color: var(--bs-card-title-color, var(--bs-heading-color));
-    margin-bottom: map.get($content-spacing, 'sm');
+    @include spacing('margin-bottom', 'sm');
   }
 
   &-text {
@@ -35,6 +35,6 @@
   &-footer {
     background-color: var(--bs-card-cap-bg);
     border-top: 1px solid var(--bs-card-border-color);
-    padding: map.get($content-spacing, 'sm') map.get($content-spacing, 'md');
+    @include spacing-x('padding', 'sm', 'md');
   }
 } 

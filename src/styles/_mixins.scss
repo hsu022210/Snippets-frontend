@@ -69,11 +69,31 @@
   transition: $property 0.2s ease-in-out;
 }
 
+// Multi-property transition utility
+@mixin transition-multi($properties, $duration: 0.3s, $easing: ease-in-out) {
+  transition: #{$properties} #{$duration} #{$easing};
+}
+
+// Two-axis spacing utility (e.g., padding or margin with x/y values)
+@mixin spacing-x($property, $size-x, $size-y) {
+  @if map.has-key($content-spacing, $size-x) and map.has-key($content-spacing, $size-y) {
+    #{$property}: map.get($content-spacing, $size-x) map.get($content-spacing, $size-y);
+  }
+}
+
 // Hover effect utility
 @mixin hover-lift {
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
   &:hover {
     transform: translateY(-2px);
     @include shadow('lg');
+  }
+}
+
+// Hover background and opacity utility
+@mixin hover-bg($color, $opacity: 0.8) {
+  &:hover {
+    background-color: $color;
+    opacity: $opacity;
   }
 } 

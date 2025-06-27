@@ -20,7 +20,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--bs-body-bg);
   color: var(--bs-body-color);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  @include transition-multi('background-color, color', 0.3s);
 }
 
 code {
@@ -62,7 +62,7 @@ code {
   padding-top: calc(#{$navbar-height} + #{map.get($content-spacing, 'xl')});
   @include spacing('padding-bottom', 'md');
   background-color: var(--bs-body-bg);
-  transition: background-color 0.3s ease;
+  @include transition-multi('background-color', 0.3s);
 
   @include breakpoint-down('md') {
     padding-top: calc(#{$navbar-height} + #{map.get($content-spacing, 'lg')});

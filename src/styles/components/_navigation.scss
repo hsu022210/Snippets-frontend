@@ -4,7 +4,7 @@
 
 .custom-navbar {
   border-bottom: 1px solid var(--bs-border-color-translucent);
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  @include transition-multi('background-color, border-color', 0.3s);
   
   &.theme-dark {
     background-color: var(--bs-dark-bg-subtle) !important;
@@ -23,11 +23,11 @@
   }
 
   .container-fluid {
-    transition: background-color 0.3s ease;
-    padding: map.get($content-spacing, 'sm') map.get($content-spacing, 'md');
+    @include transition-multi('background-color', 0.3s);
+    @include spacing-x('padding', 'sm', 'md');
 
     @include breakpoint-down('md') {
-      padding: map.get($content-spacing, 'xs') map.get($content-spacing, 'sm');
+      @include spacing-x('padding', 'xs', 'sm');
     }
   }
 
@@ -35,14 +35,14 @@
     color: var(--bs-light) !important;
     display: flex;
     align-items: center;
-    transition: opacity 0.2s ease;
+    @include transition-multi('opacity', 0.2s);
     
     &:hover {
       opacity: 0.85;
     }
 
     svg {
-      transition: transform 0.2s ease;
+      @include transition-multi('transform', 0.2s);
     }
 
     &:hover svg {
@@ -52,7 +52,7 @@
 
   .nav-link {
     color: var(--bs-light) !important;
-    transition: color 0.2s ease, opacity 0.2s ease;
+    @include transition-multi('color, opacity', 0.2s);
     
     &:hover,
     &:focus {
@@ -63,7 +63,7 @@
   // Theme toggle button
   .theme-toggle-btn {
     border-color: var(--bs-border-color-translucent);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    @include transition-multi('all', 0.3s, cubic-bezier(0.4, 0, 0.2, 1));
     position: relative;
     overflow: hidden;
     width: 40px;
@@ -92,11 +92,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      @include transition-multi('transform', 0.5s, cubic-bezier(0.4, 0, 0.2, 1));
     }
 
     .theme-icon {
-      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      @include transition-multi('transform', 0.5s, cubic-bezier(0.4, 0, 0.2, 1));
     }
 
     &:hover .theme-icon {
@@ -113,7 +113,7 @@
       background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
       transform: translate(-50%, -50%) scale(0);
       opacity: 0;
-      transition: transform 0.3s ease, opacity 0.3s ease;
+      @include transition-multi('transform, opacity', 0.3s);
     }
 
     &:active::after {
@@ -129,12 +129,12 @@
       align-items: center;
       gap: 0.5rem;
       padding: 0.5rem;
-      border-radius: var(--bs-border-radius);
-      transition: background-color 0.2s ease;
+      @include border-radius('base');
+      @include transition-multi('background-color', 0.2s);
       
       &::after {
         color: var(--bs-light);
-        transition: transform 0.2s ease;
+        @include transition-multi('transform', 0.2s);
         margin-left: 0.5rem;
       }
 
@@ -151,7 +151,7 @@
       background-color: var(--bs-body-bg);
       border-color: var(--bs-border-color);
       @include shadow('base');
-      transition: transform 0.2s ease, opacity 0.2s ease;
+      @include transition-multi('transform, opacity', 0.2s);
       transform-origin: top right;
       margin-top: 0.5rem;
       min-width: 200px;
@@ -165,9 +165,9 @@
         width: auto;
         min-width: 200px;
         margin: 0.5rem 0 0;
-        border-radius: var(--bs-border-radius);
+        @include border-radius('base');
         transform: none;
-        transition: opacity 0.2s ease;
+        @include transition-multi('opacity', 0.2s);
         padding: 0.5rem;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 
@@ -179,19 +179,19 @@
 
       .dropdown-item {
         color: var(--bs-body-color);
-        transition: all 0.2s ease;
+        @include transition-multi('all', 0.2s);
         display: flex;
         align-items: center;
-        padding: 0.75rem 1rem;
-        border-radius: var(--bs-border-radius);
+        @include spacing-x('padding', 'sm', 'md');
+        @include border-radius('base');
 
         @include breakpoint-down('md') {
-          padding: 1rem;
+          @include spacing('padding', 'md');
           font-size: 1.1rem;
         }
 
         svg {
-          transition: transform 0.2s ease;
+          @include transition-multi('transform', 0.2s);
         }
 
         &:hover,
@@ -224,7 +224,7 @@
   .navbar-toggler {
     color: var(--bs-navbar-color);
     border-color: var(--bs-border-color-translucent);
-    transition: all 0.2s ease;
+    @include transition-multi('all', 0.2s);
 
     &:hover {
       background-color: var(--bs-tertiary-bg);
@@ -253,7 +253,7 @@
 
   .nav-link {
     color: var(--bs-gray-300);
-    @include transition;
+    @include transition-multi('color', 0.2s);
 
     &:hover {
       color: var(--bs-white);
@@ -280,7 +280,7 @@
       background-color: var(--bs-white);
       
       .dropdown-item {
-        @include transition;
+        @include transition-multi('all', 0.2s);
         
         i {
           width: 1.25rem;
