@@ -48,7 +48,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
           setUser(userData);
         } catch (error) {
           console.error('Error initializing user:', error);
-          showToast('Failed to initialize user session', 'danger');
           handleLogout();
         }
       }
