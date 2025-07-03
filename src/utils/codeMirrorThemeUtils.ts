@@ -4,7 +4,7 @@ import { ThemeOption } from '../types'
 
 const THEME_STORAGE_KEY = 'codemirror-theme'
 
-// Map theme keys to user-friendly display names
+// Optional: Map theme keys to user-friendly display names
 export const THEME_LABELS: Record<string, string> = {
   abcdef: 'Abcdef',
   abyss: 'Abyss',
@@ -12,34 +12,57 @@ export const THEME_LABELS: Record<string, string> = {
   andromeda: 'Andromeda',
   atomone: 'Atom One',
   aura: 'Aura',
-  basic: 'Basic',
+  basicDark: 'Basic Dark',
+  basicLight: 'Basic Light',
   bbedit: 'BBEdit',
   bespin: 'Bespin',
+  consoleDark: 'Console Dark',
+  consoleLight: 'Console Light',
   copilot: 'Copilot',
   darcula: 'Darcula',
   dracula: 'Dracula',
-  duotone: 'Duotone',
+  duotoneDark: 'Duotone Dark',
+  duotoneLight: 'Duotone Light',
   eclipse: 'Eclipse',
-  github: 'GitHub',
-  'gruvbox-dark': 'Gruvbox Dark',
+  githubDark: 'GitHub Dark',
+  githubLight: 'GitHub Light',
+  gruvboxDark: 'Gruvbox Dark',
+  gruvboxLight: 'Gruvbox Light',
   kimbie: 'Kimbie',
   material: 'Material',
+  materialDark: 'Material Dark',
+  materialLight: 'Material Light',
   monokai: 'Monokai',
-  'monokai-dimmed': 'Monokai Dimmed',
-  'noctis-lilac': 'Noctis Lilac',
+  monokaiDimmed: 'Monokai Dimmed',
+  noctisLilac: 'Noctis Lilac',
   nord: 'Nord',
   okaidia: 'Okaidia',
   quietlight: 'Quiet Light',
   red: 'Red',
-  solarized: 'Solarized',
+  solarizedDark: 'Solarized Dark',
+  solarizedLight: 'Solarized Light',
   sublime: 'Sublime',
-  'tokyo-night': 'Tokyo Night',
-  'tokyo-night-storm': 'Tokyo Night Storm',
-  'tokyo-night-day': 'Tokyo Night Day',
-  'tomorrow-night-blue': 'Tomorrow Night Blue',
-  vscode: 'VS Code',
-  white: 'White',
-  xcode: 'Xcode',
+  tokyoNight: 'Tokyo Night',
+  tokyoNightStorm: 'Tokyo Night Storm',
+  tokyoNightDay: 'Tokyo Night Day',
+  tomorrowNightBlue: 'Tomorrow Night Blue',
+  vscodeLight: 'VS Code Light',
+  vscodeDark: 'VS Code Dark',
+  whiteDark: 'White Dark',
+  whiteLight: 'White Light',
+  xcodeDark: 'Xcode Dark',
+  xcodeLight: 'Xcode Light',
+}
+
+// Dynamically get all available theme keys
+export const getAvailableThemeKeys = (): string[] => {
+  return Object.keys(themes).filter(function (k) {
+    return (
+      k.toLowerCase().indexOf('style') === -1 &&
+      k.toLowerCase().indexOf('defaultsettings') === -1 &&
+      k.toLowerCase().indexOf('init') === -1
+    )
+  })
 }
 
 export const getSelectedTheme = (): string => {
@@ -53,19 +76,17 @@ export const setSelectedTheme = (theme: string): void => {
 
 export const getThemeOptions = (): ThemeOption[] => {
   const themeOptions: ThemeOption[] = []
-  Object.keys(themes).forEach(key => {
-    if (key === key.toLowerCase()) {
-      themeOptions.push({
-        value: key,
-        label: THEME_LABELS[key] || key.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
-      })
-    }
+  const themeKeys = getAvailableThemeKeys()
+  themeKeys.forEach(key => {
+    themeOptions.push({
+      value: key,
+      label: THEME_LABELS[key] || key.replace(/([A-Z])/g, ' $1').replace(/-/g, ' ').replace(/^\w|\s\w/g, c => c.toUpperCase()),
+    })
   })
   return themeOptions
 }
 
-export const getThemeExtension = (themeName: string): Extension => {
+export const getThemeExtension = (themeName: string): Extension | undefined => {
   // Type assertion to handle theme access
-  const theme = (themes as unknown as Record<string, Extension>)[themeName]
-  return theme
+  return (themes as unknown as Record<string, Extension>)[themeName]
 } 
