@@ -8,10 +8,12 @@ import { TbKey } from 'react-icons/tb'
 import { UserProfile } from '../types'
 import Button from '../components/shared/Button'
 import { authService, ApiError } from '../services'
+import { useAuthStore } from '../stores'
 
 const Profile: React.FC = () => {
   const { makeRequest } = useApiRequest();
   const { showToast } = useToast();
+  const setUser = useAuthStore((state) => state.setUser);
   const [loading, setLoading] = useState<boolean>(true);
   const [saving, setSaving] = useState<boolean>(false);
   const [userProfile, setUserProfile] = useState<UserProfile>({
@@ -28,6 +30,7 @@ const Profile: React.FC = () => {
           () => authService.getCurrentUser()
         );
         setUserProfile(userData);
+        setUser(userData); // Sync Zustand store with latest user data
       } catch (error) {
         const apiError = error as ApiError;
         showToast(apiError.message || 'Failed to fetch profile', 'danger');
@@ -38,7 +41,7 @@ const Profile: React.FC = () => {
     };
 
     fetchProfile();
-  }, [makeRequest, showToast]);
+  }, [makeRequest, showToast, setUser]);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -57,6 +60,7 @@ const Profile: React.FC = () => {
         () => authService.updateProfile(userProfile)
       );
       setUserProfile(updatedProfile);
+      setUser(updatedProfile); // Update Zustand store with new user data
       showToast('Profile updated successfully!', 'primary', 3);
     } catch (error) {
       const apiError = error as ApiError;

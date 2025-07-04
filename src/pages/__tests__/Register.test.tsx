@@ -2,14 +2,17 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { TestProviders } from '../../test/setup'
 import Register from '../Register'
-import { useAuth } from '../../contexts/AuthContext'
+import { useAuthStore } from '../../stores'
 import { useNavigate } from 'react-router-dom'
 import { useToast } from '../../contexts/ToastContext'
 import { ApiError } from '../../services'
 
-// Mock the hooks
-vi.mock('../../contexts/AuthContext', () => ({
-  useAuth: vi.fn()
+// Mock the Zustand auth actions
+vi.mock('../../stores', () => ({
+  useAuthStore: vi.fn(() => {
+    // Mock implementation that returns the register function when requested
+    return vi.fn();
+  })
 }));
 
 vi.mock('react-router-dom', () => ({
@@ -27,7 +30,7 @@ describe('Register Component', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    (useAuth as ReturnType<typeof vi.fn>).mockReturnValue({ register: mockRegister });
+    (useAuthStore as unknown as ReturnType<typeof vi.fn>).mockImplementation(() => mockRegister);
     (useNavigate as ReturnType<typeof vi.fn>).mockReturnValue(mockNavigate);
     (useToast as ReturnType<typeof vi.fn>).mockReturnValue({ showToast: mockShowToast });
   });

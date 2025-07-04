@@ -1,7 +1,7 @@
 import { useState, ChangeEvent, FormEvent } from 'react'
 import { Form } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../contexts/AuthContext'
+import { useAuthStore } from '../stores'
 import { useToast } from '../contexts/ToastContext'
 import PasswordInput from '../components/auth/PasswordInput'
 import AuthForm from '../components/auth/AuthForm'
@@ -22,7 +22,7 @@ const Register = () => {
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
-  const { register } = useAuth();
+  const register = useAuthStore((state) => state.register);
   const { showToast } = useToast();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
