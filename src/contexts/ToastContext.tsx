@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useMemo, useState } from 'react'
+import { createContext, useCallback, useContext, useState } from 'react'
 import { Toast, ToastContainer } from 'react-bootstrap'
 import { ToastType, ToastContextType, ToastProviderProps } from '../types'
 
@@ -35,10 +35,10 @@ export const ToastProvider = ({ children }: ToastProviderProps) => {
     setShow(false);
   }, []);
 
-  const contextValue = useMemo(() => ({
+  const contextValue = {
     showToast,
     hideToast
-  }), [showToast, hideToast]);
+  };
 
   return (
     <ToastContext.Provider value={contextValue}>

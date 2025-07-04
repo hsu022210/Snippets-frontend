@@ -1,11 +1,11 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { useToast } from '../contexts/ToastContext';
 
 export const useShareSnippet = () => {
   const { showToast } = useToast();
   const [shareSnippetTooltip, setShareSnippetTooltip] = useState<string>('Share snippet');
 
-  const handleShare = useCallback(async (snippetId: string) => {
+  const handleShare = async (snippetId: string) => {
     try {
       await navigator.clipboard.writeText(`${window.location.origin}/snippets/${snippetId}`);
       showToast('Link copied to clipboard!', undefined, 2);
@@ -23,7 +23,7 @@ export const useShareSnippet = () => {
       showToast('Failed to copy link', 'danger');
       setShareSnippetTooltip('Failed to copy link');
     }
-  }, [showToast]);
+  };
 
   return {
     shareSnippetTooltip,

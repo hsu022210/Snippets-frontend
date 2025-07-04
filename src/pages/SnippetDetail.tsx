@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { Breadcrumb } from 'react-bootstrap'
 import { useParams, Link } from 'react-router-dom'
 import ErrorBoundary from '../components/ErrorBoundary'
@@ -67,9 +67,20 @@ const SnippetDetail: React.FC = () => {
       return processCode(codeToProcess);
     } catch (error) {
       console.error('Error processing code:', error);
+      return '// Error: Could not process code content';
+    }
+  }, [isEditing, editedCode, snippet?.code]);
+
+  // Handle code processing errors separately to avoid infinite re-renders
+  useEffect(() => {
+    const codeToProcess = isEditing ? editedCode : snippet?.code;
+    try {
+      processCode(codeToProcess);
+      setCodeError(false);
+    } catch (error) {
+      console.error('Error processing code:', error);
       setCodeError(true);
       showToast('Error processing code content', 'warning');
-      return '// Error: Could not process code content';
     }
   }, [isEditing, editedCode, snippet?.code, showToast]);
 
