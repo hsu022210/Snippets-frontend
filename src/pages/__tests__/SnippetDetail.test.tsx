@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import SnippetDetail from '../SnippetDetail';
 import { TestProviders } from '../../test/setup';
 import { useSnippet } from '../../hooks/useSnippet';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuthToken } from '../../stores';
 import { useToast } from '../../contexts/ToastContext';
 import { processCode } from '../../utils/languageUtils';
 import { useParams } from 'react-router-dom';
@@ -15,7 +15,9 @@ vi.mock('@uiw/react-codemirror', () => ({
 
 // Mock hooks
 vi.mock('../../hooks/useSnippet');
-vi.mock('../../contexts/AuthContext');
+vi.mock('../../stores', () => ({
+  useAuthToken: vi.fn()
+}));
 vi.mock('../../contexts/ToastContext');
 vi.mock('../../utils/languageUtils');
 vi.mock('react-router-dom', async () => {
@@ -47,7 +49,7 @@ const baseSnippet = {
 describe('SnippetDetail', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    (useAuth as ReturnType<typeof vi.fn>).mockReturnValue({ token: 'mock-token' });
+    (useAuthToken as ReturnType<typeof vi.fn>).mockReturnValue('mock-token');
     (useToast as ReturnType<typeof vi.fn>).mockReturnValue({ showToast: mockShowToast });
     (processCode as ReturnType<typeof vi.fn>).mockImplementation((code) => code);
     (useParams as ReturnType<typeof vi.fn>).mockReturnValue({ id: '1' });

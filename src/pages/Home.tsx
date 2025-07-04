@@ -1,13 +1,13 @@
 import { Row, Col, Stack } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
-import { useAuth } from '../contexts/AuthContext'
+import { useAuthUser } from '../stores'
 import Container from '../components/shared/Container'
 import Card, { Body, Title, Text } from '../components/shared/Card'
 import Button from '../components/shared/Button'
 import { TbCode, TbPalette, TbShare } from 'react-icons/tb'
 
 const Home: React.FC = () => {
-  const { user } = useAuth();
+  const user = useAuthUser();
 
   return (
     <Container className="my-5">

@@ -12,22 +12,6 @@ import {
 } from '../utils/validationSchemas';
 
 // ============================================================================
-// CONTEXT TYPES
-// ============================================================================
-
-export interface AuthContextType {
-  user: User | null;
-  token: string | null;
-  login: (email: string, password: string) => Promise<boolean>;
-  logout: () => Promise<boolean>;
-  register: (username: string, password: string, password2: string, email: string, first_name?: string, last_name?: string) => Promise<string>;
-}
-
-export interface AuthProviderProps {
-  children: React.ReactNode;
-}
-
-// ============================================================================
 // COMPONENT PROPS
 // ============================================================================
 

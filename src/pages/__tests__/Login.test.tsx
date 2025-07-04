@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
-import { AuthProvider } from '../../contexts/AuthContext'
 import { ToastProvider } from '../../contexts/ToastContext'
 import Login from '../Login'
 
@@ -15,13 +14,10 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-// Mock the useAuth hook and AuthProvider
+// Mock the Zustand store
 const mockLogin = vi.fn();
-vi.mock('../../contexts/AuthContext', () => ({
-  useAuth: () => ({
-    login: mockLogin,
-  }),
-  AuthProvider: ({ children }: { children: React.ReactNode }) => children,
+vi.mock('../../stores', () => ({
+  useAuthStore: vi.fn(() => mockLogin),
 }));
 
 // Mock the toast context
@@ -37,9 +33,7 @@ const renderLogin = () => {
   return render(
     <BrowserRouter>
       <ToastProvider>
-        <AuthProvider>
-          <Login />
-        </AuthProvider>
+        <Login />
       </ToastProvider>
     </BrowserRouter>
   );

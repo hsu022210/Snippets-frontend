@@ -7,7 +7,6 @@ import * as matchers from '@testing-library/jest-dom/matchers'
 import { MemoryRouter } from 'react-router-dom'
 import { ThemeProvider } from '../contexts/ThemeContext'
 import { ToastProvider } from '../contexts/ToastContext'
-import { AuthProvider } from '../contexts/AuthContext'
 import { TestProvidersProps, LocalStorageMock } from '../types'
 
 // Extend Vitest's expect method with testing-library matchers
@@ -91,11 +90,9 @@ export const TestProviders: React.FC<TestProvidersProps> = ({ children }) => {
   return (
     <ToastProvider>
       <ThemeProvider>
-        <AuthProvider>
-          <MemoryRouter>
-            {children}
-          </MemoryRouter>
-        </AuthProvider>
+        <MemoryRouter>
+          {children}
+        </MemoryRouter>
       </ThemeProvider>
     </ToastProvider>
   )

@@ -11,7 +11,7 @@ import SnippetLanguageSelector from '../components/snippet/SnippetLanguageSelect
 import DeleteConfirmationModal from '../components/snippet/DeleteConfirmationModal'
 import Container from '../components/shared/Container'
 import CodeEditor from '../components/shared/CodeEditor'
-import { useAuth } from '../contexts/AuthContext'
+import { useAuthToken } from '../stores'
 import { formatDistanceToNow, format } from 'date-fns'
 import { TbClock } from 'react-icons/tb'
 
@@ -19,7 +19,7 @@ const SnippetDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [codeError, setCodeError] = useState<boolean>(false);
-  const { token } = useAuth();
+  const token = useAuthToken();
   const { showToast } = useToast();
   const {
     snippet,

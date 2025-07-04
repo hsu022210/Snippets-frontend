@@ -2,10 +2,10 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import Home from '../Home';
 import { TestProviders } from '../../test/setup';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuthUser } from '../../stores';
 
-vi.mock('../../contexts/AuthContext', () => ({
-  useAuth: vi.fn()
+vi.mock('../../stores', () => ({
+  useAuthUser: vi.fn()
 }));
 
 const renderHome = () =>
@@ -21,7 +21,7 @@ describe('Home Page', () => {
   });
 
   it('renders heading, lead, and feature cards', () => {
-    (useAuth as ReturnType<typeof vi.fn>).mockReturnValue({ user: null });
+    (useAuthUser as ReturnType<typeof vi.fn>).mockReturnValue(null);
     renderHome();
     expect(screen.getByRole('heading', { name: /simple and elegant way/i })).toBeInTheDocument();
     expect(screen.getByText(/start creating your own snippets/i)).toBeInTheDocument();
@@ -34,7 +34,7 @@ describe('Home Page', () => {
   });
 
   it('shows Login and Register buttons when not authenticated', () => {
-    (useAuth as ReturnType<typeof vi.fn>).mockReturnValue({ user: null });
+    (useAuthUser as ReturnType<typeof vi.fn>).mockReturnValue(null);
     renderHome();
     const loginBtn = screen.getByRole('button', { name: /login/i });
     const registerBtn = screen.getByRole('button', { name: /register/i });
@@ -45,7 +45,7 @@ describe('Home Page', () => {
   });
 
   it('shows View My Snippets and Create Snippet buttons when authenticated', () => {
-    (useAuth as ReturnType<typeof vi.fn>).mockReturnValue({ user: { id: 1, username: 'test', email: 'test@example.com', first_name: '', last_name: '' } });
+    (useAuthUser as ReturnType<typeof vi.fn>).mockReturnValue({ id: 1, username: 'test', email: 'test@example.com', first_name: '', last_name: '' });
     renderHome();
     const viewBtn = screen.getByRole('button', { name: /view my snippets/i });
     const createBtn = screen.getByRole('button', { name: /create snippet/i });

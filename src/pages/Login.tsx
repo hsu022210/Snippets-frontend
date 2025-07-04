@@ -1,7 +1,7 @@
 import { useState, ChangeEvent, FormEvent } from 'react'
 import { Form } from 'react-bootstrap'
 import { useNavigate, Link } from 'react-router-dom'
-import { useAuth } from '../contexts/AuthContext'
+import { useAuthStore } from '../stores'
 import { useToast } from '../contexts/ToastContext'
 import PasswordInput from '../components/auth/PasswordInput'
 import AuthForm from '../components/auth/AuthForm'
@@ -17,7 +17,7 @@ const Login = () => {
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const login = useAuthStore((state) => state.login);
   const { showToast } = useToast();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
