@@ -27,7 +27,7 @@ A modern, responsive web application for managing and organizing code snippets a
 - **Advanced Search**: Powerful search and filtering capabilities
 - **Comprehensive Testing**: Full test coverage with Vitest and React Testing Library
 - **Dark/Light Mode**: Theme switching with persistent preferences
-- **User Authentication**: Secure login/register system with robust validation using Zod
+- **User Authentication**: Secure login/register system with robust validation using Zod and global state management via Zustand
 - **Type-Safe Validation**: All forms and API responses are validated with Zod schemas for reliability
 
 ## 🚀 Supported Languages
@@ -80,6 +80,9 @@ A modern, responsive web application for managing and organizing code snippets a
 - **Axios** - HTTP client for API calls
 - **Date-fns** - Date manipulation utilities
 
+### State Management
+- **Zustand** - Lightweight, scalable state management for authentication and global state
+
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -128,6 +131,7 @@ src/
 ├── contexts/           # React contexts
 ├── hooks/              # Custom React hooks
 ├── pages/              # Page components
+├── stores/             # Global state management (Zustand)
 ├── styles/             # SCSS styles and variables
 ├── types/              # TypeScript type definitions
 ├── utils/              # Utility functions

@@ -13,9 +13,11 @@ import { usePreviewHeight } from '../usePreviewHeight'
 
 // Mock the toast context
 const mockShowToast = vi.fn();
+const mockHideToast = vi.fn();
 vi.mock('../../contexts/ToastContext', () => ({
   useToast: () => ({
     showToast: mockShowToast,
+    hideToast: mockHideToast,
   }),
 }));
 

@@ -1,7 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { AuthProvider } from './contexts/AuthContext'
+import { useEffect } from 'react'
 import { ThemeProvider } from './contexts/ThemeContext'
 import { ToastProvider } from './contexts/ToastContext'
+import { useAuthStore } from './stores'
+import { apiClient, authService } from './services'
 import PrivateRoute from './components/PrivateRoute'
 import Navigation from './components/Navigation'
 import Footer from './components/Footer'
@@ -19,50 +21,65 @@ import Container from './components/shared/Container'
 import Disclaimer from './components/Disclaimer'
 
 const App: React.FC = () => {
+  useEffect(() => {
+    // Set up API client callbacks
+    apiClient.setCallbacks(
+      (access: string, refresh: string) => {
+        useAuthStore.getState().setToken(access)
+        authService.setTokens(access, refresh)
+      },
+      () => {
+        useAuthStore.getState().setUser(null)
+        useAuthStore.getState().setToken(null)
+      }
+    )
+
+    // Initialize auth
+    useAuthStore.getState().initializeAuth();
+  }, []);
+
   return (
     <ToastProvider>
       <ThemeProvider>
-        <AuthProvider>
-          <Router>
-            <div className="App d-flex flex-column min-vh-100">
-              <Navigation />
-              <Container fluid className="main-container flex-grow-1" pageContainer>
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/register" element={<Register />} />
-                  <Route path="/forgot-password" element={<ForgotPassword />} />
-                  <Route path="/reset-password/:token" element={<ResetPassword />} />
-                  <Route path="/snippets" element={
-                    <PrivateRoute>
-                      <SnippetList />
-                    </PrivateRoute>
-                  } />
-                  <Route path="/snippets/:id" element={
-                      <SnippetDetail />
-                  } />
-                  <Route path="/create-snippet" element={
-                    <PrivateRoute>
-                      <CreateSnippet />
-                    </PrivateRoute>
-                  } />
-                  <Route path="/profile" element={
-                    <PrivateRoute>
-                      <Profile />
-                    </PrivateRoute>
-                  } />
-                  <Route path="/settings" element={
-                    <PrivateRoute>
-                      <Settings />
-                    </PrivateRoute>
-                  } />
-                  <Route path="/disclaimer" element={<Disclaimer />} />
-                </Routes>
-              </Container>
-              <Footer />
-            </div>
-          </Router>
-        </AuthProvider>
+        <Router>
+          <div className="App d-flex flex-column min-vh-100">
+            <Navigation />
+            <Container fluid className="main-container flex-grow-1" pageContainer>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/reset-password/:token" element={<ResetPassword />} />
+                <Route path="/snippets" element={
+                  <PrivateRoute>
+                    <SnippetList />
+                  </PrivateRoute>
+                } />
+                <Route path="/snippets/:id" element={
+                    <SnippetDetail />
+                } />
+                <Route path="/create-snippet" element={
+                  <PrivateRoute>
+                    <CreateSnippet />
+                  </PrivateRoute>
+                } />
+                <Route path="/profile" element={
+                  <PrivateRoute>
+                    <Profile />
+                  </PrivateRoute>
+                } />
+                <Route path="/settings" element={
+                  <PrivateRoute>
+                    <Settings />
+                  </PrivateRoute>
+                } />
+                <Route path="/disclaimer" element={<Disclaimer />} />
+              </Routes>
+            </Container>
+            <Footer />
+          </div>
+        </Router>
       </ThemeProvider>
     </ToastProvider>
   );
