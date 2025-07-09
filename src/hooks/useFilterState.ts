@@ -1,16 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { SnippetFilterValues } from '../types';
-
-// URL parameter mapping
-const URL_PARAMS = {
-  language: 'lang',
-  createdAfter: 'after',
-  createdBefore: 'before',
-  searchTitle: 'title',
-  searchCode: 'code',
-  page: 'page'
-} as const;
+import { filtersToURLParams, urlParamsToFilters } from '../utils/paramMapping';
 
 export const useFilterState = (initialFilters: SnippetFilterValues) => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -22,18 +13,7 @@ export const useFilterState = (initialFilters: SnippetFilterValues) => {
 
   // Update URL when filters change
   useEffect(() => {
-    const newSearchParams = new URLSearchParams();
-    
-    // Add non-empty filter values to URL
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value && value !== '') {
-        const urlParam = URL_PARAMS[key as keyof typeof URL_PARAMS];
-        if (urlParam) {
-          newSearchParams.set(urlParam, value);
-        }
-      }
-    });
-
+    const newSearchParams = filtersToURLParams(filters as unknown as Record<string, string>);
     setSearchParams(newSearchParams, { replace: true });
   }, [filters, setSearchParams]);
 
@@ -57,11 +37,13 @@ export const useFilterState = (initialFilters: SnippetFilterValues) => {
 
 // Helper function to extract filters from URL search params
 function getFiltersFromURL(searchParams: URLSearchParams): SnippetFilterValues {
+  const urlFilters = urlParamsToFilters(searchParams);
   return {
-    language: searchParams.get(URL_PARAMS.language) || '',
-    createdAfter: searchParams.get(URL_PARAMS.createdAfter) || '',
-    createdBefore: searchParams.get(URL_PARAMS.createdBefore) || '',
-    searchTitle: searchParams.get(URL_PARAMS.searchTitle) || '',
-    searchCode: searchParams.get(URL_PARAMS.searchCode) || '',
+    language: urlFilters.language || '',
+    createdAfter: urlFilters.createdAfter || '',
+    createdBefore: urlFilters.createdBefore || '',
+    searchTitle: urlFilters.searchTitle || '',
+    searchCode: urlFilters.searchCode || '',
+    page: urlFilters.page || '',
   };
 } 

@@ -59,6 +59,7 @@ const defaultFilters = {
   createdBefore: '',
   searchTitle: '',
   searchCode: '',
+  page: '',
 };
 
 const mockSnippetData: SnippetData = {

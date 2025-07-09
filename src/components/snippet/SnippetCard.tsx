@@ -13,7 +13,7 @@ import { SnippetCardProps } from '../../types'
 import { TbLink, TbClock } from 'react-icons/tb'
 import { formatDistanceToNow } from 'date-fns'
 
-export const SnippetCard = ({ snippet }: SnippetCardProps) => {
+export const SnippetCard = ({ snippet, filters }: SnippetCardProps) => {
   const selectedTheme = getSelectedTheme();
   const { previewHeight } = usePreviewHeight();
   const { shareSnippetTooltip, handleShare } = useShareSnippet();
@@ -39,7 +39,11 @@ export const SnippetCard = ({ snippet }: SnippetCardProps) => {
   };
 
   return (
-    <Link to={`/snippets/${snippet.id.toString()}`} className="text-decoration-none">
+    <Link 
+      to={`/snippets/${snippet.id.toString()}`} 
+      state={filters ? { filters } : undefined}
+      className="text-decoration-none"
+    >
       <Card hover className="h-100">
         <Body className="d-flex flex-column">
           <Stack gap={3}>

@@ -269,6 +269,7 @@ export interface SnippetFilterValues {
   createdBefore: string;
   searchTitle: string;
   searchCode: string;
+  page?: string;
 }
 
 export interface FilterOptions {

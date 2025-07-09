@@ -57,11 +57,21 @@ const SnippetListHeader: React.FC<SnippetListHeaderProps> = ({ totalCount, hasAc
   </div>
 );
 
-const SnippetGrid: React.FC<SnippetGridProps> = ({ snippets }) => (
+const SnippetGrid: React.FC<SnippetGridProps> = ({ snippets, filters, currentPage }) => (
   <Row xs={1} md={2} lg={3} className="g-4 mb-4">
     {snippets.map((snippet) => (
       <Col key={snippet.id}>
-        <SnippetCard snippet={snippet} />
+        <SnippetCard 
+          snippet={snippet} 
+          filters={filters ? {
+            language: filters.language || '',
+            createdAfter: filters.createdAfter || '',
+            createdBefore: filters.createdBefore || '',
+            searchTitle: filters.searchTitle || '',
+            searchCode: filters.searchCode || '',
+            page: currentPage?.toString() || ''
+          } : undefined} 
+        />
       </Col>
     ))}
   </Row>
@@ -179,7 +189,7 @@ const SnippetList: React.FC = () => {
       
       {snippets.length > 0 ? (
         <>
-          <SnippetGrid snippets={snippets} />
+          <SnippetGrid snippets={snippets} filters={filters} currentPage={currentPage} />
           {totalPages > 1 && (
             <PaginationControls
               currentPage={currentPage}

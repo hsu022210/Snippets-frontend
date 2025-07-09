@@ -6,32 +6,21 @@ import {
   Snippet as ZodSnippet,
   SnippetListResponse as ZodSnippetListResponse
 } from '../utils/validationSchemas';
+import { filtersToAPIParams } from '../utils/paramMapping';
 
 export class SnippetService {
   // Get snippets with optional filters
   async getSnippets(filters?: SnippetFilters): Promise<SnippetListResponse> {
     const params = new URLSearchParams();
     
-    if (filters?.language) {
-      params.append('language', filters.language);
-    }
-    if (filters?.createdAfter) {
-      params.append('created_after', filters.createdAfter);
-    }
-    if (filters?.createdBefore) {
-      params.append('created_before', filters.createdBefore);
-    }
-    if (filters?.searchTitle) {
-      params.append('search_title', filters.searchTitle);
-    }
-    if (filters?.searchCode) {
-      params.append('search_code', filters.searchCode);
-    }
-    if (filters?.page) {
-      params.append('page', filters.page.toString());
-    }
-    if (filters?.page_size) {
-      params.append('page_size', filters.page_size.toString());
+    if (filters) {
+      // Convert filter names to API parameter names
+      const apiParams = filtersToAPIParams(filters as Record<string, string>);
+      
+      // Add API parameters to URL search params
+      Object.entries(apiParams).forEach(([key, value]) => {
+        params.append(key, value);
+      });
     }
 
     const queryString = params.toString();

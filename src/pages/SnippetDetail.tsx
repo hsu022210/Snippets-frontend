@@ -1,11 +1,12 @@
 import { useState, useMemo, useEffect } from 'react'
 import { Breadcrumb } from 'react-bootstrap'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useLocation } from 'react-router-dom'
 import ErrorBoundary from '../components/ErrorBoundary'
 import InlineLoadingSpinner from '../components/InlineLoadingSpinner'
 import { useSnippet } from '../hooks/useSnippet'
 import { useToast } from '../contexts/ToastContext'
 import { processCode } from '../utils/languageUtils'
+import { filtersToURLParams } from '../utils/paramMapping'
 import SnippetHeader from '../components/snippet/SnippetHeader'
 import SnippetLanguageSelector from '../components/snippet/SnippetLanguageSelector'
 import DeleteConfirmationModal from '../components/snippet/DeleteConfirmationModal'
@@ -17,6 +18,7 @@ import { TbClock } from 'react-icons/tb'
 
 const SnippetDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const location = useLocation();
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [codeError, setCodeError] = useState<boolean>(false);
   const token = useAuthToken();
@@ -37,6 +39,19 @@ const SnippetDetail: React.FC = () => {
     handleDelete,
     handleCancel
   } = useSnippet(Number(id));
+
+  const previousFilters = location.state?.filters || null;
+
+  // Build the snippets link with filters if available
+  const getSnippetsLink = (): string => {
+    if (!previousFilters) {
+      return '/snippets';
+    }
+    
+    const searchParams = filtersToURLParams(previousFilters);
+    const queryString = searchParams.toString();
+    return queryString ? `/snippets?${queryString}` : '/snippets';
+  };
 
   const formatCreatedTime = () => {
     try {
@@ -114,7 +129,13 @@ const SnippetDetail: React.FC = () => {
       <Container>
         {!!token && (
         <Breadcrumb className="mb-4">
-          <Breadcrumb.Item linkAs={Link} linkProps={{ to: "/snippets", className: "text-decoration-none" }}>
+          <Breadcrumb.Item 
+            linkAs={Link} 
+            linkProps={{ 
+              to: getSnippetsLink(), 
+              className: "text-decoration-none" 
+            }}
+          >
             Snippets
           </Breadcrumb.Item>
           <Breadcrumb.Item active>

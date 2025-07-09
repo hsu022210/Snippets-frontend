@@ -33,6 +33,7 @@ export interface SnippetHeaderProps {
 
 export interface SnippetCardProps {
   snippet: Snippet;
+  filters?: SnippetFilterValues;
 }
 
 export interface SnippetLanguageSelectorProps {
@@ -61,6 +62,8 @@ export interface SnippetListHeaderProps {
 
 export interface SnippetGridProps {
   snippets: Snippet[];
+  filters?: SnippetFilterValues;
+  currentPage?: number;
 }
 
 export interface SnippetFilterProps {
