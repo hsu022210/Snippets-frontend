@@ -1,4 +1,6 @@
 import { Row, Col, Stack, Badge, Pagination } from 'react-bootstrap'
+import { useSearchParams } from 'react-router-dom'
+import { useState, useEffect } from 'react'
 import Container from '../components/shared/Container'
 import InlineLoadingSpinner from '../components/InlineLoadingSpinner'
 import { useSnippetList } from '../hooks/useSnippetList'
@@ -15,15 +17,19 @@ import {
   PaginationControlsProps,
 } from '../types'
 import { useFilterState } from '../hooks/useFilterState'
-import { useState } from 'react'
 
-const initialFilters: SnippetFilterValues = {
+
+const INITIAL_FILTERS: SnippetFilterValues = {
   language: '',
   createdAfter: '',
   createdBefore: '',
   searchTitle: '',
   searchCode: '',
 };
+
+const URL_PARAMS = {
+  page: 'page'
+} as const;
 
 const PaginationItems: React.FC<PaginationItemsProps> = ({ totalPages, currentPage, onPageChange }) => {
   const items = [];
@@ -88,9 +94,27 @@ const PaginationControls: React.FC<PaginationControlsProps> = ({
 );
 
 const SnippetList: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const { filters, updateFilters, resetFilters } = useFilterState(initialFilters);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { filters, updateFilters, resetFilters } = useFilterState(INITIAL_FILTERS);
+  
+  // Initialize current page from URL or default to 1
+  const [currentPage, setCurrentPage] = useState<number>(() => {
+    const pageParam = searchParams.get(URL_PARAMS.page);
+    return pageParam ? parseInt(pageParam, 10) : 1;
+  });
+  
   const { snippets, totalCount, loading, hasNextPage, hasPreviousPage } = useSnippetList(filters, currentPage);
+
+  // Update URL when page changes
+  useEffect(() => {
+    const newSearchParams = new URLSearchParams(searchParams);
+    if (currentPage > 1) {
+      newSearchParams.set(URL_PARAMS.page, currentPage.toString());
+    } else {
+      newSearchParams.delete(URL_PARAMS.page);
+    }
+    setSearchParams(newSearchParams, { replace: true });
+  }, [currentPage, searchParams, setSearchParams]);
 
   const handleFilterChange = (newFilters: SnippetFilterValues) => {
     updateFilters({

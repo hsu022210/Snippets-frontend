@@ -24,7 +24,7 @@ A modern, responsive web application for managing and organizing code snippets a
 - **Primary Color Customization**: Dynamic color picker for app-wide theming
 - **Rich Text Editing**: Advanced code editor with CodeMirror integration
 - **Responsive Design**: Mobile-first design with Bootstrap components
-- **Advanced Search**: Powerful search and filtering capabilities
+- **Advanced Search & Filtering**: Powerful search and filtering capabilities with URL-based state persistence
 - **Comprehensive Testing**: Full test coverage with Vitest and React Testing Library
 - **Dark/Light Mode**: Theme switching with persistent preferences
 - **User Authentication**: Secure login/register system with robust validation using Zod and global state management via Zustand
