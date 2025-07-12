@@ -29,6 +29,7 @@ A modern, responsive web application for managing and organizing code snippets a
 - **Dark/Light Mode**: Theme switching with persistent preferences
 - **User Authentication**: Secure login/register system with robust validation using Zod and global state management via Zustand
 - **Type-Safe Validation**: All forms and API responses are validated with Zod schemas for reliability
+- **Contact Page**: Users can send a message to the site owner via a validated contact form (name, email, subject, message)
 
 ## 🚀 Supported Languages
 

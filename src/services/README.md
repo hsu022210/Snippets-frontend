@@ -231,4 +231,27 @@ src/
     ├── snippet.ts         # Additional snippet types
     ├── api.ts             # General API types
     └── index.ts           # Type exports
-``` 
+```
+
+## Contact Service
+
+### `contactService.sendContactMessage`
+
+Sends a contact form message to the backend `/contact/` endpoint.
+
+**Parameters:**
+- `name` (string): Sender's name
+- `email` (string): Sender's email address
+- `subject` (string): Subject of the message
+- `message` (string): The message content
+
+**Usage:**
+```js
+await contactService.sendContactMessage({
+  name: 'John Doe',
+  email: 'john@example.com',
+  subject: 'Hello',
+  message: 'I love your site!'
+});
+```
+
