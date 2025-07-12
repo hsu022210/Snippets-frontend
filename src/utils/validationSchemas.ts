@@ -354,3 +354,12 @@ export const validatePassword = (password: string): { isValid: boolean; errors: 
   const errors = result.error.errors.map(error => error.message);
   return { isValid: false, errors };
 }; 
+
+export const contactSchema = z.object({
+  name: createRequiredString('Name is required').max(150, VALIDATION_MESSAGES.LENGTH.NAME_MAX),
+  email: emailSchema,
+  subject: createRequiredString('Subject is required'),
+  message: createRequiredString('Message is required'),
+});
+
+export type ContactFormData = z.infer<typeof contactSchema>; 

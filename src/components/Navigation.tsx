@@ -119,6 +119,9 @@ const Navigation: React.FC = () => {
                   </Nav.Link>
                 </>
               )}
+              <Nav.Link as={Link} to="/contact" className="px-3" onClick={() => setExpanded(false)}>
+                Contact
+              </Nav.Link>
             </Nav>
             <Nav>
               {user ? (

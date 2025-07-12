@@ -206,3 +206,8 @@ export class ApiClient {
 
 // Create singleton instance
 export const apiClient = new ApiClient(); 
+
+export const contactService = {
+  sendContactMessage: (data: { name: string; email: string; subject: string; message: string }) =>
+    apiClient.post('/contact/', data),
+}; 

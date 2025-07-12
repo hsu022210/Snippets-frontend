@@ -19,6 +19,7 @@ import Profile from './pages/Profile'
 import Settings from './pages/Settings'
 import Container from './components/shared/Container'
 import Disclaimer from './components/Disclaimer'
+import Contact from './pages/Contact';
 
 const App: React.FC = () => {
   useEffect(() => {
@@ -75,6 +76,7 @@ const App: React.FC = () => {
                   </PrivateRoute>
                 } />
                 <Route path="/disclaimer" element={<Disclaimer />} />
+                <Route path="/contact" element={<Contact />} />
               </Routes>
             </Container>
             <Footer />
