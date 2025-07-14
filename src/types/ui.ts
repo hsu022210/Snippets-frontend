@@ -82,7 +82,6 @@ export interface CodeEditorProps {
   editable?: boolean;
   className?: string;
   theme?: string;
-  showCopyButton?: boolean;
 }
 
 export interface DeleteConfirmationModalProps {
