@@ -4,6 +4,7 @@ import Card from '../Card'
 import Container from '../Container'
 import Button from '../Button'
 import CodeEditor from '../CodeEditor'
+import CopyButton from '../CopyButton'
 import { TestProviders } from '../../../test/setup'
 import PrimaryColorModal from '../../PrimaryColorModal'
 import { PRIMARY_COLORS } from '../../../utils/primaryColor'
@@ -139,7 +140,7 @@ describe('Shared Components', () => {
       expect(handleChange).toHaveBeenCalledWith('new value')
     })
 
-    it('applies border and border radius styles', () => {
+    it('applies border and border radius styles with Bootstrap tokens', () => {
       render(
         <TestProviders>
           <CodeEditor
@@ -152,11 +153,88 @@ describe('Shared Components', () => {
       const editor = screen.getByTestId('codemirror-mock')
       const container = editor.parentElement
       expect(container).toHaveStyle({
-        border: '1px solid #dee2e6',
+        border: '1px solid var(--bs-border-color)',
         borderRadius: '4px',
         overflow: 'hidden'
       })
     })
+
+    it('renders copy button with Bootstrap styling', () => {
+      render(
+        <TestProviders>
+          <CodeEditor
+            value="test code"
+            onChange={() => {}}
+            language="javascript"
+          />
+        </TestProviders>
+      )
+      const copyButton = screen.getByRole('button', { name: /copy/i })
+      const header = copyButton.closest('div')
+      expect(copyButton).toBeInTheDocument()
+      expect(header).toHaveStyle({
+        backgroundColor: 'var(--bs-tertiary-bg)',
+        borderBottom: '1px solid var(--bs-border-color)'
+      })
+    })
+  })
+
+  describe('CopyButton', () => {
+    const mockClipboard = { writeText: vi.fn() };
+    Object.assign(navigator, { clipboard: mockClipboard });
+
+    beforeEach(() => mockClipboard.writeText.mockClear());
+
+    it('renders and handles copy functionality', async () => {
+      mockClipboard.writeText.mockResolvedValue(undefined);
+      
+      render(
+        <TestProviders>
+          <CopyButton textToCopy="test code" />
+        </TestProviders>
+      );
+      
+      const button = screen.getByRole('button', { name: /copy/i });
+      expect(button).toBeInTheDocument();
+      expect(screen.getByText('Copy')).toBeInTheDocument();
+      
+      fireEvent.click(button);
+      expect(mockClipboard.writeText).toHaveBeenCalledWith('test code');
+      
+      // Wait for state update
+      await screen.findByText('Copied!');
+    });
+
+    it('handles disabled states and errors', async () => {
+      const { rerender } = render(
+        <TestProviders>
+          <CopyButton textToCopy="" />
+        </TestProviders>
+      );
+      
+      expect(screen.getByRole('button')).toBeDisabled();
+      
+      rerender(
+        <TestProviders>
+          <CopyButton textToCopy="test code" disabled={true} />
+        </TestProviders>
+      );
+      
+      expect(screen.getByRole('button')).toBeDisabled();
+      
+      rerender(
+        <TestProviders>
+          <CopyButton textToCopy="test code" disabled={false} />
+        </TestProviders>
+      );
+      
+      // Mock error for the next call
+      mockClipboard.writeText.mockRejectedValueOnce(new Error('Clipboard error'));
+      fireEvent.click(screen.getByRole('button'));
+      
+      // Should still show Copy text after error
+      expect(screen.getByText('Copy')).toBeInTheDocument();
+    });
   })
 
   describe('PrimaryColorModal', () => {

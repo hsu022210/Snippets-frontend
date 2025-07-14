@@ -82,6 +82,7 @@ export interface CodeEditorProps {
   editable?: boolean;
   className?: string;
   theme?: string;
+  showCopyButton?: boolean;
 }
 
 export interface DeleteConfirmationModalProps {
@@ -135,4 +136,12 @@ export interface PrimaryColorModalProps {
   primaryColor: string;
   onPrimaryColorChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   isDark: boolean;
+}
+
+export interface CopyButtonProps {
+  textToCopy: string;
+  size?: 'sm' | 'md' | 'lg';
+  variant?: string;
+  className?: string;
+  disabled?: boolean;
 } 
