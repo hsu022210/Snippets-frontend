@@ -3,8 +3,9 @@ import { ButtonProps } from '../../types'
 import { unfocusActiveElement } from '../../utils/dom'
 
 const Button = ({ children, variant = 'primary', size, className, isMobile, onClick, ...props }: ButtonProps) => {
+
   const getButtonClasses = () => {
-    const classes = [];
+    const classes = ['btn-animated'];
     
     if (size === 'lg' && isMobile) {
       classes.push('py-3');

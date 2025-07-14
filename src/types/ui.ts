@@ -5,6 +5,8 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   variant?: string;
   size?: 'sm' | 'md' | 'lg';
   isMobile?: boolean;
+  as?: React.ElementType;
+  to?: string;
 }
 
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {

@@ -6,7 +6,7 @@ const InlineLoadingSpinner: React.FC<InlineLoadingSpinnerProps> = ({
   variant = 'primary' 
 }) => {
   return (
-    <div className="d-flex align-items-center gap-2">
+    <div className="d-flex align-items-center gap-2 animate-fade-in-up animate-pulse">
       <Spinner 
         animation="border" 
         role="status" 

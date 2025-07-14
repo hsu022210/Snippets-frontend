@@ -44,7 +44,7 @@ export const SnippetCard = ({ snippet, filters }: SnippetCardProps) => {
       state={filters ? { filters } : undefined}
       className="text-decoration-none"
     >
-      <Card hover className="h-100">
+      <Card hover className="h-100 hover-lift">
         <Body className="d-flex flex-column">
           <Stack gap={3}>
             <div>

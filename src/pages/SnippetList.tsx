@@ -58,7 +58,7 @@ const SnippetListHeader: React.FC<SnippetListHeaderProps> = ({ totalCount, hasAc
 );
 
 const SnippetGrid: React.FC<SnippetGridProps> = ({ snippets, filters, currentPage }) => (
-  <Row xs={1} md={2} lg={3} className="g-4 mb-4">
+  <Row xs={1} md={2} lg={3} className="g-4 mb-4 animate-stagger">
     {snippets.map((snippet) => (
       <Col key={snippet.id}>
         <SnippetCard 

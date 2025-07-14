@@ -4,6 +4,7 @@ import { ThemeProvider } from './contexts/ThemeContext'
 import { ToastProvider } from './contexts/ToastContext'
 import { useAuthStore } from './stores'
 import { apiClient, authService } from './services'
+import { useAnimations } from './hooks/useAnimations'
 import PrivateRoute from './components/PrivateRoute'
 import Navigation from './components/Navigation'
 import Footer from './components/Footer'
@@ -20,8 +21,12 @@ import Settings from './pages/Settings'
 import Container from './components/shared/Container'
 import Disclaimer from './components/Disclaimer'
 import Contact from './pages/Contact';
+import AnimationDemo from './pages/AnimationDemo';
 
 const App: React.FC = () => {
+  // Initialize animations
+  useAnimations();
+
   useEffect(() => {
     // Set up API client callbacks
     apiClient.setCallbacks(
@@ -77,6 +82,7 @@ const App: React.FC = () => {
                 } />
                 <Route path="/disclaimer" element={<Disclaimer />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/animation-demo" element={<AnimationDemo />} />
               </Routes>
             </Container>
             <Footer />

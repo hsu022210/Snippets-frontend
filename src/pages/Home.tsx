@@ -75,11 +75,11 @@ const Home: React.FC = () => {
         </Col>
       </Row>
 
-      <Row className="mt-5">
+      <Row className="mt-5 animate-stagger">
         <Col md={4}>
-          <Card className="mb-4" hover>
+          <Card className="mb-4 hover-lift" hover>
             <Body>
-              <TbCode className="mb-3" size={32} />
+              <TbCode className="mb-3 animate-pulse" size={32} />
               <Title>Store</Title>
               <Text>
                 Save your code snippets in a secure and organized way.
@@ -88,9 +88,9 @@ const Home: React.FC = () => {
           </Card>
         </Col>
         <Col md={4}>
-          <Card className="mb-4" hover>
+          <Card className="mb-4 hover-lift" hover>
             <Body>
-              <TbPalette className="mb-3" size={32} />
+              <TbPalette className="mb-3 animate-pulse" size={32} />
               <Title>Syntax Highlighting</Title>
               <Text>
                 Beautiful syntax highlighting for multiple programming languages.
@@ -99,9 +99,9 @@ const Home: React.FC = () => {
           </Card>
         </Col>
         <Col md={4}>
-          <Card className="mb-4" hover>
+          <Card className="mb-4 hover-lift" hover>
             <Body>
-              <TbShare className="mb-3" size={32} />
+              <TbShare className="mb-3 animate-pulse" size={32} />
               <Title>Share</Title>
               <Text>
                 Share your snippets with others or keep them private.

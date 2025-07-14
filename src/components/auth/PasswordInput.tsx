@@ -1,5 +1,6 @@
 import { useState} from 'react'
 import { Form, InputGroup } from 'react-bootstrap'
+import { TbEye, TbEyeOff } from 'react-icons/tb'
 import Button from '../shared/Button'
 import { PasswordInputProps } from '../../types'
 
@@ -49,7 +50,9 @@ const PasswordInput = ({
           type="button"
           aria-label={showPassword ? 'Hide password' : 'Show password'}
         >
-          <i className={`bi ${showPassword ? 'bi-eye-slash' : 'bi-eye'}`}></i>
+          <span className="password-icon">
+            {showPassword ? <TbEyeOff size={16} /> : <TbEye size={16} />}
+          </span>
         </Button>
         {error && (
           <Form.Control.Feedback type="invalid">
