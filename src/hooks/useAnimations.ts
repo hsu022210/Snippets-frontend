@@ -7,7 +7,7 @@ export const useAnimations = () => {
     if (mainContainer) {
       animate(
         mainContainer,
-        { opacity: [0, 1], y: [20, 0] },
+        { opacity: [0, 1], y: [10, 0] },
         { duration: 0.6 }
       );
     }
