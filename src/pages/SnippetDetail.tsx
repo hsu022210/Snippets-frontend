@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react'
-import { Breadcrumb } from 'react-bootstrap'
+import { Breadcrumb, Form } from 'react-bootstrap'
 import { useParams, Link, useLocation } from 'react-router-dom'
 import ErrorBoundary from '../components/ErrorBoundary'
 import InlineLoadingSpinner from '../components/InlineLoadingSpinner'
@@ -12,6 +12,7 @@ import SnippetLanguageSelector from '../components/snippet/SnippetLanguageSelect
 import DeleteConfirmationModal from '../components/snippet/DeleteConfirmationModal'
 import Container from '../components/shared/Container'
 import CodeEditor from '../components/shared/CodeEditor'
+import FileUpload from '../components/shared/FileUpload'
 import { useAuthToken } from '../stores'
 import { formatDistanceToNow, format } from 'date-fns'
 import { TbClock } from 'react-icons/tb'
@@ -144,6 +145,14 @@ const SnippetDetail: React.FC = () => {
         </Breadcrumb>
         )}
 
+        <div className="d-flex align-items-center gap-1 text-muted mb-3">
+          <TbClock size={14} />
+          <small>
+            Created {createdTime.relative} 
+            ({createdTime.absolute})
+          </small>
+        </div>
+
         <SnippetHeader
           isEditing={isEditing}
           editedTitle={editedTitle}
@@ -165,19 +174,18 @@ const SnippetDetail: React.FC = () => {
             setEditedLanguage={setEditedLanguage}
             language={snippet.language}
           />
-          <div className="d-flex align-items-center gap-1 text-muted">
-            <TbClock size={14} />
-            <small>
-              Created {createdTime.relative} 
-              ({createdTime.absolute})
-            </small>
-          </div>
         </div>
 
         {codeError && (
           <div className="alert alert-warning mb-3">
             There was an issue processing the code content. The display might be affected.
           </div>
+        )}
+
+        {isEditing && (
+          <FileUpload 
+            onFileRead={setEditedCode}
+          />
         )}
 
         <CodeEditor
@@ -202,4 +210,4 @@ const SnippetDetail: React.FC = () => {
   );
 };
 
-export default SnippetDetail; 
+export default SnippetDetail;
