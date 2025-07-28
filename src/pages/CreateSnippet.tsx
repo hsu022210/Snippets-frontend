@@ -3,6 +3,7 @@ import { Form } from 'react-bootstrap'
 import Button from '../components/shared/Button'
 import Container from '../components/shared/Container'
 import CodeEditor from '../components/shared/CodeEditor'
+import FileUpload from '../components/shared/FileUpload'
 import { useCreateSnippet } from '../hooks/useSnippet'
 import { LanguageOptions } from '../utils/languageUtils'
 import { snippetDataSchema, validateFormDataWithFieldErrors, SnippetData } from '../utils/validationSchemas'
@@ -63,7 +64,7 @@ const CreateSnippet: React.FC = () => {
       <h2 className="mb-4">Create Snippet</h2>
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
-          <Form.Label>Title</Form.Label>
+          <Form.Label className='fw-bold'>Title</Form.Label>
           <Form.Control
             type="text"
             value={title}
@@ -80,7 +81,7 @@ const CreateSnippet: React.FC = () => {
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Language</Form.Label>
+          <Form.Label className='fw-bold'>Language</Form.Label>
           <Form.Select
             value={language}
             onChange={handleLanguageChange}
@@ -97,8 +98,12 @@ const CreateSnippet: React.FC = () => {
           )}
         </Form.Group>
 
+        <FileUpload 
+          onFileRead={setCode}
+        />
+
         <Form.Group className="mb-3">
-          <Form.Label>Code</Form.Label>
+          <Form.Label className='fw-bold'>Code</Form.Label>
           <CodeEditor
             value={code}
             onChange={handleCodeChange}
@@ -127,4 +132,4 @@ const CreateSnippet: React.FC = () => {
   );
 };
 
-export default CreateSnippet; 
+export default CreateSnippet;
